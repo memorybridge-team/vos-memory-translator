@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import json
 from collections import OrderedDict
 
@@ -48,7 +49,8 @@ def _read_jsonl(path) -> list[dict]:
 
 def test_state_probe_records_required_stats_and_frame_change(tmp_path) -> None:
     path = tmp_path / "probe.jsonl"
-    with ManifestWriter(path) as writer:
+    csv_path = tmp_path / "probe.csv"
+    with ManifestWriter(path, csv_path) as writer:
         probe = StateProbe(_config(), writer)
         assert probe.record_frame(_state(), 0) == 5
         assert probe.record_frame(_state(), 1) == 5
@@ -61,6 +63,13 @@ def test_state_probe_records_required_stats_and_frame_change(tmp_path) -> None:
     assert feature_rows[1]["changed_from_previous"] is True
     assert feature_rows[1]["max_abs_delta_from_previous"] == 1.0
     assert feature_rows[1]["cond_non_cond"] == "non_cond"
+    position_rows = [row for row in rows if row["tensor_name"] == "maskmem_pos_enc[0]"]
+    assert position_rows[1]["changed_from_previous"] is False
+    with csv_path.open(newline="", encoding="utf-8") as handle:
+        csv_rows = list(csv.DictReader(handle))
+    assert len(csv_rows) == len(rows)
+    assert csv_rows[0]["model_id"] == "tiny"
+    assert csv_rows[0]["shape"].startswith("[")
 
 
 def test_dump_is_opt_in_and_moves_tensor_to_cpu(tmp_path) -> None:
@@ -158,4 +167,3 @@ def test_compatibility_report_distinguishes_copy_and_mapping_candidates(tmp_path
         dispositions["pred_masks"]
         == "supporting_state_not_primary_translator_target"
     )
-

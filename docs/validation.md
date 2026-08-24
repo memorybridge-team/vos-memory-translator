@@ -50,7 +50,7 @@ The suite was extended with DAVIS layout and safe-extraction tests after this
 run. The final rerun observed:
 
 ```text
-6 passed in 7.50s
+6 passed in 9.00s
 ```
 
 Syntax/import compilation:
