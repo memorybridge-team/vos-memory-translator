@@ -1,0 +1,18 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
+*.egg-info/
+
+# Model/data artifacts must remain outside Git.
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+data/
+datasets/
+checkpoints/
+dumps/
+artifacts/
+probe-output/
+
