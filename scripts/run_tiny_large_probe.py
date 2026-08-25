@@ -25,6 +25,7 @@ def main() -> None:
     parser.add_argument("--switch-frame", type=int, required=True)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -35,6 +36,7 @@ def main() -> None:
             args.tiny_checkpoint,
             args.output_dir / "tiny.jsonl",
             args.output_dir / "tiny.csv",
+            args.output_dir / "tiny_state.pt",
         ),
         (
             "sam2.1-hiera-large",
@@ -42,10 +44,11 @@ def main() -> None:
             args.large_checkpoint,
             args.output_dir / "large.jsonl",
             args.output_dir / "large.csv",
+            args.output_dir / "large_state.pt",
         ),
     )
     summaries = []
-    for model_id, config, checkpoint, jsonl, csv in runs:
+    for model_id, config, checkpoint, jsonl, csv, canonical_state in runs:
         summaries.append(
             run_video_probe(
                 sam2_repo=args.sam2_repo,
@@ -61,6 +64,8 @@ def main() -> None:
                 device=args.device,
                 offload_video_to_cpu=True,
                 offload_state_to_cpu=True,
+                seed=args.seed,
+                canonical_state_path=canonical_state,
             )
         )
     report = compare_manifests(

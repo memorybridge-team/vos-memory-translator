@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import gc
+import random
 import sys
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,7 @@ from PIL import Image
 from .attention_hook import MemoryAttentionProbe
 from .manifest import DumpPolicy, ManifestWriter
 from .probe import ProbeConfig, StateProbe
+from .sam2_state import canonicalize_sam2_inference_state
 from .upstream import verify_sam2_checkout
 
 
@@ -47,6 +49,8 @@ def run_video_probe(
     offload_video_to_cpu: bool = True,
     offload_state_to_cpu: bool = True,
     allow_upstream_mismatch: bool = False,
+    seed: int = 0,
+    canonical_state_path: str | Path | None = None,
 ) -> dict[str, Any]:
     sam2_repo = Path(sam2_repo).resolve()
     video_dir = Path(video_dir).resolve()
@@ -57,6 +61,11 @@ def run_video_probe(
         raise FileNotFoundError(f"Video frame directory not found: {video_dir}")
     if not checkpoint.is_file():
         raise FileNotFoundError(f"Checkpoint not found: {checkpoint}")
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
     upstream_commit = verify_sam2_checkout(
         sam2_repo, allow_mismatch=allow_upstream_mismatch
     )
@@ -120,6 +129,13 @@ def run_video_probe(
                 frames_recorded.append(int(frame_idx))
                 if frame_idx >= switch_frame:
                     break
+    if canonical_state_path is not None:
+        canonical_path = Path(canonical_state_path)
+        canonical_path.parent.mkdir(parents=True, exist_ok=True)
+        canonical = canonicalize_sam2_inference_state(
+            inference_state, switch_frame=switch_frame, strict=True
+        )
+        torch.save(canonical, canonical_path)
     summary = {
         "model_id": model_id,
         "upstream_commit": upstream_commit,
@@ -129,6 +145,12 @@ def run_video_probe(
         "jsonl_path": str(Path(jsonl_path).resolve()),
         "csv_path": None if csv_path is None else str(Path(csv_path).resolve()),
         "dump_tensors": list(dump_tensors),
+        "seed": seed,
+        "canonical_state_path": (
+            None
+            if canonical_state_path is None
+            else str(Path(canonical_state_path).resolve())
+        ),
     }
     del inference_state, predictor
     gc.collect()

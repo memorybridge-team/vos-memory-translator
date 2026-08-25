@@ -1,9 +1,11 @@
 # VOS Memory Translator
 
-This repository implements the inspection milestone that precedes any
-Tiny-to-Large translator training. It records SAM 2.1 compact video state and the
-assembled tensors that are passed to memory attention. It does not inject state
-or fit a translator.
+This repository implements the CMMT inspection and translator-baseline
+milestones. It records SAM 2.1 compact video state and the assembled tensors
+passed to memory attention, normalizes nested/Hugging Face cache containers,
+builds a runtime-validated canonical handoff state, and fits Direct, closed-form
+Ridge/OLS, Linear, and residual two-layer MLP baselines. Target-owned positional
+regeneration is mandatory during SAM 2 history materialization.
 
 The supported SAM 2 upstream revision is pinned in
 [`SAM2_UPSTREAM_COMMIT`](SAM2_UPSTREAM_COMMIT). See
@@ -22,9 +24,10 @@ scope, state contract, baselines, or evaluation design.
 | --- | --- |
 | `docs/design/` | Translator, state-contract, and experiment design documents |
 | `docs/memory_tensor_inventory.md` | Verified SAM 2 memory producer/storage/consumer paths |
+| `docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md` | KV paper analysis, SAM 2 state contract, implementation and smoke results |
 | `docs/validation.md` | Commands and tests run for the current probe milestone |
 | `references/` | Source papers and searchable page-level text extracts |
-| `src/vos_memory_inspector/` | Current inspection and compatibility code |
+| `src/vos_memory_inspector/` | Inspection, canonical state, translators, metrics, and experiments |
 | `tests/` | Synthetic unit and integration tests |
 | `configs/` | Repository-owned experiment configuration files |
 | `scripts/` | Reproducible command entry points |
@@ -58,7 +61,7 @@ python -m pip install -e ./sam2
 
 git clone https://github.com/memorybridge-team/vos-memory-translator.git
 cd vos-memory-translator
-git switch feature/sam2-memory-inspection
+git switch kim/cmmt-development
 python -m pip install -e ".[dev]"
 ```
 
@@ -73,6 +76,15 @@ python -m pytest -q
 
 The tests use synthetic tensors only. They do not download checkpoints or
 datasets.
+
+Run the paired-state translator smoke explicitly:
+
+```bash
+cmmt-synthetic-experiment --output-dir outputs/synthetic_cmmt --seed 7
+```
+
+This command is clearly marked synthetic in its JSON/Markdown output. It is not
+a SAM 2 checkpoint result.
 
 ## DAVIS 2017 val input
 
@@ -113,7 +125,9 @@ sam2-memory-probe \
   --object-id 1 \
   --switch-frame 5 \
   --jsonl /content/probe/tiny.jsonl \
-  --csv /content/probe/tiny.csv
+  --csv /content/probe/tiny.csv \
+  --canonical-state /content/probe/tiny_state.pt \
+  --seed 7
 ```
 
 To dump only selected CPU tensors, add both `--dump-dir /content/probe/dumps`
@@ -137,11 +151,26 @@ python scripts/run_tiny_large_probe.py \
   --output-dir /content/probe
 ```
 
-It creates `tiny.jsonl`, `large.jsonl`, CSV equivalents,
+It creates `tiny.jsonl`, `large.jsonl`, CSV equivalents, opt-in canonical
+`tiny_state.pt`/`large_state.pt` artifacts,
 `compatibility.json`, and `compatibility.md`. A shape-compatible row is labeled
 as a direct-copy candidate with semantics explicitly unverified. A learned
 linear map is only proposed when tensor rank and spatial resolution agree but
 the mapped dimension differs.
+
+After collecting multiple disjoint train/test video-switch pairs, fit the
+offline tensor baselines with repeated `--train-source/--train-target` and
+`--test-source/--test-target` arguments:
+
+```bash
+cmmt-paired-experiment \
+  --train-source outputs/train01_tiny.pt --train-target outputs/train01_large.pt \
+  --test-source outputs/test01_tiny.pt --test-target outputs/test01_large.pt \
+  --output-dir outputs/paired_tiny_to_large --seed 7
+```
+
+This command evaluates serialized tensors only; it does not claim downstream
+SAM 2 continuation quality.
 
 ## Current verification boundary
 
@@ -150,8 +179,13 @@ the mapped dimension differs.
   [`docs/validation.md`](docs/validation.md) for commands actually run.
 - Tiny/Large checkpoint and DAVIS GPU run: not run in the local CPU-only
   environment; no compatibility result is claimed.
-- Translator fitting and state injection: intentionally out of scope.
+- Translator fitting: implemented and verified on synthetic paired state only.
+- Target history materialization: implemented behind a required target
+  positional factory; actual checkpoint next-frame injection is not yet run.
 
 Private API risks and the translator candidate rationale are documented in
 [`docs/memory_tensor_inventory.md`](docs/memory_tensor_inventory.md).
+The exact KV-cache analysis, component policies, formulas, commands and current
+blockers are in
+[`docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md`](docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md).
 

@@ -396,6 +396,18 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
 - 변경: 사용자 요청에 따라 위 연결을 제거하고 `origin`을 `https://github.com/memorybridge-team/vos-memory-translator.git`로 교체했다. 새 원격의 기본 브랜치는 `feature/sam2-memory-inspection`이며, 현재 작업 브랜치는 이를 기준으로 만든 `kim/cmmt-development`다.
 - 이유: 연구 원자료, 검증된 설계, 실행 코드와 생성물을 구분해 탐색성을 높이고, 향후 코드 변경을 독립적인 commit으로 관리하기 위해서다.
 
+### 2026-08-25 — Cross-Model KV 분석과 translator baseline 구현
+
+- 근거 문서: `docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md`; Heo et al. *Cross-Model KV Cache Transfer in LLM Families* arXiv:2608.03893v1, Hugging Face cache 문서, pinned SAM 2 commit `2b90b9f5ceec907a1c18123530e92e794ad901a4`를 재확인했다.
+- **[확인]** 논문의 production linear mapper는 target `(layer, KV head, K/V)`마다 독립적인 centered affine ridge(`lambda=0.01`)다. Target layer별 top-k source layers를 선택하고 각 선택 layer의 모든 source KV heads를 `[B*T, k*Hkv*Dh]` feature로 concatenate한다. Source RoPE를 inverse한 content key를 mapping한 뒤 target RoPE를 다시 적용한다.
+- **[확인]** 논문 평가 pair는 모두 GQA `8 KV heads`, `head_dim=128`로 source/target cache shape가 맞는다. Head/layer/dimension mismatch를 수식상 처리할 수 있다는 것과 실제 검증됐다는 것은 구분한다. Matched shape에서도 Ministral 3→14/8→14는 낮은 retention을 보여 shape equality가 semantic compatibility를 보장하지 않는다.
+- **[확인]** 논문 nonlinear mapper는 per target `(layer,head,K/V)` `Linear(ds,1024)→ReLU→Linear(1024,1024)→ReLU→Linear(1024,Dt)`, Adam `1e-3`, 20 epochs, MSE, batch 4096이다. Ridge 성공 pair에서는 보편적 개선이 아니며 일부 failure pair에서만 큰 개선을 보였다.
+- 공개 코드 상태: 2026-08-25 기준 arXiv/논문에서 저자 공식 repository를 확인하지 못했다. `souvikDevloper/kvbridge@949d81d...`는 독립 구현 근거로만 사용하며 공식 코드로 인용하지 않는다.
+- **[구현]** 기존 `src/vos_memory_inspector/`에 nested tensor inspector, Hugging Face legacy/current cache normalization, runtime-validated `CanonicalState`/`StateSpec`, SAM 2 multi-object cond/non-cond history canonicalizer, target positional factory가 필수인 history materializer를 추가했다.
+- **[구현]** translator ladder는 Direct Copy, centered OLS/Ridge, component-wise Linear, separate feature/pointer residual two-layer MLP와 scalar presence calibrator다. Grid mismatch는 bilinear resampling, channel/pointer mismatch는 explicit projection 또는 Direct의 zero-pad/truncate로 처리하고 residual identity는 input/output dimension이 같을 때만 쓴다. Global spatial attention은 추가하지 않았다.
+- **[Pilot — synthetic only]** Windows/Python 3.13/PyTorch 2.13 CPU에서 unit test `12 passed`; generated affine+quadratic paired state에서 Direct aggregate MSE 1.44755, Ridge 0.030507, Linear 0.111864, residual MLP 0.019728이었다. 이는 schema/fitting/metric/serialization smoke이며 SAM 2 J&F나 real handoff 성능이 아니다.
+- **[미검증]** 로컬에 official SAM 2 checkout과 Tiny/Large checkpoint가 없어 paired runtime dump, same-checkpoint round-trip, target PE 재생성을 포함한 next-frame injection, DAVIS/J&F/identity/recovery/latency 측정은 실행하지 않았다. Checkpoint와 dataset은 자동 다운로드하지 않았다.
+
 ## 18. 노션 원자료 인덱스
 
 프로젝트 데이터베이스:

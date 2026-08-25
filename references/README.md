@@ -4,6 +4,7 @@
 
 - [`papers/sam2_iclr2025.pdf`](papers/sam2_iclr2025.pdf): *SAM 2: Segment Anything in Images and Videos*, ICLR 2025. [Official repository](https://github.com/facebookresearch/sam2), [arXiv](https://arxiv.org/abs/2408.00714)
 - [`papers/rds_cvpr2026.pdf`](papers/rds_cvpr2026.pdf): *Efficient Video Object Segmentation and Tracking with Recurrent Dynamic Submodel*, CVPR 2026. [CVF Open Access](https://openaccess.thecvf.com/content/CVPR2026/html/Tang_Efficient_Video_Object_Segmentation_and_Tracking_with_Recurrent_Dynamic_Submodel_CVPR_2026_paper.html)
+- [`papers/cross_model_kv_cache_transfer_arxiv2608.03893v1.pdf`](papers/cross_model_kv_cache_transfer_arxiv2608.03893v1.pdf): *Cross-Model KV Cache Transfer in LLM Families: A Closed-Form Linear Mapping for Prefill Reuse*, arXiv:2608.03893v1. [arXiv](https://arxiv.org/abs/2608.03893)
 
 ## Extracted text
 

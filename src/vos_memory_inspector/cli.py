@@ -6,7 +6,13 @@ from pathlib import Path
 
 from .compatibility import compare_manifests, write_compatibility_report
 from .davis import download_davis_2017_trainval_480p, validate_davis_sequence
+from .paired_experiment import (
+    load_canonical_state,
+    run_paired_experiment,
+    run_synthetic_experiment,
+)
 from .runner import run_video_probe
+from .state_inspector import inspect_state, write_inspection_report
 
 
 def _probe_parser() -> argparse.ArgumentParser:
@@ -37,6 +43,12 @@ def _probe_parser() -> argparse.ArgumentParser:
     parser.add_argument("--keep-video-on-device", action="store_true")
     parser.add_argument("--keep-state-on-device", action="store_true")
     parser.add_argument("--allow-upstream-mismatch", action="store_true")
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument(
+        "--canonical-state",
+        type=Path,
+        help="Opt-in .pt export of the continuation-oriented canonical state.",
+    )
     return parser
 
 
@@ -59,6 +71,8 @@ def probe_main(argv: list[str] | None = None) -> None:
         offload_video_to_cpu=not args.keep_video_on_device,
         offload_state_to_cpu=not args.keep_state_on_device,
         allow_upstream_mismatch=args.allow_upstream_mismatch,
+        seed=args.seed,
+        canonical_state_path=args.canonical_state,
     )
     print(json.dumps(summary, indent=2))
 
@@ -116,3 +130,83 @@ def davis_download_main(argv: list[str] | None = None) -> None:
         keep_archive=args.keep_archive,
     )
     print(json.dumps({"davis_root": str(root)}, indent=2))
+
+
+def state_inspect_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description="Inspect tensors in a nested .pt state, HF cache, or canonical state."
+    )
+    parser.add_argument("--input", required=True, type=Path)
+    parser.add_argument("--key", help="Optional top-level mapping key to inspect")
+    parser.add_argument("--json", required=True, type=Path)
+    parser.add_argument("--markdown", type=Path)
+    args = parser.parse_args(argv)
+    # State files are pickle-backed. Only load files from a trusted source.
+    value = __import__("torch").load(args.input, map_location="cpu", weights_only=False)
+    if args.key is not None:
+        value = value[args.key]
+    report = inspect_state(value)
+    write_inspection_report(report, args.json, args.markdown)
+    print(json.dumps(report.to_dict(), indent=2))
+
+
+def synthetic_experiment_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description="Run an explicitly synthetic paired-state translator smoke test."
+    )
+    parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--epochs", type=int, default=120)
+    parser.add_argument("--learning-rate", type=float, default=2e-2)
+    parser.add_argument("--ridge-lambda", type=float, default=0.01)
+    parser.add_argument("--hidden-dim", type=int, default=32)
+    args = parser.parse_args(argv)
+    report = run_synthetic_experiment(
+        args.output_dir,
+        seed=args.seed,
+        epochs=args.epochs,
+        learning_rate=args.learning_rate,
+        ridge_lambda=args.ridge_lambda,
+        hidden_dim=args.hidden_dim,
+    )
+    print(json.dumps(report, indent=2))
+
+
+def paired_experiment_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description="Fit translators from paired canonical states and evaluate held-out pairs."
+    )
+    parser.add_argument("--train-source", action="append", type=Path, default=[])
+    parser.add_argument("--train-target", action="append", type=Path, default=[])
+    parser.add_argument("--test-source", action="append", type=Path, default=[])
+    parser.add_argument("--test-target", action="append", type=Path, default=[])
+    parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--epochs", type=int, default=120)
+    parser.add_argument("--learning-rate", type=float, default=2e-2)
+    parser.add_argument("--ridge-lambda", type=float, default=0.01)
+    parser.add_argument("--hidden-dim", type=int, default=128)
+    args = parser.parse_args(argv)
+    if len(args.train_source) != len(args.train_target) or not args.train_source:
+        parser.error("provide the same non-zero number of --train-source/--train-target")
+    if len(args.test_source) != len(args.test_target) or not args.test_source:
+        parser.error("provide the same non-zero number of --test-source/--test-target")
+    train_pairs = [
+        (load_canonical_state(source), load_canonical_state(target))
+        for source, target in zip(args.train_source, args.train_target, strict=True)
+    ]
+    test_pairs = [
+        (load_canonical_state(source), load_canonical_state(target))
+        for source, target in zip(args.test_source, args.test_target, strict=True)
+    ]
+    report = run_paired_experiment(
+        train_pairs,
+        test_pairs,
+        args.output_dir,
+        seed=args.seed,
+        epochs=args.epochs,
+        learning_rate=args.learning_rate,
+        ridge_lambda=args.ridge_lambda,
+        hidden_dim=args.hidden_dim,
+    )
+    print(json.dumps(report, indent=2))
