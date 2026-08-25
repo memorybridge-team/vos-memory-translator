@@ -1,7 +1,7 @@
 # Cross-Model Memory Translator — Project Context
 
 > 새 채팅을 위한 프로젝트 영구 컨텍스트  
-> 로컬 스냅샷 기준일: **2026-08-25 (KST)**  
+> 로컬 스냅샷 기준일: **2026-08-26 (KST)**
 > 원자료: 프로젝트 노션 데이터베이스 및 현재까지의 대화  
 > 상태 표기: **[확인]** 문헌·코드·기록으로 확인 / **[가설]** 실험 필요 / **[Pilot]** 제한적 예비 결과
 
@@ -393,7 +393,7 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
 - 결정: 프로젝트 진입 문서인 `AGENTS.md`, `PROJECT_CONTEXT.md`, `README.md`는 루트에 유지하고, 설계 문서는 `docs/design/`, 논문과 텍스트 추출본은 `references/`, 구현 package는 `src/`, 검증은 `tests/`, 실행 설정과 진입점은 각각 `configs/`, `scripts/`로 분리한다. 현재 구현 package는 `src/vos_memory_inspector/`다.
 - 결정: 데이터셋, 모델 weight, checkpoint와 대용량 실험 산출물은 기본적으로 Git에서 제외하고, 재현에 필요한 코드·작은 설정·요약 결과만 추적한다.
 - 당시 Git: 최초에는 ref가 없는 빈 `https://github.com/memorybridge-team/vos_menory_translater_KIM.git`을 `origin`으로 연결했다.
-- 변경: 사용자 요청에 따라 위 연결을 제거하고 `origin`을 `https://github.com/memorybridge-team/vos-memory-translator.git`로 교체했다. 새 원격의 기본 브랜치는 `feature/sam2-memory-inspection`이며, 현재 작업 브랜치는 이를 기준으로 만든 `kim/cmmt-development`다.
+- 변경: 사용자 요청에 따라 위 연결을 제거하고 `origin`을 `https://github.com/memorybridge-team/vos-memory-translator.git`로 교체했다. 새 원격의 기본 브랜치는 `feature/sam2-memory-inspection`이며, 작업 브랜치는 처음 `kim/cmmt-development`로 만들었다가 2026-08-26 원격 이름 변경에 맞춰 `kim/exp-sam2-state-translator`로 변경했다.
 - 이유: 연구 원자료, 검증된 설계, 실행 코드와 생성물을 구분해 탐색성을 높이고, 향후 코드 변경을 독립적인 commit으로 관리하기 위해서다.
 
 ### 2026-08-25 — Cross-Model KV 분석과 translator baseline 구현

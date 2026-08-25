@@ -61,7 +61,7 @@ python -m pip install -e ./sam2
 
 git clone https://github.com/memorybridge-team/vos-memory-translator.git
 cd vos-memory-translator
-git switch kim/cmmt-development
+git switch kim/exp-sam2-state-translator
 python -m pip install -e ".[dev]"
 ```
 
