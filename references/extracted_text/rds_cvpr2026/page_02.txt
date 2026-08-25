@@ -1,0 +1,74 @@
+Figure 1. (a)Different samples favor different submodel architectures.Two static models, obtained by randomly pruning at the same
+rate, achieve similar overall results on the dataset but exhibit significant variations in their frame-by-frame performance. (b)The per-block
+router in dynamic models fails to deliver real acceleration.We employ the block-skipping mechanism in AdaViT [26], which includes
+a router for each block. This approach results in a theoretical reduction in FLOPs but causes a slowdown in practice. (c)Our recurrent
+dynamic submodel (RDS)selects a subset of blocks for each frame using a single router, leveraging the prediction from the previous
+frame, achieving both FLOPs reduction and actual acceleration.
+methods that assign a dedicated router to each block for dy-
+namic activation, our approach employs a single router to
+determine the subset of active blocks for the entire model.
+This significantly reduces the overhead associated with dy-
+namic routing, leading to both reduced computational costs
+and speedup in practice, as illustrated in Figure 1 (c).
+The dynamic activation decision actually reflects an in-
+sight that the importance of blocks is different and there
+may exist a core subset of blocks that are fundamentally
+more important across diverse samples. Motivated by this
+observation, we propose an importance-aware low-rank
+adaptation (I-LoRA) method, an efficient training approach
+that updates parameters exclusively within these important
+blocks. Specifically, it employs a dual-perspective impor-
+tance metric, evaluating each block’s significance based on
+its impact on the final output and its influence on the current
+feature map. This design complements RDS, enabling a
+substantial reduction in the adaptation costs of our dynamic
+framework while preserving competitive performance.
+In summary, our contributions are summarized as:
+• We propose theRecurrentDynamicSubmodel (RDS)
+framework. Its prediction-aware router adopts previous
+predictions and current inputs to dynamically select a sub-
+set of blocks per frame, overcoming the input-agnostic
+nature of static approaches and eliminating the overhead
+of per-block routers in dynamic methods.
+• We introduce the I-LoRA strategy, which employs a dual
+importance metric to identify the most vital blocks, then
+selectively allocates trainable parameters to these blocks,
+thus significantly lowering adaptation costs.
+• Extensive empirical validation on multiple challenging
+VOS and VOT benchmarks demonstrates our method
+achieves significant real-world acceleration. For exam-
+ple, it achieves a1.3×speedup on the DA VIS 2017 [28]
+dataset with less than0.4%performance degradation,
+while introducing only3%trainable parameters and re-
+quiring minimal SAM2 training data.
+• Additional experiments on DINOv3 [33] further demon-
+strate the generalizability of our framework across differ-
+ent vision foundation models.
+2. Related Work
+2.1. Video Object Segmentation and Tracking
+Video Object Segmentation (VOS) [8, 23, 46, 52] and
+Video Object Tracking (VOT) [3, 46, 50] are fundamental
+and closely related areas in computer vision. While VOS
+aims for pixel-level target segmentation and VOT focuses
+on bounding-box localization, both require robust identity
+modeling across frames to handle challenges like occlusion
+and deformation.
+Driven by recent advancements, state-of-the-art methods
+in both fields increasingly rely on large foundation mod-
+els [9, 32, 52]. Despite their eminent zero-shot generaliza-
+tion and tracking performance, these heavy architectures in-
+cur prohibitive computational overhead, hindering their de-
+ployment in real-time video applications. Although recent
+efforts have actively explored accelerating and lightening
+these foundation models (e.g., via knowledge distillation or
+efficient network designs) [5, 40, 41, 49], balancing perfor-
+mance and efficiency remains a critical bottleneck. Cru-
+cially, these lightweight variants often employ static archi-
+tectures, meaning they allocate uniform computational re-
+sources to every frame. This ignores the inherent temporal
+redundancy and varying complexity of video streams.
+To address this, we propose Recurrent Dynamic Sub-
+model, which achieves faster inference and lower adap-
+tation cost by dynamically skipping encoder blocks, fine-
+tuning only LoRA adapters assigned to critical blocks.
+20913

@@ -1,0 +1,49 @@
+Published as a conference paper at ICLR 2025
+Ho Kei Cheng, Yu-Wing Tai, and Chi-Keung Tang. Rethinking space-time networks with improved
+memory coverage for efficient video object segmentation. In NeurIPS, 2021a.
+Ho Kei Cheng, Yu-Wing Tai, and Chi-Keung Tang. Modular interactive video object segmentation:
+Interaction-to-mask, propagation and difference-aware fusion. In CVPR, 2021b.
+Ho Kei Cheng, Seoung Wug Oh, Brian Price, Joon-Young Lee, and Alexander Schwing. Putting the
+object back into video object segmentation. In arXiv, 2023a.
+Ho Kei Cheng, Seoung Wug Oh, Brian L. Price, Alexander Schwing, and Joon-Young Lee. Tracking
+anything with decoupled video segmentation. ICCV, pp. 1316–1326, 2023b.
+Yangming Cheng, Liulei Li, Yuanyou Xu, Xiaodi Li, Zongxin Yang, Wenguan Wang, and Yi Yang.
+Segment and track anything. arXiv preprint arXiv:2305.06558, 2023c.
+Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Dzmitry Bahdanau, Fethi Bougares, Holger
+Schwenk, and Yoshua Bengio. Learning phrase representations using rnn encoder-decoder for
+statistical machine translation, 2014. cite arxiv:1406.1078Comment: EMNLP 2014.
+Luca Ciampi, Carlos Santiago, Joao Costeira, Claudio Gennaro, and Giuseppe Amato. Domain
+adaptation for traffic density estimation. International Joint Conference on Computer Vision,
+Imaging and Computer Graphics Theory and Applications, 2021.
+Luca Ciampi, Carlos Santiago, Joao Costeira, Claudio Gennaro, and Giuseppe Amato. Night and day
+instance segmented park (NDISPark) dataset: a collection of images taken by day and by night for
+vehicle detection, segmentation and counting in parking areas. Zenodo, 2022.
+Kevin Clark, Minh-Thang Luong, Quoc V Le, and Christopher D Manning. ELECTRA: Pre-training
+text encoders as discriminators rather than generators. In ICLR, 2020.
+Nadav Cohen, Yael Newman, and Ariel Shamir. Semantic segmentation in art paintings. Computer
+Graphics Forum, 2022.
+Marius Cordts, Mohamed Omran, Sebastian Ramos, Timo Rehfeld, Markus Enzweiler, Rodrigo
+Benenson, Uwe Franke, Stefan Roth, and Bernt Schiele. The cityscapes dataset for semantic urban
+scene understanding. In CVPR, pp. 3213–3223, 2016.
+Dima Damen, Hazel Doughty, Giovanni Maria Farinella, Antonino Furnari, Jian Ma, Evangelos Kaza-
+kos, Davide Moltisanti, Jonathan Munro, Toby Perrett, Will Price, and Michael Wray. Rescaling
+egocentric vision: Collection, pipeline and challenges for EPIC-KITCHENS-100. IJCV, 2022.
+Tri Dao. Flashattention-2: Faster attention with better parallelism and work partitioning. arXiv
+preprint arXiv:2307.08691, 2023.
+Ahmad Darkhalil, Dandan Shan, Bin Zhu, Jian Ma, Amlan Kar, Richard Higgins, Sanja Fidler,
+David Fouhey, and Dima Damen. Epic-kitchens visor benchmark: Video segmentations and object
+relations. NeurIPS, 35:13745–13758, 2022.
+Thanos Delatolas, Vicky Kalogeiton, and Dim P Papadopoulos. Learning the what and how of
+annotation in video object segmentation. In WACV, pp. 6951–6961, 2024.
+Ruining Deng, Can Cui, Quan Liu, Tianyuan Yao, Lucas W Remedios, Shunxing Bao, Bennett A
+Landman, Lee E Wheless, Lori A Coburn, Keith T Wilson, et al. Segment anything model (sam)
+for digital pathology: Assess zero-shot segmentation on whole slide imaging. arXiv preprint
+arXiv:2304.04155, 2023.
+Henghui Ding, Chang Liu, Shuting He, Xudong Jiang, Philip H. S. Torr, and Song Bai. Mose: A new
+dataset for video object segmentation in complex scenes. ICCV, pp. 20167–20177, 2023.
+Qingnan Fan, Fan Zhong, Dani Lischinski, Daniel Cohen-Or, and Baoquan Chen. Jumpcut: non-
+successive mask transfer and interpolation for video cutout. ACM Transactions on Graphics,
+2015.
+Alireza Fathi, Xiaofeng Ren, and James M. Rehg. Learning to recognize objects in egocentric
+activities. CVPR, 2011.
+12

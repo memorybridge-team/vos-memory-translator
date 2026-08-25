@@ -1,0 +1,57 @@
+Published as a conference paper at ICLR 2025
+G A PPLICATION OF SA-V DATA TO OTHER MODELS
+The segment anything in images and videos capability of SAM 2 can be attributed to both its model
+design as well as its large-scale, high-quality training data, including SA-1B and SA-V .
+Note that the SA-V dataset was collected in a model-in-the-loop fashion, in order to improve SAM 2
+and correct its failure cases, while at the same time enabling flexible annotation for targeted data
+collection, including full objects and parts. This iterative process led to improvements in both the
+model and the data.
+In this section, we aim to evaluate if the SA-V data can also benefit existing models, beyond SAM
+2. To evaluate this, we use SA-V to train a recent semi-supervised VOS model, Cutie (Cheng et al.,
+2023a), which SA-V was not collected for, to assess SA-V’s generalization capabilities.
+To assess the generality of SA-V , we compare the performance of Cutie models trained with and
+without it, both for the existing VOS task with mask input and for interactive video segmentation
+with click or bounding box input (identical to the setup in §6.2). We report results in Table 17.
+mask 5-click box mask
+Method SA-V
+test
+MOSE
+val
+DA VIS
+2017 test
+LVOS
+val
+17 zero-shot datasets (§6.2)
+Cutie 62.2 68.3 85.3 63.5 71.7 68.6 73.5
+Cutie + SA-V 68.7 67.6 84.5 65.0 73.4 70.4 75.5
+SAM 2 78.4 77.9 87.7 78.0 77.6 74.4 79.3
+Table 17: Our SA-V data has a broader utility beyond SAM 2 and helps zero-shot generalization in
+other models. Including SA-V in the training mix improves the performance of Cutie on SA-V test
+and provides zero-shot gains on LVOS and 17 zero-shot datasets. The final performance of Cutie +
+SA-V still falls short of the full SAM 2 shown in the last row.
+As a baseline, the first row of Table 17 shows theJ &F accuracy of the official Cutie model trained on
+DA VIS, YouTubeVOS, and MOSE (referred to as “w/ MOSE” in Cheng et al. (2023a)) as evaluated
+by us on SA-V test and our zero-shot benchmark of 17 datasets (using 5 clicks or bounding box as
+input to SAM+Cutie or ground-truth mask input to Cutie; see §F.1.3 for details). Performance on
+MOSE, DA VIS, and LVOS benchmarks is from officially reported numbers.
+In the second row of Table 17, we train another Cutie model on our data mixture consisting of SA-V ,
+DA VIS, YouTube-VOS, and MOSE. We use the same data mixture ratio as for SAM 2 and follow
+the official Cutie training recipe. Including SA-V in the training mix brings a large performance
+improvement on the SA-V benchmark. Although integrating SA-V into the training mix does not
+improve the performance on MOSE and DA VIS in-domain benchmarks, it boosts the zero-shot
+performance as shown by gains of +1.5 on LVOS and +2.0 on our 17 zero-shot benchmark suite
+under mask input, and similar boost for the out-of-domain click and box prompts.
+Finally, the last row shows the accuracy of SAM 2, which significantly outperforms the Cutie models
+under both training settings, suggesting that the SAM 2 architecture design is another crucial aspect
+of the final performance.
+H D ETAILS ON COMPARISON TO STATE -OF-THE -ART IN SEMI -SUPERVISED
+VOS
+We provide additional details on the comparison to the previous state-of-the-art in semi-supervised
+VOS (§7). We include results from SAM 2 trained only on SA-1B, SA-V and Internal data, for
+different encoder sizes.
+Qualitative comparison: In Fig. 17, we show a comparison between our baseline (Cutie-base+, top
+row) and our model (SAM 2, bottom row) when prompted with a mask in the first frame. While
+the mask prompt in the first frame only covers the shirt of the person, the masklet predicted by the
+baseline wrongfully propagates to the whole person. Our model, however, is able to restrict the
+masklet to the target object.
+36

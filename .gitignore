@@ -1,18 +1,46 @@
 __pycache__/
 .pytest_cache/
+.mypy_cache/
 .ruff_cache/
 .venv/
+venv/
 *.egg-info/
+.coverage
+htmlcov/
+
+# Editors, operating systems, secrets, and local overrides.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+*.local.yaml
+*.local.yml
+tmp/
+*.tmp
+.ipynb_checkpoints/
 
 # Model/data artifacts must remain outside Git.
 *.pt
 *.pth
 *.ckpt
 *.safetensors
-data/
+data/*
+!data/README.md
 datasets/
 checkpoints/
 dumps/
 artifacts/
 probe-output/
+outputs/*
+!outputs/README.md
+runs/
+wandb/
+mlruns/
+
+# Package build artifacts.
+build/
+dist/
 

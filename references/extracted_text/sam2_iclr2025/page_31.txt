@@ -1,0 +1,142 @@
+Published as a conference paper at ICLR 2025
+20 40 60 80 100 120
+EndoVis/uni00A02018/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+60
+65
+70
+75
+80
+85J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+20 40 60 80 100 120 140 160
+ESD/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+83
+85
+87
+89
+91
+93J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+50 100 150 200 250 300 350 400
+LVOSv2/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+60
+65
+70
+75
+80
+85
+90
+95J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+10 20 30 40 50 60
+LV/uni00ADVIS/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+80
+82
+84
+86
+88
+90
+92
+94J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+100 200 300 400 500 600 700
+PUMaVOS/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+45
+50
+55
+60
+65
+70
+75
+80
+85J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+20 40 60 80 100 120
+UVO/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+70
+72
+74
+76
+78
+80
+82
+84J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+10 20 30 40 50 60
+VIPSeg/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+78
+80
+82
+84
+86
+88
+90
+92J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+20 40 60 80 100 120
+Virtual/uni00A0KITTI/uni00A02/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+55
+60
+65
+70
+75
+80J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+20 40 60 80 100 120
+VOST/uni00A0/uni00A0annotation/uni00A0time/uni00A0(sec)/uni00A0with/uni00A03/uni00ADclick
+40
+50
+60
+70
+80J&F
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+(a) J &F performance on each dataset with different number of interacted frames (3-click)
+EndoVis Virtual
+Method 2018 ESD LVOSv2 LV-VIS PUMaVOS UVO VIPSeg KITTI 2 VOST (average)
+SAM + XMem++ 68.9 88.2 72.1 86.4 60.2 74.5 84.2 63.8 46.6 71.7
+SAM + Cutie 71.8 87.6 82.1 87.1 59.4 75.2 84.4 70.3 54.3 74.7
+SAM 2 77.0 90.2 87.9 90.3 68.5 79.2 88.3 74.1 67.5 80.3
+(b) average J &F on each dataset over 8 interacted frames (3-click)
+Figure 13: Zero-shot performance of SAM 2 vs baselines (SAM+XMem++ and SAM+Cutie) under
+interactive offline evaluation with different numbers of interacted frames, using 3 clicks per interacted
+frame. See §F.1.2 for details.
+In this setting, we evaluate on all 17 zero-shot video datasets in §F.1.1. If a dataset does not follow
+the standard VOS format, we preprocess it into a format similar to MOSE (Ding et al., 2023). During
+processing, we ensure that all objects in each video have a valid non-empty segmentation mask on the
+first frame to be compatible with semi-supervised VOS evaluation. In case an object doesn’t appear in
+the first frame, we create a separate video for it starting from the first frame where the object appears.
+We report the standard J &F metric (Pont-Tuset et al., 2017) for this evaluation. If a dataset provides
+an official evaluation toolkit, we use it for evaluation (on the VOST dataset, we report theJ metric
+instead, following its official protocol (Tokmakov et al., 2022)). The results are shown in Table 4,
+where SAM 2 performs better than both baselines on the majority of the 17 datasets across different
+types of prompts.
+We show per-dataset results of SAM 2 and the two baselines (SAM+XMem++ and SAM+Cutie,
+see their details below) for semi-supervised VOS evaluation in Fig. 15. SAM 2 outperforms both
+baselines on the majority of these datasets across different types of prompts.
+F.1.4 SAM+XM EM++ AND SAM+C UTIE BASELINE DETAILS
+We adopt SAM+XMem++ and SAM+Cutie as two baselines for promptable video segmentation,
+where the click (or box) prompts are first processed by SAM to obtain an object mask, and then
+XMem++ / Cutie models track this SAM mask across the video to obtain the final masklet. In these
+two baselines, SAM can be used to provide both aninitial object mask on the first frame, or tocorrect
+an existing object mask output by XMem++ or Cutie. This is used for subsequent interacted frames
+during interactive offline and online evaluation, where new positive and negative clicks are provided
+as corrections over an existing mask.
+31

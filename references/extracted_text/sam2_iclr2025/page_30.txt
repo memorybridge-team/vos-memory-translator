@@ -1,0 +1,54 @@
+Published as a conference paper at ICLR 2025
+until reaching another low quality frame with IoU < 0.75. This is repeated while the number of
+prompted frames is less than the maximum Nframe. Unlike the previous offline evaluation, in this
+setting, the new prompts only affect the frames after the current paused frame but not the frames
+before it.
+In both settings, we evaluate on 9 densely annotated datasets in §F.1.1 (EndoVis, ESD, LVOSv2,
+LV-VIS, UVO, VOST, PUMaVOS, Virtual KITTI 2, and VIPSeg). If a video contains multiple objects
+to segment in its ground-truth annotations, we perform inference on each object independently. We
+simulate interactive video segmentation with Nclick = 3 clicks per frame, assuming that the user
+would visually locate the object to label it (with initial clicks) or to refine the current segmentation
+prediction of it (with correction clicks). Specifically, when starting the first pass (where there are not
+any existing predictions yet), we place an initial click on the first frame at the center1 of the object’s
+ground-truth mask and then interactively add two more clicks based on the center of the error region
+(between the ground-truth mask and the predicted segments on the first frame). Then in subsequent
+passes (where there are already predicted segments), we interactively add three clicks based on the
+center of the error region (between the ground-truth mask and the predicted segments on the frame
+being prompted).
+We report the average J &F metric over Nframe = 1, . . . ,8 interacted frames and the J &F metrics
+under different annotation time on a video based on the following assumptions:
+• On each frame, it takes Tloc = 1 sec for the annotator to visually locate an object in the
+frame, and Tclick = 1.5 sec to add each click, following Delatolas et al. (2024).
+• In offline mode, it takes Texam = 30 sec on a 300-frame video to examine the results
+throughout the video in each round, including finding the frame with the worst segmentation
+quality to add corrections (and for longer or shorter videos, this time is proportional to the
+video length L, assuming the annotator could examine the results at 10 FPS).
+• In online mode, it takes Texam = 30 sec on a 300-frame video to follow the results
+throughout the video in total, including pausing at a frame with low quality for further
+corrections (and this time is proportional to the video length L similar to the offline mode).
+• The annotation time for an object is (Texam · (L/300) + Tloc + Tclick · Nclick) · Nframe in
+offline mode andTexam ·(L/300)+( Tloc + Tclick · Nclick)·Nframe in online mode, where L
+is the total frame number in the video, Nframe = 1, . . . ,8 is the number of frames annotated
+(i.e., the number of interactive rounds), and Nclick = 3 is the number of clicks per frame.2
+We show per-dataset results of SAM 2 and the two baselines (SAM+XMem++ and SAM+Cutie,
+see their details below) for interactive offline and online evaluation in Fig. 13 and Fig. 14. SAM 2
+outperforms both baselines with a notable margin on all datasets and settings.
+F.1.3 S EMI -SUPERVISED VOS EVALUATION DETAILS
+In §6.2, we also compare with previous video tracking methods under the semi-supervised VOS setting
+(Pont-Tuset et al., 2017), where prompts (which can be foreground/background clicks, bounding
+boxes, or ground-truth object masks) are provided only on the first frame of the video. When using
+click prompts, we interactively sample either 1, 3 or 5 clicks on the first video frame, and then track
+the object based on these clicks. Following the click-based evaluation in prior work (Kirillov et al.,
+2023; Sofiiuk et al., 2022), the initial click is placed on the object center and subsequent clicks are
+obtained from the center of the error region.
+Similar to the interactive setting, here we also use SAM+XMem++ and SAM+Cutie as two baselines.
+For click or box prompts, SAM is first used to handle click or bounding box inputs, and its output
+mask is then used as input to XMem++ or Cutie. For mask prompts, the ground-truth object masks on
+the first frame are directly used as input to XMem++ and Cutie – this is the standard semi-supervised
+VOS setting and evaluates XMem++ and Cutie without using SAM.
+1The center of a mask is defined as the mask pixel that has the largest Euclidean distance to the mask
+boundary.
+2We note that this estimation does not account for the model’s tracking FPS. The intuition is that human
+annotators can only examine the results at a lower speed, and therefore the model’s tracking time is covered by
+Texam.
+30

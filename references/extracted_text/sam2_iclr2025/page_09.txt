@@ -1,0 +1,65 @@
+Published as a conference paper at ICLR 2025
+1 2 3 4 5 6 7 8
+number/uni00A0of/uni00A0annotated/uni00A0frames/uni00A0with/uni00A03/uni00ADclick
+65
+70
+75
+80
+85average/uni00A0J&F/uni00A0over/uni00A0datasets
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+1 2 3 4 5 6 7 8
+number/uni00A0of/uni00A0annotated/uni00A0frames/uni00A0with/uni00A03/uni00ADclick
+65
+70
+75
+80
+85average/uni00A0J&F/uni00A0over/uni00A0datasets
+SAM/uni00A02
+SAM/uni00A0+/uni00A0XMem++
+SAM/uni00A0+/uni00A0Cutie
+(a) offline average J &F across datasets (3-click) (b) online average J &F across datasets (3-click)
+Figure 5: Zero-shot accuracy over 9 datasets in interactive offline and online evaluation settings.
+We create two strong baselines, SAM+XMem++ and SAM+Cutie, based on two state-of-the-art
+models for video object segmentation, XMem++ (Bekuzarov et al., 2023) and Cutie (Cheng et al.,
+2023a). We use XMem++ to generate a video segmentation based on mask inputs on one or multiple
+frames. SAM is used to provide an initial mask or to refine an output (by feeding the current
+segmentation as a mask prompt to SAM). For the SAM+Cutie baseline, we modify Cutie to allow
+taking mask inputs on multiple frames.
+In Fig. 5, we report the average J &F accuracy over Nframe = 1 , . . . ,8 interacted frames. SAM
+2 outperforms SAM+XMem++ and SAM+Cutie for both offline and online evaluation settings.
+Across all 9 datasets (see per-dataset results in §F.1), SAM 2 dominates both methods, generating
+high-quality video segmentation from a few clicks while allowing continued refinement with prompts.
+Overall, SAM 2 can generate better segmentation accuracy, with >3× fewer interactions.
+6.2 S EMI -SUPERVISED VIDEO OBJECT SEGMENTATION
+Method 1-click 3-click 5-click bounding box ground-truth mask ‡
+SAM+XMem++ 56.9 68.4 70.6 67.6 72.7
+SAM+Cutie 56.7 70.1 72.2 69.4 74.1
+SAM 2 64.7 75.3 77.6 74.4 79.3
+Table 4: Zero-shot accuracy across 17 video datasets using different prompts. We report average
+accuracy for each type of prompt (1, 3 or 5 clicks, bounding boxes, or ground-truth masks) in the first
+video frame (‡: this case directly uses masks as inputs into XMem++ or Cutie without SAM).
+We evaluate the semi-supervised video object segmentation (VOS) setting (Pont-Tuset et al., 2017)
+with click, box, or mask prompts only on the first frame of the video. When using click prompts, we
+interactively sample either 1, 3 or 5 clicks on the first video frame.
+Similar to the interactive setting in §6.1, we compare to XMem++ and Cutie, using SAM for click
+and box prompts, and in their default setting when using mask prompts. We report the standardJ &F
+accuracy (Pont-Tuset et al., 2017), except for on VOST (Tokmakov et al., 2022), where we report the
+J metric following its protocol. The results are in Table 4. SAM 2 outperforms both methods on the
+17 datasets. The results underline that SAM 2 also excels at the conventional, non-interactive VOS
+task with mask input, for which these other works are specifically designed. Details are in §F.1.3.
+6.3 I MAGE SEGMENTATION
+We evaluate SAM 2 on the Segment Anything task across 37 zero-shot datasets, including 23 datasets
+previously used by SAM for evaluation. 1-click and 5-click mIoUs are reported in Table 5 and we
+show the average mIoU by dataset domain and model speed in frames per second (FPS) on a single
+A100 GPU.
+The first column (SA-23 All) shows accuracy on the 23 datasets from SAM. SAM 2 achieves higher
+accuracy (58.9 mIoU with 1 click) than SAM (58.1 mIoU with 1 click), without using any extra data
+and while being 6× faster. This can be mainly attributed to the smaller but more effective Hiera
+image encoder in SAM 2.
+The bottom row shows how training on our SA-1B and video data mix can further improve accuracy
+to 61.4% on average on the 23 datasets. We also see exceptional gains on the video benchmarks from
+SA-23 (video datasets are evaluated as images, identical to Kirillov et al. (2023)), and the 14 new
+video datasets we added. More detailed results including a breakdown by dataset are in §F.4.
+9

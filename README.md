@@ -13,6 +13,23 @@ producer, storage, and consumer paths verified against that revision.
 No checkpoint, dataset, prompt token, or tensor dump belongs in Git. Tensor
 dumps are opt-in and ignored by `.gitignore`.
 
+## Project documents and layout
+
+Read [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md) before changing the research
+scope, state contract, baselines, or evaluation design.
+
+| Path | Purpose |
+| --- | --- |
+| `docs/design/` | Translator, state-contract, and experiment design documents |
+| `docs/memory_tensor_inventory.md` | Verified SAM 2 memory producer/storage/consumer paths |
+| `docs/validation.md` | Commands and tests run for the current probe milestone |
+| `references/` | Source papers and searchable page-level text extracts |
+| `src/vos_memory_inspector/` | Current inspection and compatibility code |
+| `tests/` | Synthetic unit and integration tests |
+| `configs/` | Repository-owned experiment configuration files |
+| `scripts/` | Reproducible command entry points |
+| `data/`, `outputs/` | Local-only datasets and generated artifacts |
+
 ## What is measured
 
 - Stored per-frame tensors: `maskmem_features`, every element of

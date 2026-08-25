@@ -1,0 +1,52 @@
+Published as a conference paper at ICLR 2025
+E.2.2 D ATA ENGINE PHASE COMPARISON
+The comparison of data engine phases shown in Table 1 was conducted as a controlled experiment
+using 169 videos and 452 masklets. We ask three subsets of annotators to annotate the same set of
+objects with the annotation protocol from each phase. We categorize masklets into three buckets
+based on the mask area in the first frame (small: 1 to 322, medium: 322 to 962, and large: equal or
+greater than 962). Phase 1 data is used as the quality reference, due to the high quality masks from
+frame-by-frame manual annotation with SAM.
+F D ETAILS ON ZERO -SHOT TRANSFER EXPERIMENTS
+In this section, we describe further details of our zero-shot experiments (§6). Unless otherwise noted,
+the results reported in this section follow our default setup using Hiera-B+ image encoder with a
+resolution of 1024 and trained on the full combination of datasets, i.e., SAM 2 (Hiera-B+) in Table 6.
+F.1 Z ERO-SHOT VIDEO TASKS
+F.1.1 V IDEO DATASET DETAILS
+We evaluate SAM 2 on a diverse benchmark of 17 zero-shot datasets: EndoVis 2018 (Allan et al.,
+2020) contains medical surgery videos with robotic instruments. ESD (Huang et al., 2023) contains
+videos from a robot manipulator camera often with motion blur. LVOSv2 (Hong et al., 2024)
+is a benchmark for long-term video object segmentation. LV-VIS (Wang et al., 2023) contains
+videos from a diverse set of open-vocabulary object categories. UVO (Wang et al., 2021b) contains
+videos for open-world object segmentation, and VOST (Tokmakov et al., 2022) contains videos with
+objects undergoing large transformations such as egg broken or paper torn. PUMaVOS (Bekuzarov
+et al., 2023) contains videos with segments around object parts such as a person’s cheek. Virtual
+KITTI 2 (Cabon et al., 2020) is a synthetic video dataset with driving scenes. VIPSeg (Miao et al.,
+2022) provides object segmentation in panoptic videos. Wildfires (Toulouse et al., 2017) contains
+wildfire videos under different conditions from the Corsican Fire Database. VISOR (Darkhalil
+et al., 2022) contains egocentric videos in kitchen scenes with segments around hands and active
+objects. FBMS (Brox et al., 2010) provides motion segmentation over moving objects in videos.
+Ego-Exo4D (Grauman et al., 2023) is a large dataset with egocentric videos around various human
+activities. Cityscapes (Cordts et al., 2016) contains videos for urban driving scenes. Lindenthal
+Camera (Haucke & Steinhage, 2021) contains videos in a wildlife park with segments around observed
+animals such as birds and mammals. HT1080WT Cells (Gómez-de Mariscal et al., 2021) contains
+microscopy videos with cell segments. Drosophila Heart (Fishman et al., 2023) contains microscopy
+videos for the heart of fruit flies.
+Among these 17 zero-shot video datasets above, 9 of them (EndoVis, ESD, LVOSv2, LV-VIS,
+UVO, VOST, PUMaVOS, Virtual KITTI 2, and VIPSeg) have dense object segments annotated for
+every video frame. In the remaining 8 datasets (Wildfires, VISOR, FBMS, Ego-Exo4D, Cityscapes,
+Lindenthal Camera, HT1080WT Cells, and Drosophila Heart), the object segments are sparsely
+annotated over only a subset of video frames, and we compute the metrics on those frames where the
+ground-truth segmentation masks are available. In most evaluations of the paper, we only evaluate
+zero-shot performance on the 9 densely annotated datasets, while in our semi-supervised VOS
+evaluation (§6.2), we evaluate on all these 17 datasets listed above.
+F.1.2 I NTERACTIVE OFFLINE AND ONLINE EVALUATION DETAILS
+Offline evaluation involves multiple passes over the entire video. We start with click prompts on the
+first frame, segment the object throughout the entire video, and then in the next pass, we select the
+frame with the lowest segmentation IoU w.r.t. the ground-truth as the new frame for prompting. The
+model then segments the object again throughout the video based on all prompts received previously,
+until reaching a maximum of Nframe passes (with one new prompted frame in each pass).
+Online evaluation involves only one pass over the entire video. We start with click prompts on the
+first frame and propagate the prompts across the video, pausing propagation when encountering a
+frame with a low-quality prediction (IoU < 0.75 with ground-truth). We then add additional click
+prompts on the paused frame to correct the segment on this frame and resume the propagationforward
+29

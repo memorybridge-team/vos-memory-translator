@@ -1,0 +1,44 @@
+Published as a conference paper at ICLR 2025
+f r a m e  1
+s t e p  1
+s t e p  2
+f r a m e  2 f r a m e  3 f r a m e  4
+Figure 2: Interactive segmentation with SAM 2. Step 1 (selection): we prompt SAM 2 in frame 1
+to obtain the segment of the target object (the tongue). Green/red dots indicate positive/negative
+prompts respectively. SAM 2 automatically propagates the segment to the following frames (blue
+arrows) to form a masklet. If SAM 2 loses the object (after frame 2), we can correct the masklet by
+providing an additional prompt in a new frame (red arrow). Step 2 (refinement): a single click in
+frame 3 is sufficient to recover the object and propagate it to obtain the correct masklet. A decoupled
+SAM + video tracker approach would require several clicks in frame 3 (as in frame 1) to correctly
+re-annotate the object as the segmentation is restarted from scratch. With SAM 2’s memory, a single
+click can recover the tongue.
+4 M ODEL
+SAM 2 (Fig. 3) can be seen as a generalization of SAM to the video (and image) domain, taking point,
+box, and mask prompts on individual frames to define the spatial extent of the object to be segmented
+spatio-temporally. Spatially, the model behaves similarly to SAM. A promptable andlight-weight
+mask decoder takes an image embedding and prompts (if any) and outputs a segmentation mask for
+the frame. Prompts can be iteratively added on a frame in order to refine the masks.
+The frame embedding used by the SAM 2 decoder is not directly from an image encoder and is instead
+conditioned on memories of past predictions and prompted frames. It is possible for prompted frames
+to also come “from the future” relative to the current frame. Memories of frames are created by the
+memory encoder based on the current prediction and placed in a memory bank for use in subsequent
+frames. The memory attention operation takes the per-frame embedding from the image encoder and
+conditions it on the memory bank, before the mask decoder ingests it to form a prediction.
+We describe individual components and training below and provide more details in Appendix D.
+Image encoder. For real-time processing of arbitrarily long videos, we take a streaming approach,
+consuming video frames as they become available. The image encoder is only run once for the entire
+interaction and its role is to provide unconditioned tokens (feature embeddings) representing each
+frame. We use an MAE (He et al., 2022) pre-trained Hiera (Ryali et al., 2023; Bolya et al., 2023)
+image encoder, which is hierarchical, allowing us to use multiscale features during decoding.
+Memory attention. The role of memory attention is to condition the current frame features on
+the past frames features and predictions as well as on any new prompts. We stack L transformer
+blocks, the first one taking the image encoding from the current frame as input. Each block performs
+self-attention, followed by cross-attention to memories of (prompted/unprompted) frames and object
+pointers (see below), stored in a memory bank (see below), followed by an MLP. We use vanilla
+attention operations for self- and cross-attention, allowing us to benefit from recent developments in
+efficient attention kernels (Dao, 2023).
+Prompt encoder and mask decoder.Our prompt encoder is identical to SAM’s and can be prompted
+by clicks (positive or negative), boxes, or masks to define the extent of the object in a given frame.
+Sparse prompts are represented by positional encodings summed with learned embeddings for each
+prompt type, while masks are embedded using convolutions and summed with the frame embedding.
+4

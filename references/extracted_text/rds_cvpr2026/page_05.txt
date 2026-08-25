@@ -1,0 +1,110 @@
+Block
+Block
+Block
+Block
+Block
+Block
+Block
+Block
+Router
+Block
+Router
+Block
+Router
+Router
+Block
+Block
+(1) SlimSAM (2) Progressive Block Drop (PBD) (3) Dynamic Token Pruning (DyT) (4) AdaViT
+Figure 3. Illustration of the four baseline methods.(1) SlimSAM[5]: A static channel pruning method that permanently removes network
+channels.(2) PBD[4]: A static block pruning strategy that removes entire computational blocks.(3) DyT[51]: A dynamic token pruning
+method where blue circles represent kept tokens and yellow circles represent skipped tokens.(4) AdaViT[26]: A dynamic block skipping
+method that decides whether to execute certain blocks.
+Local perspective.The local importanceI i
+L indicates the
+block’s contribution to feature transformation. A significant
+transformation suggests the block is performing a critical
+computation. We measure this via the cosine similarity be-
+tween the input and output features of the block:
+I i
+L = 1−E
+ ⟨Xi,X i+1⟩
+∥Xi∥ · ∥Xi+1∥
+
+,(10)
+where⟨·,·⟩and∥ · ∥are inner product and L2-norm opera-
+tion of certain vector, respectively.
+Parameter allocation.We select adapted blocks via rank
+aggregation over global and local importance. LetK sel de-
+note the target number of blocks to fine-tune. For each
+i∈ {0, . . . , L−1} \ K, we compute the descending ranks
+rG(i)andr L(i)fromI i
+G andI i
+L, and define:
+s(i) =−(r G(i) +r L(i)).
+The final selected set of blocksHis:
+H=K ∪TopIdx Ksel−|K|(s).(11)
+whereTopIdx k(·)returns the indices of the topkvalues.
+For each block inH, we inject LoRA adapters into all pro-
+jection matrices, namelyW Q,W K,W V ,W O,W U , and
+WD, optimizing only these adapters and the router while
+freezing the original encoder weights.
+3.4. Training and Inference of RDS
+Training.Our training pipeline can be roughly divided
+into 2 stages: i) I-LoRA identification and ii) Dynamic com-
+ponents fine-tuning. Specifically, we first split off a small
+subset of the training set and run inference on these data us-
+ing the SAM2 backbone, locating the most important blocks
+as in Equation 11. LoRA adapters are then inserted into all
+weight matrices of these blocks following Equation 3.
+After we have allocated trainable parameters, we fine-
+tune our router and the LoRA adapters jointly. Unlike tradi-
+tional dynamic methods that rely heavily on a delicate spar-
+sity loss penalty, our normalized routing probability˜wi
+t (as
+defined in Equation 6) inherently constrains the overall acti-
+vation ratio to approximatelyβ. During training, we fix the
+hyperparameterβto strictly control the target complexity.
+Inference.We report stochastic evaluation by default: for
+i /∈ K, we sampler i
+t ∼Bernoulli( ˜wi
+t), which better
+matches the training objective. For deterministic deploy-
+ment, we instead setr i
+t = 1when˜w i
+t ≥τandr i
+t = 0other-
+wise, withτcalibrated on a validation set (defaultτ= 0.5);
+blocks inKremain always active.
+4. Experiments
+4.1. Experiment Settings
+Our experiments cover two tasks: Video Object Segmenta-
+tion (VOS) and Video Object Tracking (VOT).
+Datasets.For the VOS task, the model is evaluated in a
+semi-supervised setting, where the ground-truth mask for
+the first frame is provided. We adopt three main datasets
+for this evaluation: DA VIS 2017 [28], SA-V [32], and
+YouTube-VOS (YTVOS 2019) [43]. For VOT experiments,
+we evaluate our method using the following datasets: La-
+SOT [7], TrackingNet [27], and GOT-10k [18].
+Implementation Details.We fine-tune the model on
+DA VIS 2017 [28] with I-LoRA for 40 epochs on a single
+RTX A5000 ADA, following SAM2 fine-tuning for other
+settings. I-LoRA employs rank 32, applied to half of en-
+coder blocks (i.e., 24 blocks) selected via the importance
+metric. For evaluation, we adopt semi-supervised VOS set-
+ting, where ground-truth masks are provided for the first
+frame.
+The baseline and default settings in the experiments are
+highlighted using grey and blue , respectively.
+4.2. Comparison with Other Methods
+As shown in Figure 3, we compare RDS against four
+mainstream strategies (SlimSAM [5], Progressive Block
+Drop [4], Dynamic Token Pruning [51], and AdaViT [26]),
+all based on the SAM2 backbone. Further details on these
+four methods are provided in the supplementary material.
+As shown in Table 1 and Figure 4, RDS lies on the Pareto
+frontier, offering a strong trade-off at high performance.
+For instance, on DA VIS 2017, it delivers a notable1.3×
+speedup with negligible performance cost, significantly out-
+performing others. Unlike methods like DyT and AdaViT,
+20916

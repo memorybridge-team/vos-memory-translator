@@ -1,0 +1,19 @@
+Published as a conference paper at ICLR 2025
+Figure 12: Annotation guideline overview. There are 3 main annotation tasks: masklet selection,
+masklet tracking, and masklet verification. Each task has a different set of annotators working on it.
+selection, Steps 3 and 4 on masklet tracking, and Step 5 on quality verification. SAM 2 was deployed
+on GPU as an API and built into the annotation tool to enable interactive use.
+Compared to image segmentation annotation, large-scale video segmentation annotation presents
+unique challenges which require innovations in the annotation task design and protocol. To improve
+our model’s ability to “segment anything”, it was important to focus annotation on challenging objects
+where SAM 2 struggled. We leveraged our online model in the loop setup to enable this, requesting
+annotators to use SAM 2 interactively to identify failure modes and then correct them.
+We found the number of edited frames to be a proxy to the “challengingness” of an object as shown in
+Table 8. Therefore, we asked annotators to annotate objects that required at least 2 edited frames with
+SAM 2 in the loop. To focus annotation on less prominent and more challenging cases, annotators
+were presented with videos pre-filled with verified satisfactory automatic masklets and asked to find
+un-annotated challenging objects. We further decouple the object selection task from the annotation
+task: in the selection task annotators focus on choosing the challenging objects in one frame, while in
+the annotation task annotators are presented with a challenging target object and requested to annotate
+the masklet consistently throughout the video.
+28

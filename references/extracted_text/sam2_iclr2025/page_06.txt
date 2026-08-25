@@ -1,0 +1,53 @@
+Published as a conference paper at ICLR 2025
+5 D ATA
+To develop the capability to “segment anything” in video, we built a data engine to collect a large and
+diverse video segmentation dataset. We employ an interactive model in the loop setup with human
+annotators. Similar to Kirillov et al. (2023), we do not impose semantic constraints on the annotated
+masklets, and focus on both whole objects (e.g., a person) and parts (e.g., a person’s hat). Our data
+engine went through three phases, each categorized based on the level of model assistance provided
+to annotators. Next, we describe each data engine phase and our SA-V dataset.
+5.1 D ATA ENGINE
+Phase 1: SAM per frame. The initial phase used the image-based interactive SAM (Kirillov et al.,
+2023) to assist human annotation. Annotators are tasked with annotating the mask of a target object in
+every frame of the video at 6 frames per second (FPS) using SAM, and pixel-precise manual editing
+tools such as a “brush” and “eraser”. There is no tracking model involved to assist with the temporal
+propagation of masks to other frames. As this is a per-frame method, and all frames require mask
+annotation from scratch, the process is slow, with an average annotation time of 37.8 seconds per
+frame in our experiment. However, this yields high-quality spatial annotations per frame. In this
+phase, we collected 16K masklets across 1.4K videos. We further use this approach to annotate our
+SA-V val and test sets to mitigate potential biases of SAM 2 during evaluation.
+Phase 2: SAM + SAM 2 Mask. The second phase added SAM 2 into the loop, where SAM 2 only
+accepted masks as prompts. We refer to this version as SAM 2 Mask. Annotators used SAM and
+other tools as in Phase 1 to generate spatial masks in the first frame, and then use SAM 2 Mask to
+temporally propagate the annotated mask to other frames to get the full spatio-temporal masklets. At
+any subsequent video frame, annotators can spatially modify the predictions made by SAM 2 Mask
+by annotating a mask from scratch with SAM, a “brush” and/or “eraser”, and re-propagate with SAM
+2 Mask, repeating this process until the masklet is correct. SAM 2 Mask was initially trained on the
+Phase 1 data and publicly available datasets. During Phase 2, we re-trained and updated SAM 2 Mask
+in the annotation loop twice using the collected data. In Phase 2, we collected 63.5K masklets. The
+annotation time went down to 7.4 s/frame, a ∼5.1x speed up over Phase 1.
+Despite an improvement in annotation time, this approach requires annotating masks in intermediate
+frames from scratch without previous memory. We then advanced to develop the fully-featured
+SAM 2, capable of both interactive segmentation and mask propagation in a unified model.
+Phase 3: SAM 2. In the final phase, we utilize the fully-featured SAM 2, which accepts various
+types of prompts, including points and masks. SAM 2 benefits from memories of objects across
+the temporal dimension to generate mask predictions. This means annotators only need to provide
+occasional refinement clicks to SAM 2 to edit the predicted masklets in intermediate frames, as
+opposed to annotating from scratch with a spatial SAM which has no such memory context. During
+Phase 3, we re-trained and updated SAM 2 using the collected annotations five times. With SAM 2 in
+the loop, the annotation time per frame went down to 4.5 seconds, a ∼8.4x speed up over Phase 1. In
+Phase 3, we collected 197.0K masklets.
+Quality verification. To uphold a high standard for annotation, we introduce a verification step.
+A separate set of annotators are tasked with verifying the quality of each annotated masklet as
+“satisfactory” (correctly and consistently tracking the target object across all frames) or “unsatisfactory”
+(target object is well defined with a clear boundary but the masklet is not correct or consistent).
+Unsatisfactory masklets were sent back to the annotation pipeline for refinement. Any masklets
+tracking not well defined objects were rejected entirely.
+Auto masklet generation. Ensuring diversity in annotation is important to enable the anything
+capability of our model. As human annotators might typically focus more on salient objects, we
+augment the annotations with automatically generated masklets (referred to as “Auto”). This serves a
+dual purpose of increasing the coverage of annotations and helping identify model failure cases. To
+generate auto masklets, we prompt SAM 2 with a regular grid of points in the first frame and generate
+candidate masklets. These are then sent to the masklet verification step for filtering. Automatic
+masklets tagged as “satisfactory” are added to the SA-V dataset. Masklets identified as “unsatisfactory”
+6

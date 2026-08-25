@@ -1,0 +1,68 @@
+Published as a conference paper at ICLR 2025
+12) without degrading the VOS capability. Training only on SA-V and SA-1B (row 4) is enough to
+obtain strong performance on all benchmarks except for MOSE (specific object categories). Overall,
+we obtain the best results when mixing all datasets: VOS, SA-1B, and our data engine data (row 12).
+Data quantity ablation. Next, we study the effect of scaling training data. SAM 2 is pre-trained on
+SA-1B before training on varying sizes of SA-V . We report averageJ &F score (when prompted
+with 3 clicks in the first frame) over 3 benchmarks: SA-V val, zero-shot, and MOSE dev. Fig. 6 shows
+a consistent power law relationship between the quantity of training data and the video segmentation
+accuracy on all benchmarks.
+5 10 20 50 100 200
+#masklets/uni00A0×/uni00A01000
+58
+60
+62
+64
+66
+68SA/uni00ADV/uni00A0val/uni00A0J&F
+5 10 20 50 100 200
+#masklets/uni00A0×/uni00A01000
+66
+67
+68
+69
+70
+71
+72
+73zero/uni00ADshot/uni00A0J&F
+5 10 20 50 100 200
+#masklets/uni00A0×/uni00A01000
+69
+70
+71
+72
+73
+74
+75MOSE/uni00A0dev/uni00A0J&F
+Figure 6: SAM 2 accuracy as a function of the SA-V quantity. We report J &F accuracy for 3-click
+prompts in the first frame on SA-V val (left), 9 zero-shot datasets (center), and MOSE dev (right).
+Data quality ablation. In Table 8, we experiment with filtering strategies for quality. We subsample
+50k masklets from SA-V , either randomly or by taking the masklets that have beenedited the most by
+annotators. Filtering based on the number of edited frames leads to strong performance using just
+25% of the data, and outperforms random sampling, but is worse than using all 190k SA-V masklets.
+J &F mIoU
+Setting SA-V val Internal-test MOSE dev 9 zero-shot SA-23
+SA-1B + SA-V 50k random 63.7 70.3 72.3 68.7 59.1
+SA-1B + SA-V 50k most edited 66.2 73.0 72.5 69.2 58.6
+SA-1B + SA-V 69.9 73.8 73.9 70.8 59.8
+Table 8: We train our model on different subsets of our SA-V Manual data: 50k randomly sampled
+masklets, 50k masklets with the most edited frames, and the full SA-V dataset (190k masklets).
+A.2 M ODEL ARCHITECTURE ABLATIONS
+In this section, we present model ablations that guided design decisions, conducted under a smaller
+model setup with 512 input resolution by default. For each ablation setting, we report segmentation
+accuracy for video (J &F) and image (mIoU) tasks, and its relative video segmentation speed (the
+maximum inference throughput relative to the ablation default setup in gray ). We find design
+choices for image and video components to be largely decoupled – this can be attributed to our
+modular design and training strategy.
+A.2.1 C APACITY ABLATIONS
+Input size. During training, we sample sequences of frames of fixed resolution and fixed length (here
+denoted by # frames). We ablate their impact in Tables 9a, 9b. A higher resolution leads to significant
+improvements across image and video tasks, and we use a spatial input resolution of 10242 in our
+final model. Increasing the number of frames brings notable gains on video benchmarks and we use a
+default of 8 to balance speed and accuracy.
+Memory size. Increasing the (maximum) number of memories, N, generally helps the performance
+although there could be some variance, as in Table 9c. We use a default value of 6 past frames to
+strike a balance between temporal context length and computational cost. Using fewer channels for
+memories does not cause much performance regression as in Table 9d, while making the memory
+required for storage 4× smaller.
+19

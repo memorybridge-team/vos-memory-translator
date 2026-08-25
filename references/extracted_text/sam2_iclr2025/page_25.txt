@@ -1,0 +1,60 @@
+Published as a conference paper at ICLR 2025
+config value
+data SA-1B
+steps ∼90k
+resolution 1024
+precision bfloat16
+optimizer AdamW
+optimizer momentum β1, β2=0.9, 0.999
+gradient clipping type: ℓ2, max: 0.1
+weight decay 0.1
+learning rate (lr) 4e-4
+lr schedule reciprocal sqrt, timescale=1000
+warmup linear, 1k iters
+cooldown linear, 5k iters
+layer-wise decay 0.8 (T, S), 0.9 (B+), 0.925 (L)
+augmentation hflip, resize to 1024 (square)
+batch size 256
+drop path 0.1 (T, S), 0.2 (B+), 0.3 (L)
+mask losses (weight) focal (20), dice (1)
+IoU loss (weight) ℓ1 (1)
+max # masks per image 64
+# correction points 7
+global attn. blocks 5-7-9 (T), 7-10-13 (S), 12-16-20 (B+), 23-33-43 (L)
+(a) Pre-training
+config value
+data SA-1B, Internal, SA-V
+steps ∼150k
+resolution 1024
+precision bfloat16
+optimizer AdamW
+optimizer momentum β1, β2=0.9, 0.999
+gradient clipping type: ℓ2, max: 0.1
+weight decay 0.1
+learning rate (lr) img. enc.: 6e-5, other: 3.0e-4
+lr schedule cosine
+warmup linear, 7.5k iters
+layer-wise decay 0.8 (T, S), 0.9 (B+), 0.925 (L)
+image augmentation hflip, resize to 1024 (square)
+video augmentation hflip, affine (deg: 25, shear: 20), colorjitter (b: 0.1, c: 0.03, s: 0.03, h:
+null), grayscale (0.05), per frame colorjitter (b: 0.1, c: 0.05, s: 0.05, h:
+null), mosaic-2×2 (0.1)
+batch size 256
+drop path 0.1 (T, S), 0.2 (B+), 0.3 (L)
+mask losses (weight) focal (20), dice (1)
+IoU loss (weight) ℓ1 (1)
+occlusion loss (weight) cross-entropy (1)
+max. masks per frame. image: 64, video: 3
+# correction points 7
+global attn. blocks 5-7-9 (T), 7-10-13 (S), 12-16-20 (B+), 23-33-43 (L)
+(b) Full training
+Table 12: Hyperparameters and details of SAM 2 pre-training and full training. Note that some
+settings vary with image encoder size (T, S, B+, L).
+Losses and optimization. We supervise the model’s predictions using a linear combination of focal
+and dice losses for the mask prediction, mean-absolute-error (MAE) loss for the IoU prediction, and
+cross-entropy loss for object prediction with a ratio of 20:1:1:1 respectively.
+As during pre-training, for multi-mask predictions, we only supervise the mask with the lowest
+segmentation loss. If the ground-truth does not contain a mask for a frame, we do not supervise any
+of the mask outputs (but always supervise the occlusion prediction head that predicts whether there
+should exist a mask in the frame).
+25

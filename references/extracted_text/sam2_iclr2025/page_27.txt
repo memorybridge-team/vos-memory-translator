@@ -1,0 +1,16 @@
+Published as a conference paper at ICLR 2025
+Table 13 shows the comparison in J &F accuracy of SAM 2 for segmenting people across gender
+and age. At 3 clicks and with ground-truth mask prompts there is minimal discrepancy. We manually
+inspect 1 click predictions, and find the model frequently predicts the mask for a part instead of the
+person. When limiting the comparison to clips where the person is correctly segmented, the gap
+in 1 click shrinks substantially (J &F male 94.3, female 92.7), suggesting the discrepancy can be
+partially attributed to ambiguity in the prompt.
+In Appendix J, we provide model, data and annotation cards for SA-V .
+Figure 11: Example videos from the SA-V dataset with masklets overlaid (manual and automatic).
+Each masklet has a unique color, and each row represents frames from one video, with 1 second
+between them.
+E.2 D ATA ENGINE DETAILS
+E.2.1 A NNOTATION PROTOCOL
+A diagram of the annotation protocol used in our data engine is shown in Fig. 12. The annotation
+task was separated into steps each carried out by a different annotator: Steps 1 and 2 focus on object
+27

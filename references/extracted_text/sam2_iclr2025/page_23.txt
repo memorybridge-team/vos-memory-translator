@@ -1,0 +1,76 @@
+Published as a conference paper at ICLR 2025
+image
+embedding
+(256x64x64)
+x2
+token
+to image
+attn.
+2x
+conv.
+trans.
+IoU
+scores
+mlp
+masks
+dot product
+per mask
+prompt tokens
+(Ntokensx256)
+output tokens
++
+output
+token
+per mask
+IoU
+output token
+mlp
+mask decoder
+self attn.
+token to image attn.
+mlp
+image to token attn.
+stride 4, 8 feats. from img. enc.
+obj ptr
+mlp
+occlusion 
+token occlusion 
+score
+Figure 8: Mask decoder architecture. The design largely follows SAM, and we additionally include
+the stride 4 and 8 features from the image encoder during upsampling. We also use the mask token
+corresponding to the output mask as an object pointer and generate an occlusion score which indicates
+if the object of interest is visible in the current frame.
+model can interpret this click as referring to only the tire or the entire bike and output multiple
+predictions. In videos, this ambiguity can extend across video frames. For example, if in one frame
+only the tire is visible, a click on the tire might relate to just the tire, or as more of the bike becomes
+visible in subsequent frames, this click could have been intended for the entire bike. To handle this
+ambiguity, SAM 2 predicts multiple masks at each step of the video. If further prompts do not resolve
+the ambiguity, the model selects the mask with the highest predicted IoU for the current frame for
+further propagation in the video.
+Memory encoder and memory bank. Our memory encoder does not use an additional image
+encoder and instead reuses the image embeddings produced by the Hiera encoder, which are fused
+with the predicted mask information to produce memory features (as discussed in §4). This design
+allows the memory features to benefit from the strong representations produced by the image encoder
+(especially when we scale the image encoder to a larger size). Further, we project the memory
+features in our memory bank to a dimension of 64, and split the 256-dim object pointer into 4 tokens
+of 64-dim for cross-attention to the memory bank.
+Handling multiple objects in a video. When applying SAM 2 to segment multiple objects in the
+same video (such as multi-object tracking in the semi-supervised VOS evaluation), we perform
+inference on each object independently. More specifically, we share the visual features from the
+image encoder between all the objects in the video but run all the other model components (such as
+the memory bank and the mask decoder) separately for each object.
+D.2 T RAINING
+D.2.1 P RE-TRAINING
+We first pre-train SAM 2 on static images on the SA-1B dataset. Table 12a details the settings used
+during pre-training on SA-1B – other settings not mentioned here follow Kirillov et al. (2023). The
+image encoder is initialized from MAE pre-trained Hiera (Ryali et al., 2023). Similar to SAM, we
+filter masks covering more than 90% of the image and restricted training to 64 randomly sampled
+masks per image.
+Unlike SAM, we found it beneficial to use an ℓ1 loss to more aggressively supervise the IoU
+predictions and to apply a sigmoid activation to the IoU logits to restrict the output into the range
+between 0 and 1. For multi-mask predictions (on the first click), we supervise the IoU predictions of
+all masks to encourage better learning of when a mask might be bad, but only supervise the mask
+logits with the lowest segmentation loss (linear combination of focal and dice loss). In SAM, during
+iterative sampling of points, two iterations were inserted with no additional prompts (only feeding
+the previous mask logits) – we do not add such iterations during our training and use 7 correction
+23

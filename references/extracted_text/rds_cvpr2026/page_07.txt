@@ -1,0 +1,91 @@
+Figure 5.Visual comparison on the DA VIS 2017 dataset.The bottom row shows the original SAM2 model, and the top row shows our
+RDS model (activation ratio 0.6). The results demonstrate that our method maintains high-quality segmentation, nearly indistinguishable
+from the original model, while significantly improving computational efficiency.
+mance drop of less than0.4%.
+4.4. Ablation Study
+To validate the effectiveness of the key components within
+our proposed framework, we conduct a series of compre-
+hensive ablation studies. Unless otherwise specified, all ex-
+periments are conducted on the DA VIS 2017, with a visual
+comparison provided in Figure 5.
+Table 4.Routing latency comparison.A single router deter-
+mines the architecture from the input, reducing routing latency
+from∼17.2 ms to∼0.5 ms and enabling real speedup.
+Strategy Total
+Latency
+Block
+Latency
+Router
+Latency
+Original SAM2 ∼23.1 ms ∼23.1 ms -
+SAM2 w/ Dense Router∼31.1 ms∼13.9 ms∼17.2 ms
+SAM2 w/ Single Router ∼14.5 ms ∼13.9 ms ∼0.5 ms
+/uni00000013/uni00000011/uni0000001c/uni00000013/uni00000011/uni0000001b/uni00000013/uni00000011/uni0000001a/uni00000013/uni00000011/uni00000019/uni00000013/uni00000011/uni00000018/uni00000013/uni00000011/uni00000017
+/uni00000024/uni00000046/uni00000057/uni0000004c/uni00000059/uni00000044/uni00000057/uni0000004c/uni00000052/uni00000051/uni00000003/uni00000035/uni00000044/uni00000057/uni0000004c/uni00000052/uni00000003/uni0000000b/uni0000000c
+/uni0000001a/uni00000013
+/uni0000001a/uni00000018
+/uni0000001b/uni00000013
+/uni0000001b/uni00000018
+/uni0000001c/uni00000013
+/uni0000001c/uni00000018/uni0000002d/uni00000009/uni00000029
+/uni00000025/uni00000044/uni00000056/uni00000048/uni0000004f/uni0000004c/uni00000051/uni00000048
+/uni00000035/uni00000027/uni00000025
+/uni0000005a/uni00000012/uni00000052/uni00000003/uni0000002c/uni00000010/uni0000002f/uni00000052/uni00000035/uni00000024
+/uni0000005a/uni00000012/uni00000052/uni00000003/uni00000035/uni00000052/uni00000058/uni00000057/uni00000048/uni00000055
+Figure 6.The contributions
+of key components in RDS:
+The prediction-aware router and
+Importance-aware LoRA.
+/uni00000013/uni00000011/uni0000001c/uni00000013/uni00000011/uni0000001b/uni00000013/uni00000011/uni0000001a/uni00000013/uni00000011/uni00000019/uni00000013/uni00000011/uni00000018/uni00000013/uni00000011/uni00000017
+/uni00000024/uni00000046/uni00000057/uni0000004c/uni00000059/uni00000044/uni00000057/uni0000004c/uni00000052/uni00000051/uni00000003/uni00000035/uni00000044/uni00000057/uni0000004c/uni00000052/uni00000003/uni0000000b/uni0000000c
+/uni0000001b/uni00000013
+/uni0000001b/uni00000018
+/uni0000001c/uni00000013
+/uni0000001c/uni00000018/uni0000002d/uni00000009/uni00000029
+/uni00000025/uni00000044/uni00000056/uni00000048/uni0000004f/uni0000004c/uni00000051/uni00000048
+/uni00000029/uni00000058/uni00000056/uni0000004c/uni00000052/uni00000051
+/uni00000030/uni00000044/uni00000056/uni0000004e
+/uni0000002c/uni00000050/uni00000044/uni0000004a/uni00000048
+Figure 7.Impact of Router In-
+put:Fusion of temporal prior
+and visual features achieves the
+best performance.
+Effectiveness of the Router.Unlike dense per-block
+routing, our single router predicts the active submodel di-
+rectly from the input, reducing latency from 17.2 ms to 0.5
+ms (Table 4). Moreover, it outperforms static pruning un-
+der the same budget (Figure 6), highlighting the need for
+adaptive submodels.
+Impact of Input on Routing Decisions.Our router fuses
+current visual features with a temporal prior (previous
+mask). Figure 7 shows that image-only routing struggles
+with background distractions, while mask-only routing fails
+to adapt to appearance changes. By synergizing spatial at-
+tention (where to look) with visual cues (what to see), our
+fused approach achieves the best performance.
+Table 5.Router Memory.The
+immediate prior mask (M t−1)
+suffices for routing.
+MemoryJ&F
+Mt−1 89.6
+Mt−1 ∪M t−2 89.6
+Mt−1 · · · ∪M t−4 89.4
+Table 6.Motion Bias.Minimal
+degradation under large inter-
+frame motion (low FPS).
+Downsample ratioJ&F
+1×(∼24FPS) 89.6
+4×(∼6FPS) 88.8
+6×(∼4FPS) 88.7
+Temporal information.As shown in Table 5, regarding
+the memory utilized by the router, extending the history
+masks (Mt−1 ∪. . .) yields no noticeable performance im-
+provement. This further demonstrates that using only the
+most recent prior maskM t−1 is sufficient to support effec-
+tive and stable dynamic routing.
+Motion/FPS Bias.In Table 6, we downsample videos up
+to6×(∼4 FPS) to simulate large inter-frame motion. The
+minimal performance degradation confirms the robustness
+of using the previous frame’s mask as a temporal prior, even
+under varied motion scales and large object displacements.
+20918

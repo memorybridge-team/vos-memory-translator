@@ -1,0 +1,62 @@
+Published as a conference paper at ICLR 2025
+1 (5) click mIoU
+Model Data SA-23 All SA-23 Image SA-23 Video 14 new Video FPS
+SAM SA-1B 58.1 (81.3) 60.8 (82.1) 54.5 (80.3) 59.1 (83.4) 21.7
+SAM 2 SA-1B 58.9 (81.7) 60.8 (82.1) 56.4 (81.2) 56.6 (83.7) 130.1
+SAM 2 our mix 61.9 (83.5) 63.3 (83.8) 60.1 (83.2) 69.6 (85.8) 130.1
+Table 5: Zero-shot accuracy on the Segment Anything (SA) task across 37 datasets. The table shows
+the average 1- and 5-click mIoU of SAM 2 compared to SAM by domains (image/video). We report
+the average metrics on the 23 datasets used by SAM (SA-23) and the average across 14 additional
+zero-shot video datasets (as detailed in §F.4).
+J &F G
+Method MOSE
+val
+DA VIS
+2017 val
+LVOS
+val
+SA-V
+val
+SA-V
+test
+YTVOS
+2019 val
+STCN (Cheng et al., 2021a) 52.5 85.4 - 61.0 62.5 82.7
+SwinB-AOT (Yang et al., 2021b) 59.4 85.4 - 51.1 50.3 84.5
+SwinB-DeAOT (Yang & Yang, 2022) 59.9 86.2 - 61.4 61.8 86.1
+RDE (Li et al., 2022a) 46.8 84.2 - 51.8 53.9 81.9
+XMem (Cheng & Schwing, 2022) 59.6 86.0 - 60.1 62.3 85.6
+SimVOS-B (Wu et al., 2023b) - 88.0 - 44.2 44.1 84.2
+JointFormer (Zhang et al., 2023b) - 90.1 - - - 87.4
+ISVOS (Wang et al., 2022) - 88.2 - - - 86.3
+DEV A (Cheng et al., 2023b) 66.0 87.0 55.9 55.4 56.2 85.4
+Cutie-base (Cheng et al., 2023a) 69.9 87.9 66.0 60.7 62.7 87.0
+Cutie-base+ (Cheng et al., 2023a) 71.7 88.1 - 61.3 62.8 87.5
+SAM 2 (Hiera-B+) 76.6 90.2 78.0 76.8 77.0 88.6
+SAM 2 (Hiera-L) 77.9 90.7 78.0 77.9 78.4 89.3
+Table 6: VOS comparison to prior work. SAM 2 performs well in accuracy ( J &F, G) for video
+segmentation based on first-frame ground-truth mask prompts. SAM 2 performs significantly better
+on SA-V val/test.
+7 C OMPARISON TO STATE -OF-THE -ART IN SEMI -SUPERVISED VOS
+Our primary focus is on the general, interactive PVS task, but we also address the specific semi-
+supervised VOS setting (where the prompt is a ground-truth mask on the first frame), as it is a
+historically common protocol. We evaluate two versions of SAM 2 with varying image encoder sizes
+(Hiera-B+/-L) with different speed-vs-accuracy tradeoffs. We measure frames per second (FPS) on a
+single A100 GPU using a batch-size of one. SAM 2 based on Hiera-B+ and Hiera-L runs at real-time
+speeds of 43.8 and 30.2 FPS, respectively.
+We present a comparison with existing state-of-the-art in Table 6, reporting accuracy using standard
+protocols. SAM 2 shows significant improvement over the best existing methods. We observe that
+using a larger image encoder brings significant accuracy gains across the board.
+We also evaluate existing work on the SA-V val and test sets which measure performance for open-
+world segments of “any” object class. When comparing on this benchmark, we see that most previous
+methods peak at around the same accuracy. The best performance on SA-V val and SA-V test for
+prior work is significantly lower demonstrating the gap to a “segmentanything in videos” capability.
+Finally, we see that SAM 2 also brings notable gains in long-term video object segmentation as
+observed in the LVOS benchmark result. For data and model ablations, see §A.
+8 C ONCLUSION
+We present a natural evolution of Segment Anything into the video domain, based on three key aspects:
+(i) extending the promptable segmentation task to video, (ii) equipping the SAM architecture to use
+memory when applied to video, and (iii) the diverse SA-V dataset for training and benchmarking
+video segmentation. We believe SAM 2 marks a significant advancement in visual perception,
+positioning our contributions as milestones that will propel further research and applications.
+10

@@ -1,0 +1,84 @@
+Efficient Video Object Segmentation and Tracking
+with Recurrent Dynamic Submodel
+Weidong Tang1,2, Zhiyuan Liang2,3, Xinyan Wan1, Chen Zhu1,2
+Zhaopan Xu4, Pengfei Zhou2, Yan Song3, Yang You2, Wangbo Zhao2†
+1Xidian University 2National University of Singapore
+3University of Science and Technology of China 4Harbin Institute of Technology
+Abstract
+Large vision foundation models, such as SAM2, have
+achieved remarkable performance in video object segmen-
+tation and tracking (VOST). However, their effectiveness
+is hindered by significant computational overhead. While
+model pruning is a widely used strategy to address this
+issue, traditional static and input-agnostic pruning ap-
+proaches fall short in managing the diverse and complex
+nature of video data effectively. A promising alternative
+is dynamic networks, yet they often struggle to translate
+theoretical computational reductions into actual acceler-
+ation. Furthermore, both static and dynamic approaches
+typically focus on visual features of individual frames while
+neglecting the temporal correlations between them, limiting
+their performance in handling complex video streams. To
+address these challenges, we proposeRecurrentDynamic
+Submodel (RDS), a dynamic architecture that adaptively
+selects submodel blocks for each frame. Specifically, it has
+a lightweight Prediction-Aware Router (PAR), which lever-
+ages both the segmentation mask from the previous frame
+and the visual features of the current frame to make rout-
+ing decisions, enabling the submodel to explicitly capture
+the temporal nature of video data. Additionally, to reduce
+the cost of adapting the dynamic submodel, we introduce an
+Importance-aware LoRA (I-LoRA), tuning parameters only
+in the most critical blocks. Extensive experiments show that
+our approach achieves an optimal trade-off between perfor-
+mance and speed, requiring minimal trainable parameters
+and training data.
+1. Introduction
+Recent advancements in large vision foundation models,
+such as SAM2 [32], have significantly propelled progress in
+video object segmentation and tracking (VOST) [3, 8, 23,
+42, 46, 50, 52]. While these models demonstrate remark-
+†Corresponding author.
+able performance, their broader application remains con-
+strained by their substantial computational requirements,
+particularly in resource-limited environments.
+To tackle this challenge, prior works [4, 11] have pro-
+posed static model pruning techniques to reduce model size.
+However, these input-agnostic approaches often struggle
+with temporally varied and complex video data. This is
+because different tasks, datasets, or even individual video
+frames may favor distinct key components of the original
+model, as illustrated in Figure 1 (a).
+Dynamic models [17, 26, 36, 38] offer an effective al-
+ternative to static model pruning by adaptively activating a
+submodel customized for each input frame. This dynamic
+activation is typically implemented using a lightweight
+router, which conditions on intermediate features to selec-
+tively activate components along the computational path,
+such as tokens [21, 25, 26, 30, 31, 47, 51] and blocks [2, 13–
+15, 17, 20, 26, 35, 45]. However, while they achieve theo-
+retical FLOPs reduction, the acceleration benefits are often
+offset by the additional overhead introduced by per-block
+routers, as illustrated in Figure 1 (b).
+Moreover, both the pruning criteria used in static model
+pruning approaches and the intermediate features employed
+for routing in dynamic models are often adapted from
+image-based models by treating video streams as mere se-
+quences of individual images. This simplification gener-
+ally overlooks the temporal correlations between consecu-
+tive frames, thereby limiting their performance potential.
+To address the aforementioned challenges, we propose
+theRecurrentDynamicSubmodel (RDS), a dynamic archi-
+tecture designed for efficient VOST. Our framework adap-
+tively activates a subset of blocks for each video frame,
+guided by a lightweight, prediction-aware router. This
+router leverages the segmentation mask of the previous
+frame as a temporal prior and combines it with visual fea-
+tures from the current frame. By fusing temporal and vi-
+sual information, the router adaptively determines the acti-
+vation of submodels, effectively overcoming the temporal-
+agnostic limitations of prior approaches. Unlike existing
+This CVPR paper is the Open Access version, provided by the Computer Vision Foundation.
+Except for this watermark, it is identical to the accepted version;
+the final published version of the proceedings is available on IEEE Xplore.
+20912

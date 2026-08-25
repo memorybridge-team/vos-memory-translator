@@ -1,0 +1,113 @@
+[28] Jordi Pont-Tuset, Federico Perazzi, Sergi Caelles, Pablo Ar-
+bel´aez, Alex Sorkine-Hornung, and Luc Van Gool. The 2017
+davis challenge on video object segmentation.arXiv preprint
+arXiv:1704.00675, 2017. 2, 4, 5, 6, 1
+[29] Rui Qian, Xiaoyi Dong, Pan Zhang, Yuhang Zang, Shuan-
+grui Ding, Dahua Lin, and Jiaqi Wang. Streaming long video
+understanding with large language models.NeurIPS, 37:
+119336–119360, 2024. 8
+[30] Yongming Rao, Wenliang Zhao, Benlin Liu, Jiwen Lu,
+Jie Zhou, and Cho-Jui Hsieh. DynamicViT: Efficient
+Vision Transformers with Dynamic Token Sparsification.
+InNeurIPS, pages 13937–13949. Curran Associates, Inc.,
+2021. 1, 3
+[31] Yongming Rao, Zuyan Liu, Wenliang Zhao, Jie Zhou, and Ji-
+wen Lu. Dynamic Spatial Sparsification for Efficient Vision
+Transformers and Convolutional Neural Networks.TPAMI,
+45(9):10883–10897, 2023. 1, 3
+[32] Nikhila Ravi, Valentin Gabeur, Yuan-Ting Hu, Ronghang
+Hu, Chaitanya Ryali, Tengyu Ma, Haitham Khedr, Roman
+R¨adle, Chloe Rolland, Laura Gustafson, Eric Mintun, Junt-
+ing Pan, Kalyan Vasudev Alwala, Nicolas Carion, Chao-
+Yuan Wu, Ross Girshick, Piotr Dollar, and Christoph Feicht-
+enhofer. SAM 2: Segment Anything in Images and Videos.
+InICLR, 2025. 1, 2, 3, 5, 6
+[33] Oriane Sim ´eoni, Huy V . V o, Maximilian Seitzer, Federico
+Baldassarre, Maxime Oquab, Cijo Jose, Vasil Khalidov,
+Marc Szafraniec, Seungeun Yi, Micha ¨el Ramamonjisoa,
+Francisco Massa, Daniel Haziza, Luca Wehrstedt, Jianyuan
+Wang, Timoth´ee Darcet, Th´eo Moutakanni, Leonel Sentana,
+Claire Roberts, Andrea Vedaldi, Jamie Tolan, John Brandt,
+Camille Couprie, Julien Mairal, Herv ´e J ´egou, Patrick La-
+batut, and Piotr Bojanowski. DINOv3, 2025. 2, 8
+[34] Max Sponner, Bernd Waschneck, and Akash Kumar. Adapt-
+ing Neural Networks at Runtime: Current Trends in At-
+Runtime Optimizations for Deep Learning.ACM Comput.
+Surv., 56(10), 2024. 3
+[35] Surat Teerapittayanon, Bradley McDanel, and H.T. Kung.
+BranchyNet: Fast inference via early exiting from deep neu-
+ral networks. InICPR, pages 2464–2469, 2016. 1, 3
+[36] Andreas Veit and Serge Belongie. Convolutional Networks
+with Adaptive Inference Graphs. InECCV, 2018. 1, 3
+[37] Preeti Raj Verma, Navneet Pratap Singh, Deepika Pantola,
+and Xiaochun Cheng. Neural network developments: A de-
+tailed survey from static to dynamic models.Comput. Electr.
+Eng., 120:109710, 2024.
+[38] Zuxuan Wu, Tushar Nagarajan, Abhishek Kumar, Steven
+Rennie, Larry S. Davis, Kristen Grauman, and Rogerio Feris.
+BlockDrop: Dynamic Inference Paths in Residual Networks.
+InCVPR, 2018. 1, 3
+[39] Haomiao Xiong, Zongxin Yang, Jiazuo Yu, Yunzhi Zhuge,
+Lu Zhang, Jiawen Zhu, and Huchuan Lu. Streaming video
+understanding and multi-round interaction with memory-
+enhanced knowledge.arXiv preprint arXiv:2501.13468,
+2025. 8
+[40] Yunyang Xiong, Bala Varadarajan, Lemeng Wu, Xiaoyu Xi-
+ang, Fanyi Xiao, Chenchen Zhu, Xiaoliang Dai, Dilin Wang,
+Fei Sun, Forrest Iandola, Raghuraman Krishnamoorthi, and
+Vikas Chandra. EfficientSAM: Leveraged Masked Image
+Pretraining for Efficient Segment Anything. InCVPR, pages
+16111–16121, 2024. 2
+[41] Yunyang Xiong, Chong Zhou, Xiaoyu Xiang, Lemeng Wu,
+Chenchen Zhu, Zechun Liu, Saksham Suri, Balakrishnan
+Varadarajan, Ramya Akula, Forrest Iandola, Raghuraman
+Krishnamoorthi, Bilge Soran, and Vikas Chandra. Efficient
+Track Anything. InICCV, pages 11513–11524, 2025. 2
+[42] Guoping Xu, Jayaram K Udupa, Yajun Yu, Hua-Chieh Shao,
+Songlin Zhao, Wei Liu, and You Zhang. Segment anything
+for video: a comprehensive review of video object segmen-
+tation and tracking from past to future.OJCN, page 133439,
+2026. 1
+[43] Ning Xu, Linjie Yang, Yuchen Fan, Jianchao Yang,
+Dingcheng Yue, Yuchen Liang, Brian Price, Scott Cohen,
+and Thomas Huang. Youtube-vos: Sequence-to-sequence
+video object segmentation. InECCV, pages 585–601, 2019.
+5, 6
+[44] Cheng-Yen Yang, Hsiang-Wei Huang, Wenhao Chai,
+Zhongyu Jiang, and Jenq-Neng Hwang. Samurai: Adapting
+segment anything model for zero-shot visual tracking with
+motion-aware memory.arXiv preprint arXiv:2411.11922,
+2024. 6
+[45] Le Yang, Yizeng Han, Xi Chen, Shiji Song, Jifeng Dai, and
+Gao Huang. Resolution Adaptive Networks for Efficient In-
+ference. InCVPR, 2020. 1, 3
+[46] Rui Yao, Guosheng Lin, Shixiong Xia, Jiaqi Zhao, and Yong
+Zhou. Video Object Segmentation and Tracking: A Survey.
+TIST, 11(4), 2020. 1, 2
+[47] Hongxu Yin, Arash Vahdat, Jose M. Alvarez, Arun Mallya,
+Jan Kautz, and Pavlo Molchanov. A-ViT: Adaptive Tokens
+for Efficient Vision Transformer. InCVPR, pages 10809–
+10818, 2022. 1, 3
+[48] Yang Yue, Yulin Wang, Bingyi Kang, Yizeng Han, Shenzhi
+Wang, Shiji Song, Jiashi Feng, and Gao Huang. DeeR-VLA:
+Dynamic Inference of Multimodal Large Language Models
+for Efficient Robot Execution. InNeurIPS, pages 56619–
+56643. Curran Associates, Inc., 2024. 3
+[49] Chaoning Zhang, Dongshen Han, Yu Qiao, Jung Uk Kim,
+Sung-Ho Bae, Seungkyu Lee, and Choong Seon Hong.
+Faster segment anything: Towards lightweight sam for mo-
+bile applications.arXiv preprint arXiv:2306.14289, 2023.
+2
+[50] Guochen Zhao, Fanyong Meng, Chengzhuan Yang, Hui Wei,
+Dawei Zhang, and Zhonglong Zheng. A review of object
+tracking based on deep learning.IJON, 651:130988, 2025.
+1, 2
+[51] Wangbo Zhao, Jiasheng Tang, Yizeng Han, Yibing Song,
+Kai Wang, Gao Huang, Fan Wang, and Yang You. Dynamic
+Tuning Towards Parameter and Inference Efficiency for ViT
+Adaptation. InNeurIPS, pages 114765–114796. Curran As-
+sociates, Inc., 2024. 1, 3, 5
+[52] Tianfei Zhou, Fatih Porikli, David J Crandall, Luc Van Gool,
+and Wenguan Wang. A Survey on Deep Learning Technique
+for Video Segmentation.TPAMI, 2023. 1, 2
+20921

@@ -1,0 +1,48 @@
+Published as a conference paper at ICLR 2025
+benchmark for long-term object segmentation. While prior works have commonly employed GRU
+(Cho et al., 2014) states as a means of incorporating memory into the tracking process, our findings
+in Table 11 suggest that this approach does not provide an improvement (except slightly on LVOSv2).
+Instead, we find it sufficient to directly store the memory features in the memory bank, which is both
+simpler and more efficient.
+Object pointers. We ablate the impact of cross-attending to the object pointer vectors from the mask
+decoder output in other frames (see §4). The results presented in Table 11 show that while cross-
+attending to object pointers does not enhance average performance across the 9 zero-shot datasets,
+it significantly boosts performance on SA-V val dataset as well as on the challenging LVOSv2
+benchmark (validation split). Hence, we default to cross-attending to object pointers together with
+the memory bank embeddings from the memory encoder.
+J &F mIoU
+Object Pointers GRU MOSE dev SA-V val LVOSv2 val 9 zero-shot speed SA-23
+73.1 64.5 67.0 70.9 1.00 × 59.9
+✓ 72.3 65.3 68.9 70.5 0.97 × 60.0
+✓ 73.0 68.3 71.6 70.7 1.00× 59.7
+Table 11: Ablations on memory design. We use object pointers by default ( gray ) and also study
+recurrent GRU memory.
+B D ETAILS ON THE PVS T ASK
+The Promptable Visual Segmentation (PVS) task can be seen as an extension of the Segment Anything
+(SA) task from static images to videos. In the PVS setting, given an input video, the model can
+be interactively prompted with different types of inputs (including clicks, boxes, or masks) on any
+frame in the video, with the goal of segmenting (and tracking) a valid object throughout the video.
+When interacting with a video, the model provides an instant response on the frame being prompted
+(similar to the interactive experience of SAM on images), and also returns the segmentation of the
+object throughout the entire video in near real-time. Similar to SAM the focus is on valid objects
+which have a clearly defined boundary, and we do not consider regions without visual boundaries
+(e.g. Bekuzarov et al. (2023)). Fig. 7 illustrates the task.
+Segment
+Anything
+(SA)
+Promptable Visual
+Segmentation
+(PVS)
+Semi-supervised Video
+Object Segmentation
+(VOS)
+Figure 7: An illustration of the Promptable Visual Segmentation task (PVS). Previously studied tasks
+such as Segment Anything (SA) and semi-supervised Video Object Segmentation (VOS) can be seen
+as special cases of the PVS task.
+PVS is related to tasks in the image and video domains. For images, the SA task can be considered a
+subset of PVS with the video reduced to a single frame. Similarly, traditional semi-supervised and
+interactive VOS (Pont-Tuset et al., 2017) tasks are special cases of PVS, limited to mask prompts
+provided only on the first frame and scribbles on multiple frames to segment objects throughout
+a video, respectively. In PVS, prompts can either be clicks, masks, or boxes, and the focus is on
+enhancing the interactive experience, enabling refinement of a segmentation with minimal interaction.
+21

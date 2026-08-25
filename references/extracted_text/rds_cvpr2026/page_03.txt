@@ -1,0 +1,64 @@
+Figure 2. (a)The overall framework of RDS.It dynamically activates a submodel for each frame. (b)Prediction-Aware Router (PAR)
+takes the fused feature from the current frame’s visual features and the previous frame’s segmentation mask as input and outputs a binary
+routing vector for block selection. (c)Importance-aware LoRA (I-LoRA)identifies critical blocks using both global (impact on final
+output) and local (feature transformation) importance. Trainable LoRAs are allocated only to these key blocks for efficient fine-tuning.
+2.2. Dynamic Models
+Dynamic models [10, 12, 17, 26, 34, 36–38] selectively
+activate only part of their computational pathways (e.g.,
+tokens [21, 25, 26, 30, 31, 47, 51] or blocks [2, 13–
+15, 17, 20, 26, 35, 45, 48]) to achieve the goal of compu-
+tational efficiency, given intermediate features or task com-
+plexity as conditions. Unlike traditional static models, these
+networks adaptively adjust their components based on dif-
+ferent input data, demonstrating strong performance in tasks
+such as image recognition [2, 30] and object detection [14].
+As for visual segmentation, existing research [26] has in-
+tegrated dynamic mechanisms into encoder architectures,
+enhancing inference efficiency by skipping redundant mod-
+ules. In addition, there are studies [24] that leverage redun-
+dancy between consecutive frames, avoiding unnecessary
+computation, and reducing latency.
+Still, current approaches face challenges in balancing ac-
+curacy and efficiency, characterized by their dense rout-
+ing,i.e., allocating routers for intermediate features from
+all stages. This can introduce repetitive computations and
+hinder the actual accelerating effect.
+We address these limitations by introducing a Prediction-
+Aware Router that jointly takes temporal and visual fea-
+tures as input, reaching a dynamic activation decision with
+a single routing computation. Additionally, we propose I-
+LoRA to enable efficient fine-tuning of dynamic architec-
+tures while maintaining performance.
+3. Recurrent Submodel Dynamics
+Our approach, illustrated in Figure 2, introduces two core
+components. First, a Prediction-Aware Router (PAR) dy-
+namically selects a submodel for each frame using vi-
+sual features and the previous frame’s mask. Second,
+Importance-Aware LoRA (I-LoRA) enables efficient fine-
+tuning by adapting only the most critical blocks. We detail
+the full training and inference process in Section 3.4.
+3.1. Preliminary
+Segment Anything Model 2 (SAM2).This section
+briefly introduces the Segment Anything Model 2
+(SAM2) [32], a representative vision foundation model for
+VOST. Its transformer-based encoder first maps image pix-
+elsIto embeddingsXvia a patch embedding layerP, i.e
+X=P(I). These embeddings are then passed through cas-
+cading transformer blocks, each comprising a multi-head
+self-attention (MHSA) mechanism and a multi-layer per-
+ceptron (MLP). The operations can be formulated:
+MHSA(X) = Concat(head 1, . . . ,headH )WO,
+wherehead h = Attention(XWQ
+h ,XW K
+h ,XW V
+h );
+MLP(X) =σ(XW U )WD.
+(1)
+whereW Q
+h ,W K
+h ,W V
+h are the query, key, and value projec-
+tion matrices for theh-th attention head,W O is the output
+projection matrix for MHSA, andWU ,W D are the up- and
+down-projection matrices in the MLP.
+20914

@@ -1,0 +1,48 @@
+Published as a conference paper at ICLR 2025
+REFERENCES
+United States Environmental Protection Agency. Greenhouse gas equivalencies calculator.
+https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator, 2022.
+Max Allan, Satoshi Kondo, Sebastian Bodenstedt, Stefan Leger, Rahim Kadkhodamohammadi,
+Imanol Luengo, Felix Fuentes, Evangello Flouty, Ahmed Mohammed, Marius Pedersen, et al.
+2018 robotic scene segmentation challenge. arXiv preprint arXiv:2001.11190, 2020.
+Ali Athar, Jonathon Luiten, Paul V oigtlaender, Tarasha Khurana, Achal Dave, Bastian Leibe, and
+Deva Ramanan. Burst: A benchmark for unifying object recognition, segmentation and tracking in
+video. WACV, pp. 1674–1683, 2022.
+Xue Bai and Guillermo Sapiro. A geodesic framework for fast interactive image and video segmenta-
+tion and matting. In ICCV, 2007.
+Dina Bashkirova, Mohamed Abdelfattah, Ziliang Zhu, James Akl, Fadi Alladkani, Ping Hu, Vitaly
+Ablavsky, Berk Calli, Sarah Adel Bargal, and Kate Saenko. ZeroWaste dataset: Towards deformable
+object segmentation in cluttered scenes. CVPR, 2022.
+Maksym Bekuzarov, Ariana Bermudez, Joon-Young Lee, and Hao Li. Xmem++: Production-level
+video segmentation from few annotated frames. In ICCV, pp. 635–644, 2023.
+Goutam Bhat, Felix Järemo Lawin, Martin Danelljan, Andreas Robinson, Michael Felsberg, Luc Van
+Gool, and Radu Timofte. Learning what to learn for video object segmentation. ECCV,
+abs/2003.11540, 2020.
+Daniel Bolya, Chaitanya Ryali, Judy Hoffman, and Christoph Feichtenhofer. Window attention is
+bugged: How not to interpolate position embeddings. ICLR, 2023.
+T Brox, J Malik, and P Ochs. Freiburg-berkeley motion segmentation dataset (fbms-59). In ECCV,
+volume 1, pp. 9, 2010.
+Yohann Cabon, Naila Murray, and Martin Humenberger. Virtual KITTI 2. arXiv preprint
+arXiv:2001.10773, 2020.
+Sergi Caelles, Kevis-Kokitsi Maninis, Jordi Pont-Tuset, Laura Leal-Taixé, Daniel Cremers, and
+Luc Van Gool. One-shot video object segmentation. CVPR, pp. 5320–5329, 2016.
+Sergi Caelles, Alberto Montes, Kevis-Kokitsi Maninis, Yuhua Chen, Luc Van Gool, Federico Perazzi,
+and Jordi Pont-Tuset. The 2018 davis challenge on video object segmentation. arXiv preprint
+arXiv:1803.00557, 2018.
+Sergi Caelles, Jordi Pont-Tuset, Federico Perazzi, Alberto Montes, Kevis-Kokitsi Maninis, and Luc
+Van Gool. The 2019 davis challenge on vos: Unsupervised multi-object segmentation. arXiv
+preprint arXiv:1905.00737, 2019.
+Juan C. Caicedo, Allen Goodman, Kyle W. Karhohs, Beth A. Cimini, Jeanelle Ackerman, Marzieh
+Haghighi, CherKeng Heng, Tim Becker, Minh Doan, Claire McQuin, Mohammad Rohban, Shan-
+tanu Singh, and Anne E. Carpenter. Nucleus segmentation across imaging experiments: the 2018
+data science bowl. Nature Methods, 2019.
+Jiazhou Chen, Yanghui Xu, Shufang Lu, Ronghua Liang, and Liangliang Nan. 3D instance segmenta-
+tion of MVS buildings. IEEE Transactions on Geoscience and Remote Sensing, 2022.
+Keyan Chen, Chenyang Liu, Hao Chen, Haotian Zhang, Wenyuan Li, Zhengxia Zou, and Zhenwei
+Shi. Rsprompter: Learning to prompt for remote sensing instance segmentation based on visual
+foundation model. IEEE Transactions on Geoscience and Remote Sensing, 2024.
+Yuhua Chen, Jordi Pont-Tuset, Alberto Montes, and Luc Van Gool. Blazingly fast video object
+segmentation with pixel-wise metric learning. CVPR, pp. 1189–1198, 2018.
+Ho Kei Cheng and Alexander G Schwing. Xmem: Long-term video object segmentation with an
+atkinson-shiffrin memory model. In ECCV, pp. 640–658. Springer, 2022.
+11

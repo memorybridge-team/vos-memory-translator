@@ -1,0 +1,41 @@
+Published as a conference paper at ICLR 2025
+SAM 2: S EGMENT ANYTHING IN IMAGES AND VIDEOS
+Nikhila Ravi*,† Valentin Gabeur* Yuan-Ting Hu* Ronghang Hu* Chaitanya Ryali*
+Tengyu Ma* Haitham Khedr* Roman Rädle* Chloe Rolland Laura Gustafson
+Eric Mintun Junting Pan Kalyan Vasudev Alwala Nicolas Carion Chao-Yuan Wu
+Ross Girshick Piotr Dollár † Christoph Feichtenhofer*,†
+Meta FAIR, https://github.com/facebookresearch/sam2
+ABSTRACT
+We present Segment Anything Model 2 (SAM 2), a foundation model towards
+solving promptable visual segmentation in images and videos. We build a data
+engine, which improves model and data via user interaction, to collect the largest
+video segmentation dataset to date. Our model is a simple transformer architecture
+with streaming memory for real-time video processing. SAM 2 trained on our data
+provides strong performance across a wide range of tasks. In video segmentation,
+we observe better accuracy, using 3× fewer interactions than prior approaches. In
+image segmentation, our model is more accurate and 6× faster than the Segment
+Anything Model (SAM). We believe that our data, model, and insights will serve
+as a significant milestone for video segmentation and related perception tasks. We
+are releasing our main model, the dataset, an interactive demo and code.
+1 I NTRODUCTION
+Figure 1: We introduce the Segment Anything Model 2 (SAM 2), towards solving the promptable
+visual segmentation task (a) with our foundation model (b), trained on our large-scale SA-V dataset
+collected through our data engine (c). SAM 2 is capable of interactively segmenting regions through
+prompts (clicks, boxes, or masks) on one or multiple video frames by utilizing a streaming memory
+that stores previous prompts and predictions.
+Segment Anything (SA) introduced a foundation model for promptable segmentation in images (Kir-
+illov et al., 2023). However an image is only a static snapshot of the real world in which visual
+segments can exhibit complex motion, and with the rapid growth of multimedia content, a significant
+portion is now recorded with a temporal dimension, particularly in video data. Many important appli-
+cations in AR/VR, robotics, autonomous vehicles, and video editing require temporal localization
+beyond image-level segmentation. We believe a universal visual segmentation system should be
+applicable to both images and videos.
+Segmentation in video aims to determine the spatio-temporal extent of entities, which presents unique
+challenges beyond those in images. Entities can undergo significant changes in appearance due to
+motion, deformation, occlusion, lighting changes, and other factors. Videos often have lower quality
+than images due to camera motion, blur, and lower resolution. Further, efficient processing of a
+large number of frames is a key challenge. While SA successfully addresses segmentation in images,
+existing video segmentation models and datasets fall short in providing a comparable capability to
+“segment anything in videos”.
+*core contributor, †project lead
+1

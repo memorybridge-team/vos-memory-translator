@@ -1,0 +1,52 @@
+Published as a conference paper at ICLR 2025
+APPENDIX
+Table of contents:
+• §A: Data and Model Ablations
+• §B: Task Details
+• §C: Limitations
+• §D: Model Details
+• §E: Dataset Details
+• §F: Zero-shot Experiments Details
+• §H: Comparison to state-of-the-art
+• §I: Other related work
+• §J: Dataset, Annotation, and Model Cards
+A D ATA AND MODEL ABLATIONS
+This section presents ablations that informed the design decisions for SAM 2. We evaluate on SA-V
+val, Internal-test, our MOSE development set (“MOSE dev”) which contains 200 randomly-sampled
+videos from the MOSE training split, excluded from our training data and the average over 9 zero-shot
+video datasets. As the metric for comparison, we report J &F under 3-click input on the first frame
+as a balance between the 1-click regime and the VOS-style mask prompts. Additionally, we report
+the average 1-click mIoU on the 23-dataset benchmark used by SAM for the SA task on images.
+Unless otherwise specified, we perform our ablations at 5122 spatial resolution, trained with SA-V
+manual and a 10% subset of SA-1B. Additional details are in §D.2.
+A.1 D ATA ABLATIONS
+Training data J &F mIoU
+VOS Internal SA-V SA-1B SA-V val Internal-test MOSE dev 9 zero-shot SA-23
+1 ✓ 48.1 60.2 76.9 59.7 45.4
+2 ✓ 57.0 72.2 70.6 70.0 54.4
+3 ✓ 63.0 72.6 72.8 69.7 53.0
+4 ✓ ✓ 62.9 73.2 73.6 69.7 58.6
+5 ✓ ✓ 63.0 73.2 73.3 70.9 55.8
+6 ✓ ✓ ✓ 63.6 75.0 74.4 71.6 58.6
+7 ✓ ✓ 50.0 63.2 77.6 62.5 54.8
+8 ✓ ✓ 54.9 71.5 77.9 70.6 55.1
+9 ✓ ✓ 61.6 72.8 78.3 69.9 51.0
+10 ✓ ✓ ✓ 62.2 74.1 78.5 70.3 57.3
+11 ✓ ✓ ✓ 61.8 74.4 78.5 71.8 55.7
+12 ✓ ✓ ✓ ✓ 63.1 73.7 79.0 71.6 58.9
+Table 7: We train our model on different data mixtures including VOS (DA VIS, MOSE,
+YouTubeVOS), and subsets of Internal-train, SA-V , and SA-1B. We report the J &F accuracy
+when prompted with 3 clicks in the first frame on SA-V val and Internal-test, MOSE, and 9 zero-shot
+datasets, and the average 1-click mIoU on SA-23 datasets.
+Data mix ablation. In Table 7, we compare the accuracy of SAM 2 when trained on different data
+mixtures. We pre-train on SA-1B and then train a separate model for each setting. We fix the number
+of iterations (200k) and batch size (128) with only the training data changing between experiments.
+We report accuracy on our SA-V val and Internal set, MOSE, 9 zero-shot video benchmarks, and the
+SA-23 tasks (§6.3).
+Row 1 shows that a model purely trained on existing VOS datasets (DA VIS, MOSE, YouTubeVOS)
+performs well on the in-domain MOSE dev, but poorly on all the others including the 9 zero-shot
+VOS datasets (59.7 J &F). We observe tremendous benefit from adding our data engine data into
+the training mix, including +12.1% average performance improvement on 9 zero-shot datasets (row
+11 vs 1). This can be attributed to the limited coverage and size of VOS datasets. Adding SA-1B
+images improves the performance on the image segmentation task (rows 3 vs 4, 5 vs 6, 9 vs 10, 11 vs
+18

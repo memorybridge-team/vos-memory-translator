@@ -1,0 +1,112 @@
+Acknowledgments.This research was funded in part by
+the National Natural Science Foundation of China under
+Grant 62372355, and in part by the Natural Science Basic
+Research Program of Shaanxi Province under Grant 2023-
+JC-ZD-39 and 2024JC-YBMS-520. Yang You’s research
+group is supported by the NUS Startup Grant (Presidential
+Young Professorship), the Singapore MOE Tier-1 Grant, the
+ByteDance Grant, the NUS ARTIC Grant, the Apple Grant,
+the Alibaba Grant, and the Adobe Gift.
+References
+[1] Yoshua Bengio, Nicholas L ´eonard, and Aaron Courville.
+Estimating or propagating gradients through stochastic
+neurons for conditional computation.arXiv preprint
+arXiv:1308.3432, 2013. 4
+[2] Tolga Bolukbasi, Joseph Wang, Ofer Dekel, and Venkatesh
+Saligrama. Adaptive neural networks for efficient inference.
+InICML, pages 527–536. PMLR, 2017. 1, 3
+[3] Fei Chen, Xiaodong Wang, Yunxiang Zhao, Shaohe Lv, and
+Xin Niu. Visual object tracking: A survey.CVIU, 222:
+103508, 2022. 1, 2
+[4] Xiaoyong Chen, Yong Guo, Jiaming Liang, Sitong Zhuang,
+Runhao Zeng, and Xiping Hu. Temporal Action Detection
+Model Compression by Progressive Block Drop. InCVPR,
+pages 29225–29236, 2025. 1, 5
+[5] Zigeng Chen, Gongfan Fang, Xinyin Ma, and Xinchao
+Wang. SlimSAM: 0.1% Data Makes Segment Anything
+Slim. InNeurIPS, pages 39434–39461. Curran Associates,
+Inc., 2024. 2, 5
+[6] Shuangrui Ding, Rui Qian, Xiaoyi Dong, Pan Zhang, Yuhang
+Zang, Yuhang Cao, Yuwei Guo, Dahua Lin, and Jiaqi Wang.
+SAM2Long: Enhancing SAM 2 for Long Video Segmen-
+tation with a Training-Free Memory Tree. InICCV, pages
+13614–13624, 2025. 6
+[7] Heng Fan, Liting Lin, Fan Yang, Peng Chu, Ge Deng, Sijia
+Yu, Hexin Bai, Yong Xu, Chunyuan Liao, and Haibin Ling.
+LaSOT: A High-Quality Benchmark for Large-Scale Single
+Object Tracking. InCVPR, 2019. 5
+[8] Mingqi Gao, Feng Zheng, James JQ Yu, Caifeng Shan,
+Guiguang Ding, and Jungong Han. Deep learning for video
+object segmentation: a review.Artif. Intell. Rev., 56(1):457–
+531, 2023. 1, 2
+[9] Ruopeng Gao, Ji Qi, and Limin Wang. Multiple Object
+Tracking as ID Prediction. InCVPR, pages 27883–27893,
+2025. 2
+[10] Jifeng Guo, C. L. Philip Chen, Zhulin Liu, and Xixin Yang.
+Dynamic Neural Network Structure: A Review for its Theo-
+ries and Applications.TNNLS, 36(3):4246–4266, 2025. 3
+[11] Song Han, Jeff Pool, John Tran, and William Dally. Learning
+both Weights and Connections for Efficient Neural Network.
+InNeurIPS. Curran Associates, Inc., 2015. 1
+[12] Yizeng Han, Gao Huang, Shiji Song, Le Yang, Honghui
+Wang, and Yulin Wang. Dynamic Neural Networks: A Sur-
+vey.TPAMI, 44(11):7436–7456, 2022. 3
+[13] Yizeng Han, Yifan Pu, Zihang Lai, Chaofei Wang, Shiji
+Song, Junfeng Cao, Wenhui Huang, Chao Deng, and Gao
+Huang. Learning to weight samples for dynamic early-
+exiting networks. InECCV, pages 362–378. Springer, 2022.
+1, 3
+[14] Yizeng Han, Dongchen Han, Zeyu Liu, Yulin Wang, Xuran
+Pan, Yifan Pu, Chao Deng, Junlan Feng, Shiji Song, and Gao
+Huang. Dynamic Perceiver for Efficient Visual Recognition.
+InICCV, pages 5992–6002, 2023. 3
+[15] Yizeng Han, Zeyu Liu, Zhihang Yuan, Yifan Pu, Chaofei
+Wang, Shiji Song, and Gao Huang. Latency-Aware Unified
+Dynamic Networks for Efficient Image Recognition.TPAMI,
+46(12):7760–7774, 2024. 1, 3
+[16] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-
+Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu Chen.
+LoRA: Low-Rank Adaptation of Large Language Models. In
+ICLR, 2022. 4
+[17] Xiaotao Hu, Zhewei Huang, Ailin Huang, Jun Xu, and
+Shuchang Zhou. A Dynamic Multi-Scale V oxel Flow Net-
+work for Video Prediction. InCVPR, 2023. 1, 3, 4
+[18] Lianghua Huang, Xin Zhao, and Kaiqi Huang. GOT-10k: A
+Large High-Diversity Benchmark for Generic Object Track-
+ing in the Wild.TPAMI, 43(5):1562–1577, 2021. 5
+[19] Xun Huang, Zhengqi Li, Guande He, Mingyuan Zhou,
+and Eli Shechtman. Self Forcing: Bridging the Train-
+Test Gap in Autoregressive Video Diffusion.arXiv preprint
+arXiv:2506.08009, 2025. 8
+[20] Basar Kutukcu, Sabur Baidya, and Sujit Dey. SLEXNet:
+Adaptive Inference Using Slimmable Early Exit Neural Net-
+works.TECS, 23(6), 2024. 1, 3
+[21] Cheng Lei, Ao Li, Hu Yao, Ce Zhu, and Le Zhang. Rethink-
+ing Token Reduction with Parameter-Efficient Fine-Tuning
+in ViT for Pixel-Level Tasks. InCVPR, pages 14954–14964,
+2025. 1, 3
+[22] Jiaqi Li, Junshu Tang, Zhiyong Xu, Longhuang Wu, Yuan
+Zhou, Shuai Shao, Tianbao Yu, Zhiguo Cao, and Qinglin
+Lu. Hunyuan-GameCraft: High-dynamic Interactive Game
+Video Generation with Hybrid History Condition.arXiv
+preprint arXiv:2506.17201, 2025. 8
+[23] Xiangtai Li, Henghui Ding, Haobo Yuan, Wenwei Zhang,
+Jiangmiao Pang, Guangliang Cheng, Kai Chen, Ziwei Liu,
+and Chen Change Loy. Transformer-Based Visual Segmen-
+tation: A Survey.TPAMI, 46(12):10138–10163, 2024. 1,
+2
+[24] Yule Li, Jianping Shi, and Dahua Lin. Low-Latency Video
+Semantic Segmentation. InCVPR, 2018. 3
+[25] Youwei Liang, Chongjian Ge, Zhan Tong, Yibing Song, Jue
+Wang, and Pengtao Xie. Not All Patches are What You Need:
+Expediting Vision Transformers via Token Reorganizations.
+InICLR, 2022. 1, 3
+[26] Lingchen Meng, Hengduo Li, Bor-Chun Chen, Shiyi Lan,
+Zuxuan Wu, Yu-Gang Jiang, and Ser-Nam Lim. AdaViT:
+Adaptive Vision Transformers for Efficient Image Recogni-
+tion. InCVPR, pages 12309–12318, 2022. 1, 2, 3, 5
+[27] Matthias Muller, Adel Bibi, Silvio Giancola, Salman Alsub-
+aihi, and Bernard Ghanem. TrackingNet: A Large-Scale
+Dataset and Benchmark for Object Tracking in the Wild. In
+ECCV, 2018. 5
+20920
