@@ -24,6 +24,8 @@ sam2-davis-download = "vos_memory_inspector.cli:davis_download_main"
 cmmt-state-inspect = "vos_memory_inspector.cli:state_inspect_main"
 cmmt-synthetic-experiment = "vos_memory_inspector.cli:synthetic_experiment_main"
 cmmt-paired-experiment = "vos_memory_inspector.cli:paired_experiment_main"
+sam2-roundtrip-smoke = "vos_memory_inspector.cli:roundtrip_main"
+sam2-direct-handoff-smoke = "vos_memory_inspector.cli:direct_handoff_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

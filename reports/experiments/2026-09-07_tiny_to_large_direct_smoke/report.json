@@ -1,0 +1,70 @@
+{
+  "source_model_id": "sam2.1-hiera-tiny",
+  "target_model_id": "sam2.1-hiera-large",
+  "translator": "direct_copy",
+  "upstream_commit": "2b90b9f5ceec907a1c18123530e92e794ad901a4",
+  "video_id": "frames",
+  "switch_frame": 1,
+  "future_frames": [
+    2
+  ],
+  "state_alignment_to_target_native": {
+    "components": {
+      "spatial_memory": {
+        "mse": 2.5746634006500244,
+        "cosine": -0.007345236837863922,
+        "relative_error": 1.1917366981506348
+      },
+      "object_pointer": {
+        "mse": 0.39223426580429077,
+        "cosine": -0.05280125141143799,
+        "relative_error": 1.428312063217163
+      },
+      "presence_logits": {
+        "mse": 1.9470146894454956,
+        "cosine": 1.0,
+        "relative_error": 0.12773850560188293
+      }
+    },
+    "aggregate_mse": 1.637970785299937,
+    "valid_records": 2,
+    "translated_bytes": 1050632
+  },
+  "injection": {
+    "objects": 1,
+    "records": 2,
+    "switch_frame": 1
+  },
+  "backbone_calls_before_injection": 0,
+  "backbone_calls_during_injection": 0,
+  "backbone_calls_during_future_continuation": 1,
+  "mask_comparison_to_target_native": {
+    "frames": [
+      {
+        "frame": 2,
+        "mse": 1012647.9375,
+        "max_abs_error": 1036.744873046875,
+        "binary_iou": 0.0
+      }
+    ],
+    "mean_mse": 1012647.9375,
+    "max_abs_error": 1036.744873046875,
+    "mean_binary_iou": 0.0
+  },
+  "seed": 7,
+  "device": "cpu",
+  "resources": {
+    "wall_time_seconds": 132.9875599,
+    "peak_cuda_memory_bytes": null
+  },
+  "artifacts": {
+    "directory": ".",
+    "oracle_masks": "oracle_masks/",
+    "candidate_masks": "candidate_masks/",
+    "comparisons": [
+      "comparisons/frame_00002.png"
+    ],
+    "report_json": "report.json",
+    "report_markdown": "report.md"
+  }
+}

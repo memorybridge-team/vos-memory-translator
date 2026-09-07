@@ -12,6 +12,7 @@ from vos_memory_inspector.hf_cache import (
 from vos_memory_inspector.metrics import evaluate_state
 from vos_memory_inspector.sam2_state import (
     canonicalize_sam2_inference_state,
+    inject_sam2_canonical_state,
     materialize_sam2_history,
 )
 from vos_memory_inspector.state_inspector import inspect_state, write_inspection_report
@@ -118,6 +119,73 @@ def test_sam2_multi_object_canonicalization_and_materialization() -> None:
         2,
     )
     assert history[1]["non_cond_frame_outputs"][2]["obj_ptr"].shape == (1, 4)
+
+
+def test_sam2_injection_restores_registry_history_and_target_position() -> None:
+    class Position(torch.nn.Module):
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            return torch.full_like(x, 9.0)
+
+    class Predictor:
+        def __init__(self) -> None:
+            self.memory_encoder = type("MemoryEncoder", (), {})()
+            self.memory_encoder.position_encoding = Position()
+
+    def output(value: float) -> dict[str, object]:
+        return {
+            "maskmem_features": torch.full((1, 3, 2, 2), value),
+            "maskmem_pos_enc": [torch.full((1, 3, 2, 2), -1.0)],
+            "pred_masks": torch.full((1, 1, 8, 8), value),
+            "obj_ptr": torch.full((1, 4), value),
+            "object_score_logits": torch.tensor([[value]]),
+        }
+
+    source = {
+        "obj_idx_to_id": {0: 7},
+        "obj_ids": [7],
+        "output_dict_per_obj": {
+            0: {
+                "cond_frame_outputs": {0: output(1)},
+                "non_cond_frame_outputs": {1: output(2)},
+            }
+        },
+        "point_inputs_per_obj": {0: {}},
+        "mask_inputs_per_obj": {0: {0: torch.ones(1, 1, 8, 8)}},
+        "frames_tracked_per_obj": {0: {0: {"reverse": False}}},
+        "device": "cpu",
+        "storage_device": "cpu",
+        "num_frames": 3,
+        "video_height": 8,
+        "video_width": 8,
+    }
+    canonical = canonicalize_sam2_inference_state(source, switch_frame=1)
+    target = {
+        "device": torch.device("cpu"),
+        "storage_device": torch.device("cpu"),
+        "num_frames": 3,
+        "video_height": 8,
+        "video_width": 8,
+        "constants": {},
+        "obj_id_to_idx": {},
+        "obj_idx_to_id": {},
+        "obj_ids": [],
+        "point_inputs_per_obj": {},
+        "mask_inputs_per_obj": {},
+        "output_dict_per_obj": {},
+        "temp_output_dict_per_obj": {},
+        "frames_tracked_per_obj": {},
+    }
+    summary = inject_sam2_canonical_state(
+        canonical,
+        predictor=Predictor(),
+        inference_state=target,
+    )
+    assert summary == {"objects": 1, "records": 2, "switch_frame": 1}
+    assert target["obj_id_to_idx"] == {7: 0}
+    assert target["mask_inputs_per_obj"][0][0].device.type == "cpu"
+    restored = target["output_dict_per_obj"][0]
+    assert torch.all(restored["cond_frame_outputs"][0]["maskmem_pos_enc"][0] == 9)
+    assert not torch.any(restored["cond_frame_outputs"][0]["maskmem_pos_enc"][0] == -1)
 
 
 def test_direct_adapts_shape_and_preserves_discrete_state() -> None:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
+from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from typing import Any
@@ -279,3 +280,212 @@ def materialize_sam2_history(
             storage_key = COND_KEY if is_cond else NON_COND_KEY
             result[object_slot][storage_key][frame] = output
     return result
+
+
+def make_target_sam2_positional_factory(
+    predictor: Any,
+    inference_state: Mapping[str, Any],
+) -> Callable[[Any, int, bool, torch.Tensor], list[torch.Tensor]]:
+    """Build target-owned spatial PE without running a past-frame backbone.
+
+    Pinned SAM 2 computes memory positional encoding from the memory grid shape;
+    it is constant across frames and objects.  Calling the target memory
+    encoder's position module therefore regenerates PE without source PE or a
+    video-frame feature.
+    """
+
+    position_encoding = predictor.memory_encoder.position_encoding
+    compute_device = inference_state["device"]
+    constants = inference_state["constants"]
+
+    def factory(
+        _object_id: Any,
+        _frame: int,
+        _is_conditioning: bool,
+        feature: torch.Tensor,
+    ) -> list[torch.Tensor]:
+        cached = constants.get("maskmem_pos_enc")
+        expected_grid = tuple(feature.shape[-2:])
+        if cached is None:
+            device_type = torch.device(compute_device).type
+            if torch.is_autocast_enabled(device_type):
+                target_dtype = torch.get_autocast_dtype(device_type)
+            else:
+                parameters = getattr(predictor.memory_encoder, "parameters", None)
+                reference_parameter = (
+                    next(parameters(), feature) if callable(parameters) else feature
+                )
+                target_dtype = reference_parameter.dtype
+            reference = torch.empty(
+                (1, feature.shape[1], *expected_grid),
+                device=compute_device,
+                dtype=target_dtype,
+            )
+            generated = position_encoding(reference).to(dtype=target_dtype)
+            cached = [generated[0:1].clone()]
+            constants["maskmem_pos_enc"] = cached
+        actual_grid = tuple(cached[-1].shape[-2:])
+        if actual_grid != expected_grid:
+            raise ValueError(
+                f"target positional grid {actual_grid} does not match memory "
+                f"grid {expected_grid}"
+            )
+        return [value.expand(feature.shape[0], -1, -1, -1) for value in cached]
+
+    return factory
+
+
+def _move_nested_tensors(value: Any, device: torch.device) -> Any:
+    if isinstance(value, torch.Tensor):
+        return value.to(device)
+    if isinstance(value, Mapping):
+        return type(value)(
+            (key, _move_nested_tensors(item, device)) for key, item in value.items()
+        )
+    if isinstance(value, list):
+        return [_move_nested_tensors(item, device) for item in value]
+    if isinstance(value, tuple):
+        return tuple(_move_nested_tensors(item, device) for item in value)
+    return deepcopy(value)
+
+
+def inject_sam2_canonical_state(
+    state: CanonicalState,
+    *,
+    predictor: Any,
+    inference_state: dict[str, Any],
+) -> dict[str, int]:
+    """Inject a canonical history into a fresh target predictor state.
+
+    The fresh target state must contain video/runtime-owned fields but no
+    registered objects or temporary interactions.  Continuous tensors are
+    placed on the target's storage/compute devices, while record identity and
+    prompt/tracking metadata are copied exactly.
+    """
+
+    state.validate()
+    if inference_state.get("obj_ids") or inference_state.get("output_dict_per_obj"):
+        raise ValueError("target inference_state must be fresh before injection")
+    if any(inference_state.get("temp_output_dict_per_obj", {}).values()):
+        raise ValueError("target inference_state contains temporary outputs")
+    expected = {
+        "num_frames": state.metadata.get("num_frames"),
+        "video_height": state.metadata.get("video_height"),
+        "video_width": state.metadata.get("video_width"),
+    }
+    mismatches = {
+        key: (expected_value, inference_state.get(key))
+        for key, expected_value in expected.items()
+        if expected_value is not None and expected_value != inference_state.get(key)
+    }
+    if mismatches:
+        raise ValueError(f"target video contract differs from exported state: {mismatches}")
+
+    positional_factory = make_target_sam2_positional_factory(
+        predictor, inference_state
+    )
+    histories = materialize_sam2_history(
+        state,
+        positional_factory=positional_factory,
+    )
+    compute_device = torch.device(inference_state["device"])
+    storage_device = torch.device(inference_state["storage_device"])
+    source_indices = state.metadata.get("object_indices", list(range(len(state.object_ids))))
+    preserved_inputs = state.metadata.get("preserved_inputs", {})
+    preserved_points = preserved_inputs.get("point_inputs_per_obj", {})
+    preserved_masks = preserved_inputs.get("mask_inputs_per_obj", {})
+    preserved_tracking = state.metadata.get("frames_tracked_per_obj", {})
+
+    inference_state["obj_id_to_idx"] = OrderedDict(
+        (object_id, object_slot)
+        for object_slot, object_id in enumerate(state.object_ids)
+    )
+    inference_state["obj_idx_to_id"] = OrderedDict(
+        (object_slot, object_id)
+        for object_slot, object_id in enumerate(state.object_ids)
+    )
+    inference_state["obj_ids"] = list(state.object_ids)
+    inference_state["point_inputs_per_obj"] = {}
+    inference_state["mask_inputs_per_obj"] = {}
+    inference_state["output_dict_per_obj"] = {}
+    inference_state["temp_output_dict_per_obj"] = {}
+    inference_state["frames_tracked_per_obj"] = {}
+
+    for object_slot, source_index in enumerate(source_indices):
+        history = histories[object_slot]
+        for records in history.values():
+            for output in records.values():
+                output["maskmem_features"] = output["maskmem_features"].to(
+                    storage_device
+                )
+                output["pred_masks"] = output["pred_masks"].to(storage_device)
+                output["maskmem_pos_enc"] = [
+                    value.to(compute_device) for value in output["maskmem_pos_enc"]
+                ]
+                output["obj_ptr"] = output["obj_ptr"].to(compute_device)
+                output["object_score_logits"] = output[
+                    "object_score_logits"
+                ].to(compute_device)
+        inference_state["output_dict_per_obj"][object_slot] = history
+        inference_state["temp_output_dict_per_obj"][object_slot] = {
+            COND_KEY: {},
+            NON_COND_KEY: {},
+        }
+        inference_state["point_inputs_per_obj"][object_slot] = _move_nested_tensors(
+            preserved_points.get(source_index, {}), compute_device
+        )
+        inference_state["mask_inputs_per_obj"][object_slot] = _move_nested_tensors(
+            preserved_masks.get(source_index, {}), compute_device
+        )
+        inference_state["frames_tracked_per_obj"][object_slot] = deepcopy(
+            preserved_tracking.get(source_index, {})
+        )
+
+    return {
+        "objects": len(state.object_ids),
+        "records": state.valid_record_count(),
+        "switch_frame": state.switch_frame,
+    }
+
+
+def init_sam2_inference_state_without_warmup(
+    predictor: Any,
+    *,
+    video_path: str,
+    offload_video_to_cpu: bool = False,
+    offload_state_to_cpu: bool = False,
+    async_loading_frames: bool = False,
+) -> dict[str, Any]:
+    """Mirror pinned ``init_state`` while intentionally skipping frame-0 warmup."""
+
+    from sam2.utils.misc import load_video_frames
+
+    compute_device = predictor.device
+    images, video_height, video_width = load_video_frames(
+        video_path=video_path,
+        image_size=predictor.image_size,
+        offload_video_to_cpu=offload_video_to_cpu,
+        async_loading_frames=async_loading_frames,
+        compute_device=compute_device,
+    )
+    storage_device = torch.device("cpu") if offload_state_to_cpu else compute_device
+    return {
+        "images": images,
+        "num_frames": len(images),
+        "offload_video_to_cpu": offload_video_to_cpu,
+        "offload_state_to_cpu": offload_state_to_cpu,
+        "video_height": video_height,
+        "video_width": video_width,
+        "device": compute_device,
+        "storage_device": storage_device,
+        "point_inputs_per_obj": {},
+        "mask_inputs_per_obj": {},
+        "cached_features": {},
+        "constants": {},
+        "obj_id_to_idx": OrderedDict(),
+        "obj_idx_to_id": OrderedDict(),
+        "obj_ids": [],
+        "output_dict_per_obj": {},
+        "temp_output_dict_per_obj": {},
+        "frames_tracked_per_obj": {},
+    }

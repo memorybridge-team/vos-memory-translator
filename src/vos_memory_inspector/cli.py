@@ -12,6 +12,7 @@ from .paired_experiment import (
     run_synthetic_experiment,
 )
 from .runner import run_video_probe
+from .roundtrip import run_cross_model_direct_handoff, run_same_checkpoint_roundtrip
 from .state_inspector import inspect_state, write_inspection_report
 
 
@@ -209,4 +210,92 @@ def paired_experiment_main(argv: list[str] | None = None) -> None:
         ridge_lambda=args.ridge_lambda,
         hidden_dim=args.hidden_dim,
     )
+    print(json.dumps(report, indent=2))
+
+
+def roundtrip_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description="Run same-checkpoint SAM 2 export/inject continuation validation."
+    )
+    parser.add_argument("--sam2-repo", required=True, type=Path)
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--checkpoint", required=True, type=Path)
+    parser.add_argument("--model-id", required=True)
+    parser.add_argument("--video-dir", required=True, type=Path)
+    parser.add_argument("--prompt-mask", required=True, type=Path)
+    parser.add_argument("--object-id", type=int, default=1)
+    parser.add_argument("--switch-frame", type=int, required=True)
+    parser.add_argument("--device", default="cuda")
+    parser.add_argument("--keep-video-on-device", action="store_true")
+    parser.add_argument("--keep-state-on-device", action="store_true")
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--json", type=Path)
+    args = parser.parse_args(argv)
+    report = run_same_checkpoint_roundtrip(
+        sam2_repo=args.sam2_repo,
+        config_file=args.config,
+        checkpoint=args.checkpoint,
+        model_id=args.model_id,
+        video_dir=args.video_dir,
+        prompt_mask=args.prompt_mask,
+        object_id=args.object_id,
+        switch_frame=args.switch_frame,
+        device=args.device,
+        offload_video_to_cpu=not args.keep_video_on_device,
+        offload_state_to_cpu=not args.keep_state_on_device,
+        seed=args.seed,
+    )
+    if args.json is not None:
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        args.json.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    print(json.dumps(report, indent=2))
+
+
+def direct_handoff_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description="Run a checkpoint-backed cross-model Direct Copy handoff."
+    )
+    parser.add_argument("--sam2-repo", required=True, type=Path)
+    parser.add_argument("--source-config", required=True)
+    parser.add_argument("--source-checkpoint", required=True, type=Path)
+    parser.add_argument("--source-model-id", required=True)
+    parser.add_argument("--target-config", required=True)
+    parser.add_argument("--target-checkpoint", required=True, type=Path)
+    parser.add_argument("--target-model-id", required=True)
+    parser.add_argument("--video-dir", required=True, type=Path)
+    parser.add_argument("--prompt-mask", required=True, type=Path)
+    parser.add_argument("--object-id", type=int, default=1)
+    parser.add_argument("--switch-frame", type=int, required=True)
+    parser.add_argument("--device", default="cuda")
+    parser.add_argument("--keep-video-on-device", action="store_true")
+    parser.add_argument("--keep-state-on-device", action="store_true")
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--json", type=Path)
+    parser.add_argument(
+        "--artifact-dir",
+        type=Path,
+        help="Write browsable mask PNGs plus report.json/report.md.",
+    )
+    args = parser.parse_args(argv)
+    report = run_cross_model_direct_handoff(
+        sam2_repo=args.sam2_repo,
+        source_config_file=args.source_config,
+        source_checkpoint=args.source_checkpoint,
+        source_model_id=args.source_model_id,
+        target_config_file=args.target_config,
+        target_checkpoint=args.target_checkpoint,
+        target_model_id=args.target_model_id,
+        video_dir=args.video_dir,
+        prompt_mask=args.prompt_mask,
+        object_id=args.object_id,
+        switch_frame=args.switch_frame,
+        device=args.device,
+        offload_video_to_cpu=not args.keep_video_on_device,
+        offload_state_to_cpu=not args.keep_state_on_device,
+        seed=args.seed,
+        artifact_dir=args.artifact_dir,
+    )
+    if args.json is not None:
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        args.json.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2))
