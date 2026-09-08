@@ -27,7 +27,9 @@ if [[ ! -d "${sam2_dir}/.git" ]]; then
 fi
 git -C "${sam2_dir}" fetch origin "${sam2_commit}"
 git -C "${sam2_dir}" checkout --detach "${sam2_commit}"
-SAM2_BUILD_ALLOW_ERRORS=0 "${python_bin}" -m pip install -v -e "${sam2_dir}"
+# Do not let pip build isolation fetch a different CUDA build of PyTorch than
+# the CUDA-enabled one bundled by the RunPod image.
+SAM2_BUILD_ALLOW_ERRORS=0 "${python_bin}" -m pip install --no-build-isolation -v -e "${sam2_dir}"
 
 mkdir -p "${checkpoint_dir}"
 for checkpoint in sam2.1_hiera_tiny.pt sam2.1_hiera_large.pt; do
