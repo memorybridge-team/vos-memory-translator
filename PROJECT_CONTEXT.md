@@ -1,7 +1,7 @@
 # Cross-Model Memory Translator — Project Context
 
 > 새 채팅을 위한 프로젝트 영구 컨텍스트  
-> 로컬 스냅샷 기준일: **2026-09-08 (KST)**
+> 로컬 스냅샷 기준일: **2026-09-09 (KST)**
 > 원자료: 프로젝트 노션 데이터베이스 및 현재까지의 대화  
 > 상태 표기: **[확인]** 문헌·코드·기록으로 확인 / **[가설]** 실험 필요 / **[Pilot]** 제한적 예비 결과
 
@@ -602,6 +602,21 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   않고 보관본으로 표시하며, 현재 계획의 기준 문서는 `docs/experimental_plan.md`로
   단일화한다. 루트 README와 RunPod 가이드는 이 정책과 현재 실험 순서에 맞춰
   한국어로 갱신한다.
+- **[RunPod 재접속·자산 점검 — 2026-09-09]** 새 SSH endpoint에서 A40 48GB와
+  `/workspace/CMMT` persistent 자료를 재확인했다. 프로젝트 실제 사용량은 약
+  3.8GB이며 DAVIS 1.1GB, Tiny/Large checkpoint 1,008MB, 공식 SAM 2와 DAVIS
+  evaluator 423MB, outputs 214MB, venv 940MB, `.git` 83MB다. DAVIS 2017
+  train 60개·val 30개 목록, 공식 SAM 2 commit `2b90b9f5...`, 공식 DAVIS
+  evaluator commit `ac7c43fc...`, paired canonical state 4개와 Ridge artifact가
+  모두 남아 있어 다음 실험의 필수 자산 누락은 없다. RunPod checkout을 branch
+  commit `45c11a8`로 fast-forward했고 전체 test는 `19 passed in 5.33s`였다.
+- **[다음 재개 지점 — 2026-09-09]** Phase 1의 첫 미구현 산출물은 DAVIS
+  video/object/switch를 고정하는 manifest 생성기다. 일반 quantile과 GT로 정의한
+  occlusion 진입·reappearance·fast-motion tag를 결정적으로 기록하되 GT는 case
+  선택·평가에만 사용하고 model input에는 사용하지 않는다. 그 다음 동일 manifest를
+  소비하는 Target Reset/First-Frame-only, Last-Mask, Replay-k, Full Replay
+  baseline runner를 구현한다. 5시간 사용률이 89%여서 합의된 80% 보호선에 따라
+  새 장기 구현 직전에 안전 checkpoint하고 다음 reset 뒤 이 지점부터 재개한다.
 - **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.
