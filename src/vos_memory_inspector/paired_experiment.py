@@ -354,16 +354,7 @@ def run_paired_experiment(
     serialized: dict[str, Any] = {}
     ridge = translators.get("ridge")
     if ridge is not None:
-        serialized["ridge"] = {
-            "target_spec": ridge.target_spec.to_dict(),
-            "ridge_lambda": ridge.ridge_lambda,
-            "feature_weight": ridge.feature_map.weight,
-            "feature_bias": ridge.feature_map.bias,
-            "pointer_weight": ridge.pointer_map.weight,
-            "pointer_bias": ridge.pointer_map.bias,
-            "presence_weight": ridge.presence_map.weight,
-            "presence_bias": ridge.presence_map.bias,
-        }
+        serialized["ridge"] = ridge.to_payload()
     for name in ("linear", "residual_mlp"):
         translator = translators.get(name)
         if translator is not None:

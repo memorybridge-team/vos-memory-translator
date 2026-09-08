@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable
+from typing import Any, Iterable, Mapping
 
 import torch
 from torch import nn
@@ -230,6 +230,83 @@ class RidgeStateTranslator:
             mapping.parameter_count
             for mapping in (self.feature_map, self.pointer_map, self.presence_map)
         )
+
+    def to_payload(self) -> dict[str, Any]:
+        return {
+            "target_spec": self.target_spec.to_dict(),
+            "ridge_lambda": self.ridge_lambda,
+            "feature_weight": self.feature_map.weight.detach().cpu(),
+            "feature_bias": self.feature_map.bias.detach().cpu(),
+            "pointer_weight": self.pointer_map.weight.detach().cpu(),
+            "pointer_bias": self.pointer_map.bias.detach().cpu(),
+            "presence_weight": self.presence_map.weight.detach().cpu(),
+            "presence_bias": self.presence_map.bias.detach().cpu(),
+        }
+
+    @classmethod
+    def from_payload(cls, payload: Mapping[str, Any]) -> "RidgeStateTranslator":
+        required = {
+            "target_spec",
+            "ridge_lambda",
+            "feature_weight",
+            "feature_bias",
+            "pointer_weight",
+            "pointer_bias",
+            "presence_weight",
+            "presence_bias",
+        }
+        missing = sorted(required - set(payload))
+        if missing:
+            raise ValueError(f"Ridge payload is missing fields: {missing}")
+        spec_value = payload["target_spec"]
+        if not isinstance(spec_value, Mapping):
+            raise TypeError("Ridge target_spec must be a mapping")
+        target_spec = StateSpec(**dict(spec_value))
+        tensor_fields = {
+            name: payload[name]
+            for name in required
+            if name.endswith("weight") or name.endswith("bias")
+        }
+        invalid = [name for name, value in tensor_fields.items() if not isinstance(value, torch.Tensor)]
+        if invalid:
+            raise TypeError(f"Ridge payload fields must be tensors: {invalid}")
+        return cls(
+            target_spec=target_spec,
+            feature_map=AffineMap(payload["feature_weight"], payload["feature_bias"]),
+            pointer_map=AffineMap(payload["pointer_weight"], payload["pointer_bias"]),
+            presence_map=AffineMap(payload["presence_weight"], payload["presence_bias"]),
+            ridge_lambda=float(payload["ridge_lambda"]),
+        )
+
+
+class RidgeDirectPresenceTranslator:
+    """Use Ridge for memory/pointer and preserve the source presence logit."""
+
+    name = "ridge_spatial_pointer_direct_presence"
+
+    def __init__(self, ridge: RidgeStateTranslator):
+        self.ridge = ridge
+        self.target_spec = ridge.target_spec
+
+    def translate(self, source: CanonicalState) -> CanonicalState:
+        ridge_state = self.ridge.translate(source)
+        return ridge_state.with_continuous(
+            spatial_memory=ridge_state.spatial_memory,
+            object_pointer=ridge_state.object_pointer,
+            presence_logits=source.presence_logits.clone(),
+            positional_information=_target_positional(self.target_spec),
+            translation_metadata={
+                "translator": self.name,
+                "ridge_lambda": self.ridge.ridge_lambda,
+                "spatial_memory": "ridge",
+                "object_pointer": "ridge",
+                "presence_logits": "direct",
+                "grid_adapter": "bilinear",
+            },
+        )
+
+    def parameter_count(self) -> int:
+        return self.ridge.feature_map.parameter_count + self.ridge.pointer_map.parameter_count
 
 
 class _LearnedStateTranslator(nn.Module):

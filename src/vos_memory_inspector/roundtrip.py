@@ -270,7 +270,7 @@ def run_same_checkpoint_roundtrip(
     return report
 
 
-def run_cross_model_direct_handoff(
+def run_cross_model_translator_handoff(
     *,
     sam2_repo: str | Path,
     source_config_file: str,
@@ -288,8 +288,11 @@ def run_cross_model_direct_handoff(
     offload_state_to_cpu: bool = True,
     seed: int = 7,
     artifact_dir: str | Path | None = None,
+    translator: Any | None = None,
+    translator_name: str = "direct_copy",
+    candidate_label: str = "Direct Copy",
 ) -> dict[str, Any]:
-    """Run the first end-to-end cross-model Direct Copy baseline."""
+    """Run an end-to-end cross-model handoff with a supplied translator."""
 
     sam2_repo = Path(sam2_repo).resolve()
     source_checkpoint = Path(source_checkpoint).resolve()
@@ -357,8 +360,15 @@ def run_cross_model_direct_handoff(
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-    direct = DirectCopyTranslator(target_canonical.spec)
-    translated = direct.translate(source_canonical)
+    if translator is None:
+        translator = DirectCopyTranslator(target_canonical.spec)
+    target_spec = getattr(translator, "target_spec", None)
+    if target_spec is not None and target_spec != target_canonical.spec:
+        raise ValueError(
+            f"translator target spec {target_spec} differs from runtime "
+            f"target spec {target_canonical.spec}"
+        )
+    translated = translator.translate(source_canonical)
     state_alignment = evaluate_state(translated, target_canonical)
 
     _seed_everything(seed)
@@ -388,7 +398,7 @@ def run_cross_model_direct_handoff(
         inference_state=target_state,
     )
     calls_after_injection = len(backbone_calls)
-    direct_future: dict[int, torch.Tensor] = {}
+    candidate_future: dict[int, torch.Tensor] = {}
     start_frame = switch_frame + 1
     for frame_idx, _object_ids, masks in target_predictor.propagate_in_video(
         target_state,
@@ -396,16 +406,17 @@ def run_cross_model_direct_handoff(
         max_frame_num_to_track=num_frames - start_frame,
         reverse=False,
     ):
-        direct_future[int(frame_idx)] = masks.detach().cpu().float()
-    downstream = _compare_future_masks(oracle_future, direct_future)
+        candidate_future[int(frame_idx)] = masks.detach().cpu().float()
+    downstream = _compare_future_masks(oracle_future, candidate_future)
     report = {
         "source_model_id": source_model_id,
         "target_model_id": target_model_id,
-        "translator": "direct_copy",
+        "translator": translator_name,
+        "translator_parameter_count": int(translator.parameter_count()),
         "upstream_commit": commit,
         "video_id": video_dir.name,
         "switch_frame": switch_frame,
-        "future_frames": sorted(direct_future),
+        "future_frames": sorted(candidate_future),
         "state_alignment_to_target_native": state_alignment,
         "injection": injection,
         "backbone_calls_before_injection": calls_before_injection,
@@ -422,13 +433,19 @@ def run_cross_model_direct_handoff(
         report["artifacts"] = write_handoff_artifacts(
             video_dir=video_dir,
             oracle_masks=oracle_future,
-            candidate_masks=direct_future,
+            candidate_masks=candidate_future,
             output_dir=artifact_dir,
             report=report,
-            candidate_label="Direct Copy",
+            candidate_label=candidate_label,
         )
     del target_state, target_predictor
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
     return report
+
+
+def run_cross_model_direct_handoff(**kwargs: Any) -> dict[str, Any]:
+    """Backward-compatible entry point for the Direct Copy handoff baseline."""
+
+    return run_cross_model_translator_handoff(**kwargs)

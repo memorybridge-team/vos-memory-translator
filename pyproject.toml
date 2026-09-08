@@ -26,6 +26,7 @@ cmmt-synthetic-experiment = "vos_memory_inspector.cli:synthetic_experiment_main"
 cmmt-paired-experiment = "vos_memory_inspector.cli:paired_experiment_main"
 sam2-roundtrip-smoke = "vos_memory_inspector.cli:roundtrip_main"
 sam2-direct-handoff-smoke = "vos_memory_inspector.cli:direct_handoff_main"
+sam2-ridge-handoff-smoke = "vos_memory_inspector.cli:ridge_handoff_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

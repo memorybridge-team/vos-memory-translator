@@ -12,8 +12,13 @@ from .paired_experiment import (
     run_synthetic_experiment,
 )
 from .runner import run_video_probe
-from .roundtrip import run_cross_model_direct_handoff, run_same_checkpoint_roundtrip
+from .roundtrip import (
+    run_cross_model_direct_handoff,
+    run_cross_model_translator_handoff,
+    run_same_checkpoint_roundtrip,
+)
 from .state_inspector import inspect_state, write_inspection_report
+from .translators import RidgeDirectPresenceTranslator, RidgeStateTranslator
 
 
 def _probe_parser() -> argparse.ArgumentParser:
@@ -311,6 +316,79 @@ def direct_handoff_main(argv: list[str] | None = None) -> None:
         offload_state_to_cpu=not args.keep_state_on_device,
         seed=args.seed,
         artifact_dir=args.artifact_dir,
+    )
+    if args.json is not None:
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        args.json.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    print(json.dumps(report, indent=2))
+
+
+def ridge_handoff_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Run checkpoint-backed cross-model handoff using a saved Ridge model."
+        )
+    )
+    parser.add_argument("--sam2-repo", required=True, type=Path)
+    parser.add_argument("--source-config", required=True)
+    parser.add_argument("--source-checkpoint", required=True, type=Path)
+    parser.add_argument("--source-model-id", required=True)
+    parser.add_argument("--target-config", required=True)
+    parser.add_argument("--target-checkpoint", required=True, type=Path)
+    parser.add_argument("--target-model-id", required=True)
+    parser.add_argument("--translator-artifact", required=True, type=Path)
+    parser.add_argument(
+        "--presence-policy",
+        choices=("direct", "ridge"),
+        default="direct",
+        help="Use source presence logits directly or apply the fitted Ridge head.",
+    )
+    parser.add_argument("--video-dir", required=True, type=Path)
+    parser.add_argument("--prompt-mask", required=True, type=Path)
+    parser.add_argument("--object-id", type=int, default=1)
+    parser.add_argument("--switch-frame", type=int, required=True)
+    parser.add_argument("--device", default="cuda")
+    parser.add_argument("--keep-video-on-device", action="store_true")
+    parser.add_argument("--keep-state-on-device", action="store_true")
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--json", type=Path)
+    parser.add_argument("--artifact-dir", type=Path)
+    args = parser.parse_args(argv)
+
+    payload = __import__("torch").load(
+        args.translator_artifact, map_location="cpu", weights_only=True
+    )
+    if not isinstance(payload, dict) or not isinstance(payload.get("ridge"), dict):
+        parser.error("translator artifact does not contain a Ridge payload")
+    ridge = RidgeStateTranslator.from_payload(payload["ridge"])
+    if args.presence_policy == "direct":
+        translator = RidgeDirectPresenceTranslator(ridge)
+        translator_name = translator.name
+        candidate_label = "Ridge memory/pointer + Direct presence"
+    else:
+        translator = ridge
+        translator_name = ridge.name
+        candidate_label = "Ridge"
+    report = run_cross_model_translator_handoff(
+        sam2_repo=args.sam2_repo,
+        source_config_file=args.source_config,
+        source_checkpoint=args.source_checkpoint,
+        source_model_id=args.source_model_id,
+        target_config_file=args.target_config,
+        target_checkpoint=args.target_checkpoint,
+        target_model_id=args.target_model_id,
+        video_dir=args.video_dir,
+        prompt_mask=args.prompt_mask,
+        object_id=args.object_id,
+        switch_frame=args.switch_frame,
+        device=args.device,
+        offload_video_to_cpu=not args.keep_video_on_device,
+        offload_state_to_cpu=not args.keep_state_on_device,
+        seed=args.seed,
+        artifact_dir=args.artifact_dir,
+        translator=translator,
+        translator_name=translator_name,
+        candidate_label=candidate_label,
     )
     if args.json is not None:
         args.json.parent.mkdir(parents=True, exist_ok=True)

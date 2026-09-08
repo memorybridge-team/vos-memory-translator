@@ -21,6 +21,7 @@ from vos_memory_inspector.state_schema import CanonicalState, StateSpec
 from vos_memory_inspector.translators import (
     DirectCopyTranslator,
     ResidualMLPStateTranslator,
+    RidgeDirectPresenceTranslator,
     RidgeStateTranslator,
 )
 
@@ -225,6 +226,30 @@ def test_ridge_recovers_affine_components() -> None:
     ridge = RidgeStateTranslator.fit(list(zip(sources, targets)), ridge_lambda=0.0)
     result = evaluate_state(ridge.translate(sources[-1]), targets[-1])
     assert result["aggregate_mse"] < 1e-9
+
+    restored = RidgeStateTranslator.from_payload(ridge.to_payload())
+    restored_result = evaluate_state(restored.translate(sources[-1]), targets[-1])
+    assert restored_result["aggregate_mse"] < 1e-9
+
+
+def test_ridge_direct_presence_uses_ridge_for_memory_only() -> None:
+    source = _state(
+        torch.randn(1, 1, 2, 3, 2, 2),
+        torch.randn(1, 1, 2, 4),
+        torch.randn(1, 1, 2, 1),
+    )
+    target = source.with_continuous(
+        spatial_memory=source.spatial_memory * 2,
+        object_pointer=source.object_pointer * 3,
+        presence_logits=source.presence_logits + 100,
+    )
+    ridge = RidgeStateTranslator.fit([(source, target)], ridge_lambda=0.01)
+
+    translated = RidgeDirectPresenceTranslator(ridge).translate(source)
+
+    assert torch.allclose(translated.presence_logits, source.presence_logits)
+    assert not torch.allclose(translated.spatial_memory, source.spatial_memory)
+    assert translated.metadata["translation"]["presence_logits"] == "direct"
 
 
 def test_mlp_residuals_are_only_enabled_for_equal_feature_dimensions() -> None:
