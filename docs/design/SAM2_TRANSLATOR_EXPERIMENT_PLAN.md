@@ -1,5 +1,9 @@
 # SAM 2 Translator 단계별 실행 계획
 
+> **보관 문서:** 2026-09-07 당시의 단계 계획입니다. 현재 실행 우선순위와
+> 자원·평가 정책은 [`../experimental_plan.md`](../experimental_plan.md)를 기준으로
+> 합니다. 아래 내용은 초기 결정과 구현 경계를 추적하기 위해 남겨 둡니다.
+
 작성일: 2026-09-07
 첫 controlled pair: SAM 2.1 Tiny → Large
 기준 upstream: `facebookresearch/sam2@2b90b9f5ceec907a1c18123530e92e794ad901a4`

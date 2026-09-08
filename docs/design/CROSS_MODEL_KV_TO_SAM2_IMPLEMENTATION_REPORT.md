@@ -26,7 +26,7 @@ SAM 2에는 LLM의 layer/head/token 축이 그대로 존재하지 않는다. 따
 - **[구현 결정]**: 이 저장소가 채택한 인터페이스·baseline
 - **[미검증]**: 실제 checkpoint runtime으로 아직 확인하지 못한 항목
 
-분석 대상 논문은 Heo et al., *Cross-Model KV Cache Transfer in LLM Families: A Closed-Form Linear Mapping for Prefill Reuse*, arXiv:2608.03893v1이다. 로컬 원문은 [`references/papers/cross_model_kv_cache_transfer_arxiv2608.03893v1.pdf`](../../references/papers/cross_model_kv_cache_transfer_arxiv2608.03893v1.pdf)에 보존했다.
+분석 대상 논문은 Heo et al., *Cross-Model KV Cache Transfer in LLM Families: A Closed-Form Linear Mapping for Prefill Reuse*, arXiv:2608.03893v1이다. 원문은 [공식 arXiv 페이지](https://arxiv.org/abs/2608.03893)에서 확인할 수 있다.
 
 2026-08-25 기준 arXiv 페이지와 논문에서 저자 공식 code repository 링크를 찾지 못했다. 따라서 아래 “공개 구현” 분석은 `souvikDevloper/kvbridge`의 독립 구현 commit `949d81d7861e998d5c42db68d7567cc70e2e58c5`를 engineering corroboration으로만 사용하며, 논문의 공식 코드라고 부르지 않는다.
 

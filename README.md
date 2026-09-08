@@ -1,59 +1,100 @@
-# VOS Memory Translator
+# Cross-Model Memory Translator (CMMT)
 
-This repository implements the CMMT inspection and translator-baseline
-milestones. It records SAM 2.1 compact video state and the assembled tensors
-passed to memory attention, normalizes nested/Hugging Face cache containers,
-builds a runtime-validated canonical handoff state, and fits Direct, closed-form
-Ridge/OLS, Linear, and residual two-layer MLP baselines. Target-owned positional
-regeneration is mandatory during SAM 2 history materialization.
+비디오를 처리하던 모델을 중간에 다른 모델로 바꿀 때, 새 모델이 과거 프레임을
+처음부터 다시 읽지 않도록 **기존 모델의 temporal memory/state를 새 모델용
+state로 번역하는 연구 프로젝트**입니다.
 
-The supported SAM 2 upstream revision is pinned in
-[`SAM2_UPSTREAM_COMMIT`](SAM2_UPSTREAM_COMMIT). See
-[`docs/memory_tensor_inventory.md`](docs/memory_tensor_inventory.md) for the
-producer, storage, and consumer paths verified against that revision.
+```text
+SAM 2 Tiny가 frame 1…t 처리
+          │
+          ▼
+   source memory b_t
+          │
+          ▼
+      Translator T
+          │
+          ▼
+ Large-compatible state â_t
+          │
+          ▼
+Large가 frame t+1부터 계속 추론
+```
 
-No checkpoint, dataset, prompt token, or tensor dump belongs in Git. Tensor
-dumps are opt-in and ignored by `.gitignore`.
+첫 controlled pair는 **SAM 2.1 Tiny → Large**입니다. 최종 목표는 같은 SAM 2
+계열을 넘어 **SAM 2 ↔ XMem/Cutie**처럼 memory 구조가 다른 모델 사이의
+runtime handoff를 검증하는 것입니다.
 
-## Project documents and layout
+## 지금 어디까지 되었나요?
 
-Read [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md) before changing the research
-scope, state contract, baselines, or evaluation design.
+- 공식 SAM 2.1 Tiny/Large checkpoint와 DAVIS 2017을 RunPod A40에서 실행했습니다.
+- SAM 2 memory를 continuation 가능한 canonical state로 저장하고 다른 predictor에
+  주입하는 경로를 구현했습니다.
+- 같은 checkpoint의 export→inject round-trip에서 과거 프레임 backbone replay가
+  0회인지 확인했습니다.
+- Direct Copy와 component-wise Ridge translator를 실제 Tiny→Large handoff에
+  주입했습니다.
+- 제한적인 한 개 held-out pilot에서 switch 이후 DAVIS J&F는
+  Large-native `0.8630`, Direct `0.6385`, Ridge hybrid `0.8605`였습니다.
 
-| Path | Purpose |
-| --- | --- |
-| `docs/design/` | Translator, state-contract, and experiment design documents |
-| `docs/memory_tensor_inventory.md` | Verified SAM 2 memory producer/storage/consumer paths |
-| `docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md` | KV paper analysis, SAM 2 state contract, implementation and smoke results |
-| `docs/validation.md` | Commands and tests run for the current probe milestone |
-| `references/` | Source papers and searchable page-level text extracts |
-| `meetings/` | Raw meeting `.txt` files and project-focused meeting minutes |
-| `src/vos_memory_inspector/` | Inspection, canonical state, translators, metrics, and experiments |
-| `tests/` | Synthetic unit and integration tests |
-| `configs/` | Repository-owned experiment configuration files |
-| `scripts/` | Reproducible command entry points |
-| `data/`, `outputs/` | Local-only datasets and generated artifacts |
+이 수치는 **DAVIS 전체 benchmark 결과가 아닙니다.** `bear` 한 영상의 작은 학습
+표본과 `bmx-bumps` 한 영상·한 객체·한 switch point만 사용한 pilot입니다.
+현재 결론은 “실제 state injection과 평가 pipeline이 동작한다”까지이며,
+Translator의 일반화나 우월성은 아직 검증되지 않았습니다.
 
-## What is measured
+## 결과 직접 보기
 
-- Stored per-frame tensors: `maskmem_features`, every element of
-  `maskmem_pos_enc`, `pred_masks`, `obj_ptr`, and `object_score_logits`.
-- Actual next-frame consumer inputs: assembled `memory_attention.memory` and
-  `memory_attention.memory_pos` captured by a forward pre-hook.
-- Shape, dtype, device, mean, population standard deviation, norm, minimum,
-  maximum, byte size, and exact change versus the preceding recorded frame.
-- Conditioning versus non-conditioning storage and the precise state path.
-- Matching Tiny/Large rows, including spatial resolution, channel, dtype, and
-  byte-size compatibility.
+- [연구 결과 홈페이지](https://memorybridge-team.github.io/vos-memory-translator/)
+- [83프레임 인터랙티브 갤러리](https://memorybridge-team.github.io/vos-memory-translator/experiments/2026-09-08-davis-handoff/)
+- [현재 정식 실험 계획](docs/experimental_plan.md)
+- [첫 DAVIS handoff pilot 보고서](reports/experiments/2026-09-08_davis_handoff_pilot/report.md)
+- [RunPod 실행 기록](reports/run_logs/2026-09-08_runpod.md)
 
-Statistics-only mode is the default. `--dump-tensor` is required to write any
-tensor, and dumps are moved to CPU before `torch.save`.
+갤러리는 각 프레임에서 `DAVIS GT / Large-native / Direct / Ridge hybrid`를
+나란히 보여주고, 전체 영상과 frame별 J&F 그래프를 제공합니다.
 
-## Install
+## 앞으로의 핵심 실험
 
-Clone and pin the official upstream separately. The probe refuses a different
-commit by default and checks the expected private source contract before model
-construction.
+1. 여러 DAVIS train/validation 영상·객체·switch point를 고정 manifest로 구성
+2. Target Reset, Last-Mask, Replay-k, Full Replay baseline 완성
+3. leakage 없이 Tiny/Large paired-state 학습 데이터를 확대
+4. Ridge → component-wise MLP → downstream/rollout loss 순으로 비교
+5. switch+1/5/20, identity break, occlusion recovery, latency·VRAM·전송량 평가
+6. MOSE/LVOS의 hard·long-term 조건과 반복 switch로 확장
+7. SAM 2↔XMem/Cutie cross-architecture handoff 검증
+
+RunPod 비용 때문에 연구에 필요한 데이터나 반복 횟수를 줄이지 않습니다. 다만
+GPU는 checkpoint inference/state 수집/학습에 집중하고, 전처리·그래프·갤러리는
+CPU에서 수행해 불필요한 자원 낭비를 막습니다.
+
+## 성공 판단 기준
+
+Tensor MSE가 낮은 것만으로 성공이라 부르지 않습니다. 다음을 함께 봅니다.
+
+- post-switch DAVIS J&F와 switch 직후 성능 저하
+- 객체 identity 유지와 가림 후 recovery
+- Last-Mask 및 Replay-k 대비 정확도–지연시간 Pareto 개선
+- full replay 대비 handoff latency, FLOPs, VRAM과 전송 bytes 절감
+- 새로운 영상·switch 시점·반대 방향에서의 일반화
+
+## 저장소 구성
+
+| 경로 | 내용 |
+|---|---|
+| `src/vos_memory_inspector/` | state 추출·검증·주입, translator, metric 핵심 코드 |
+| `tests/` | synthetic unit/integration test |
+| `scripts/` | RunPod 준비, probe, 결과 갤러리 생성 명령 |
+| `configs/` | 저장소가 관리하는 실험 설정 |
+| `docs/design/` | state contract와 Translator 설계 근거 |
+| `docs/experimental_plan.md` | 현재 유효한 정식 실험 계획 |
+| `reports/experiments/` | 재현 가능한 pilot metric과 대표 시각 자료 |
+| `reports/run_logs/` | 실제 실행 시간·명령·성공/실패 기록 |
+| `references/` | 논문 링크와 출처 인덱스; 원문 PDF는 Git에서 제외 |
+| `data/`, `outputs/`, `checkpoints/` | 로컬/RunPod 전용이며 Git에서 제외 |
+
+## 설치와 실행 준비
+
+공식 SAM 2는 이 저장소 안에 복사하지 않고 별도 checkout으로 설치합니다. 지원
+revision은 [`SAM2_UPSTREAM_COMMIT`](SAM2_UPSTREAM_COMMIT)에 고정돼 있습니다.
 
 ```bash
 git clone https://github.com/facebookresearch/sam2.git
@@ -64,207 +105,21 @@ git clone https://github.com/memorybridge-team/vos-memory-translator.git
 cd vos-memory-translator
 git switch kim/exp-sam2-state-translator
 python -m pip install -e ".[dev]"
-```
-
-Download the SAM 2.1 Tiny and Large checkpoints from the official SAM 2
-checkpoint links. Keep them outside this repository.
-
-## Synthetic tests
-
-```bash
 python -m pytest -q
 ```
 
-The tests use synthetic tensors only. They do not download checkpoints or
-datasets.
+RunPod 구성과 실제 checkpoint 명령은 [RunPod 실행 가이드](docs/runpod.md), state
+구조와 검증 근거는 [memory tensor inventory](docs/memory_tensor_inventory.md),
+실행된 테스트는 [validation 기록](docs/validation.md)을 참고하세요.
 
-Run the paired-state translator smoke explicitly:
+## Git에 포함하지 않는 것
 
-```bash
-cmmt-synthetic-experiment --output-dir outputs/synthetic_cmmt --seed 7
-```
+- SAM 2 checkpoint와 학습 checkpoint
+- DAVIS/MOSE/LVOS 원본 데이터
+- raw canonical state와 대량 tensor dump
+- 개인 SSH key, 환경변수와 계정 정보
+- 제3자 논문 PDF 및 자동 추출한 논문 전문
 
-This command is clearly marked synthetic in its JSON/Markdown output. It is not
-a SAM 2 checkpoint result.
-
-## DAVIS 2017 val input
-
-The downloader requires an explicit dataset-terms acknowledgement and extracts
-the official 480p trainval archive with path-traversal checks:
-
-```bash
-sam2-davis-download \
-  --destination /content/data \
-  --accept-dataset-terms
-
-sam2-davis-check \
-  --root /content/data/DAVIS \
-  --sequence bike-packing
-```
-
-The validator requires the sequence to appear in `ImageSets/2017/val.txt` and
-returns the frame directory and matching first-frame annotation. DAVIS data is
-ignored by Git and must not be copied into the repository.
-
-For a checkpoint smoke run without DAVIS, create deterministic local RGB frames
-and a legal synthetic prompt:
-
-```bash
-python scripts/make_synthetic_video.py --output-dir /content/smoke
-```
-
-## One-model probe
-
-```bash
-sam2-memory-probe \
-  --sam2-repo /content/sam2 \
-  --config configs/sam2.1/sam2.1_hiera_t.yaml \
-  --checkpoint /content/checkpoints/sam2.1_hiera_tiny.pt \
-  --model-id sam2.1-hiera-tiny \
-  --video-dir /content/data/DAVIS/JPEGImages/480p/bike-packing \
-  --prompt-mask /content/data/DAVIS/Annotations/480p/bike-packing/00000.png \
-  --object-id 1 \
-  --switch-frame 5 \
-  --jsonl /content/probe/tiny.jsonl \
-  --csv /content/probe/tiny.csv \
-  --canonical-state /content/probe/tiny_state.pt \
-  --seed 7
-```
-
-To dump only selected CPU tensors, add both `--dump-dir /content/probe/dumps`
-and one or more options such as `--dump-tensor maskmem_features`. Dumping is not
-needed for compatibility inspection.
-
-## Sequential Tiny/Large run on a Colab T4
-
-The pair script always completes and releases Tiny before constructing Large;
-video and state storage are CPU-offloaded for both models.
-
-```bash
-python scripts/run_tiny_large_probe.py \
-  --sam2-repo /content/sam2 \
-  --tiny-checkpoint /content/checkpoints/sam2.1_hiera_tiny.pt \
-  --large-checkpoint /content/checkpoints/sam2.1_hiera_large.pt \
-  --video-dir /content/data/DAVIS/JPEGImages/480p/bike-packing \
-  --prompt-mask /content/data/DAVIS/Annotations/480p/bike-packing/00000.png \
-  --object-id 1 \
-  --switch-frame 5 \
-  --output-dir /content/probe
-```
-
-It creates `tiny.jsonl`, `large.jsonl`, CSV equivalents, opt-in canonical
-`tiny_state.pt`/`large_state.pt` artifacts,
-`compatibility.json`, and `compatibility.md`. A shape-compatible row is labeled
-as a direct-copy candidate with semantics explicitly unverified. A learned
-linear map is only proposed when tensor rank and spatial resolution agree but
-the mapped dimension differs.
-
-After collecting multiple disjoint train/test video-switch pairs, fit the
-offline tensor baselines with repeated `--train-source/--train-target` and
-`--test-source/--test-target` arguments:
-
-```bash
-cmmt-paired-experiment \
-  --train-source outputs/train01_tiny.pt --train-target outputs/train01_large.pt \
-  --test-source outputs/test01_tiny.pt --test-target outputs/test01_large.pt \
-  --output-dir outputs/paired_tiny_to_large --seed 7
-```
-
-This command evaluates serialized tensors only; it does not claim downstream
-SAM 2 continuation quality.
-
-## Checkpoint-backed continuation smoke
-
-Validate that one checkpoint can export and re-inject a continuation-closed
-state without replaying past-frame backbones:
-
-```bash
-sam2-roundtrip-smoke \
-  --sam2-repo /content/sam2 \
-  --config configs/sam2.1/sam2.1_hiera_l.yaml \
-  --checkpoint /content/checkpoints/sam2.1_hiera_large.pt \
-  --model-id sam2.1-hiera-large \
-  --video-dir /content/smoke/frames \
-  --prompt-mask /content/smoke/00000.png \
-  --object-id 1 --switch-frame 1 \
-  --json /content/probe/large_roundtrip.json
-```
-
-Run the first cross-model Direct Copy baseline and compare its future masks to
-target-native continuation:
-
-```bash
-sam2-direct-handoff-smoke \
-  --sam2-repo /content/sam2 \
-  --source-config configs/sam2.1/sam2.1_hiera_t.yaml \
-  --source-checkpoint /content/checkpoints/sam2.1_hiera_tiny.pt \
-  --source-model-id sam2.1-hiera-tiny \
-  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
-  --target-checkpoint /content/checkpoints/sam2.1_hiera_large.pt \
-  --target-model-id sam2.1-hiera-large \
-  --video-dir /content/smoke/frames \
-  --prompt-mask /content/smoke/00000.png \
-  --object-id 1 --switch-frame 1 \
-  --json /content/probe/tiny_to_large_direct.json \
-  --artifact-dir /content/probe/tiny_to_large_direct
-```
-
-Apply a Ridge model saved by `cmmt-paired-experiment`. The default hybrid uses
-Ridge for spatial memory/object pointers and preserves source presence logits:
-
-```bash
-sam2-ridge-handoff-smoke \
-  --sam2-repo /workspace/CMMT/.external/sam2 \
-  --source-config configs/sam2.1/sam2.1_hiera_t.yaml \
-  --source-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_tiny.pt \
-  --source-model-id sam2.1-hiera-tiny \
-  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
-  --target-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_large.pt \
-  --target-model-id sam2.1-hiera-large \
-  --translator-artifact /workspace/CMMT/outputs/paired_translators.pt \
-  --presence-policy direct \
-  --video-dir /workspace/CMMT/data/DAVIS/JPEGImages/480p/bmx-bumps \
-  --prompt-mask /workspace/CMMT/data/DAVIS/Annotations/480p/bmx-bumps/00000.png \
-  --object-id 1 --switch-frame 6 \
-  --artifact-dir /workspace/CMMT/outputs/ridge_handoff
-```
-
-Evaluate saved future-mask PNGs with the official DAVIS metric functions. This
-example is explicitly a partial sequence, not a full benchmark run:
-
-```bash
-cmmt-davis-future-eval \
-  --evaluation-repo /workspace/CMMT/.external/davis2017-evaluation \
-  --prediction-dir /workspace/CMMT/outputs/ridge_handoff/candidate_masks \
-  --annotation-dir /workspace/CMMT/data/DAVIS/Annotations/480p/bmx-bumps \
-  --sequence bmx-bumps --object-id 1 \
-  --start-frame 7 --end-frame 88 \
-  --output /workspace/CMMT/outputs/ridge_handoff/davis_future.json
-```
-
-The artifact directory contains binary mask PNGs, a four-panel comparison image,
-`report.json`, and a `report.md` that renders in both VS Code and GitHub. For a
-budget-safe RunPod setup and one-command smoke run, see
-[`docs/runpod.md`](docs/runpod.md).
-
-## Current verification boundary
-
-- Memory-flow inventory: verified from pinned upstream source.
-- Synthetic-state and hook tests: implemented; see
-  [`docs/validation.md`](docs/validation.md) for commands actually run.
-- Tiny/Large checkpoints: construction, canonical-state collection and
-  same-checkpoint round-trip are checkpoint-backed. A40 CUDA runs include a
-  one-object DAVIS `blackswan` same-checkpoint round-trip.
-- Translator fitting/injection: an actual Tiny→Ridge-hybrid→Large handoff ran on
-  held-out DAVIS train `bmx-bumps`. Its switch-future partial J&F nearly matched
-  Large-native in this one pilot; full validation-set evaluation remains pending.
-- Target history materialization and injection: checkpoint-backed next-frame
-  continuation verified for Tiny and Large. Current closure evidence covers a
-  one-object forward smoke, not the full interactive/multi-object matrix.
-
-Private API risks and the translator candidate rationale are documented in
-[`docs/memory_tensor_inventory.md`](docs/memory_tensor_inventory.md).
-The exact KV-cache analysis, component policies, formulas, commands and current
-blockers are in
-[`docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md`](docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md).
-
+Git에는 코드, 설정, 작은 metric 보고서, 재현 기록과 공개 검토용으로 선별·압축한
+시각화만 저장합니다. DAVIS를 사용한 공개 결과에는
+[dataset attribution](docs/DATA_ATTRIBUTION.md)을 표시합니다.

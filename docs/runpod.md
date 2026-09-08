@@ -1,20 +1,22 @@
-# RunPod GPU pilot and artifact sharing
+# RunPod GPU 실행 가이드
 
-This repository keeps code, configs, metrics, and selected visual previews in
-Git. Checkpoints, datasets, raw tensors, and bulk masks stay outside Git.
+이 프로젝트는 RunPod 비용 때문에 연구에 필요한 데이터·baseline·반복 수를
+축소하지 않습니다. 대신 GPU와 CPU 작업을 분리하고, 작은 smoke에서 실행 오류를
+먼저 제거한 다음 동일한 protocol로 정식 실험을 확장합니다.
 
-## Recommended first Pod
+## 현재 검증된 환경
 
-- Use a PyTorch image with CUDA and at least 30 GB of persistent volume for the
-  first pilot; 40 GB is more comfortable if raw state dumps will be retained.
-- Prefer one A40 48 GB GPU for the first Tiny→Large pilot. The pipeline currently
-  loads source, target oracle, and target handoff models sequentially, so it does
-  not require all three predictors to occupy VRAM at once.
-- The official price shown on 2026-09-07 was USD 0.49/hour for A40. Reserve USD 2
-  of a USD 12 balance for storage and mistakes; a USD 10 compute cap is roughly
-  20.4 A40 hours. Availability and the launch-screen price must be checked again
-  before creating the Pod.
-- Clone this feature branch into `/workspace/CMMT`, then run:
+- GPU: NVIDIA A40 48GB
+- Persistent volume: `/workspace`
+- 프로젝트: `/workspace/CMMT`
+- 공식 SAM 2 checkout: `/workspace/CMMT/.external/sam2`
+- SAM 2.1 Tiny/Large checkpoint: `/workspace/CMMT/checkpoints/`
+- DAVIS 2017: `/workspace/CMMT/data/DAVIS`
+- 원시 실행 결과: `/workspace/CMMT/outputs/`
+
+Checkpoint, dataset, raw state와 SSH key는 Git에 올리지 않습니다.
+
+## 최초 구성
 
 ```bash
 cd /workspace
@@ -22,40 +24,64 @@ git clone --branch kim/exp-sam2-state-translator \
   https://github.com/memorybridge-team/vos-memory-translator.git CMMT
 cd /workspace/CMMT
 bash scripts/runpod_bootstrap.sh /workspace/CMMT
-bash scripts/runpod_direct_smoke.sh /workspace/CMMT
 ```
 
-Pricing reference: [RunPod GPU pricing](https://www.runpod.io/pricing).
+기존 checkout에서는 새 실험 전에 작업 브랜치를 갱신하고 전체 test를 실행합니다.
 
-The second command writes a small, Git-friendly result bundle under
-`reports/experiments/<UTC-run-id>/`:
+```bash
+cd /workspace/CMMT
+git switch kim/exp-sam2-state-translator
+git pull --ff-only
+.venv/bin/python -m pytest -q
+```
 
-- `comparisons/*.png`: input, target-native mask, handoff mask, and error map
-- `oracle_masks/*.png` and `candidate_masks/*.png`: binary masks
-- `report.json`: full machine-readable metrics and provenance
-- `report.md`: preview page that renders inside VS Code and GitHub
+## 자원 사용 원칙
 
-Before committing a run, inspect its size and commit only representative PNGs
-and reports. Do not force-add checkpoints, datasets, state dumps, or large mask
-collections.
+GPU에서 수행:
 
-## Budget-safe execution order
+- 공식 checkpoint inference
+- Tiny/Large paired-state 수집
+- MLP/attention Translator 학습
+- downstream rollout과 latency/VRAM 측정
 
-1. Run the three-frame smoke and open `report.md`.
-2. Run a small DAVIS subset and collect paired Tiny/Large state offline.
-3. Fit Direct/Ridge/Linear first; train the residual MLP only after data and
-   evaluation checks pass.
-4. Increase videos and switch points only when the pilot improves downstream
-   masks over Direct and the required baselines.
-5. Stop or terminate the Pod immediately after syncing the selected report
-   bundle and any needed private raw artifacts.
+CPU에서 수행:
 
-A practical initial cap for A40 is 20 GPU-hours: at most 1 hour for setup/smoke,
-6 hours for a small paired-state extraction, 2 hours for Direct/Ridge/Linear,
-7 hours for residual-MLP and downstream evaluation, and 4 hours of retry margin.
-These are planning limits, not measured runtimes; record the actual time and VRAM
-from the first run before expanding the dataset.
+- dataset manifest와 split 검증
+- Ridge/OLS fit이 메모리에 맞는 경우
+- DAVIS metric 집계
+- 그래프, MP4와 HTML gallery 생성
+- 보고서·Git 산출물 구성
 
-The user accepted the DAVIS terms on 2026-09-08 and the official DAVIS 2017
-trainval 480p archive was downloaded and extracted to
-`/workspace/CMMT/data/DAVIS`. The dataset remains outside Git.
+GPU가 0%여도 Pod가 켜져 있으면 요금이 발생할 수 있으므로 실행 상태는 기록합니다.
+그러나 비용을 줄이려고 필요한 실험 case를 제거하지는 않습니다.
+
+## 실행 순서
+
+1. 1개 case smoke로 경로·checkpoint·state contract·artifact 생성을 확인합니다.
+2. 고정 manifest 전체에서 Target Reset, Last-Mask, Replay-k, Full Replay,
+   Direct Transfer를 같은 evaluator로 실행합니다.
+3. train video에서 paired state를 수집하고 validation/test video와 분리합니다.
+4. Ridge와 component-wise MLP를 학습합니다.
+5. post-switch J&F, identity, recovery, latency·VRAM·bytes를 집계합니다.
+6. 전체 영상 gallery와 실패 case를 검수한 뒤 보고서를 Git에 반영합니다.
+
+현재 유효한 전체 계획과 Go/No-Go 기준은
+[`experimental_plan.md`](experimental_plan.md)를 따릅니다.
+
+## Git에 가져올 결과
+
+- 실행 config, seed, upstream/checkpoint 식별자
+- case별 raw metric JSON과 요약 Markdown
+- 대표 실패·성공 PNG
+- 공개 검토용으로 압축한 MP4/HTML gallery
+- 재현 명령과 알려진 한계
+
+대량 binary mask, raw state tensor, dataset과 checkpoint는 RunPod persistent
+volume에 보관하고 Git에는 위치·hash·schema만 기록합니다.
+
+## 현재 공개 Pilot
+
+2026-09-08 Tiny→Large DAVIS pilot의 전체 83-frame 결과는
+[GitHub Pages gallery](https://memorybridge-team.github.io/vos-memory-translator/experiments/2026-09-08-davis-handoff/)에서
+확인할 수 있습니다. 이는 한 영상·한 객체·한 switch의 제한적 pilot이며 전체
+DAVIS benchmark 결과가 아닙니다.

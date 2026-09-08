@@ -594,6 +594,14 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   공개 URL은 `https://memorybridge-team.github.io/vos-memory-translator/`이다.
   DAVIS 2017 frame/annotation을 포함한 qualitative output에는 공식 dataset
   metadata의 CC BY-NC 4.0 출처·인용 고지를 표시한다.
+- **[저장소 정리 — 2026-09-09]** 현재 계획과 재현성 기준으로 branch 파일을
+  재검토했다. 제3자 논문 PDF 약 23.6MB와 자동 추출 전문은 공식 링크로 대체하고
+  Git 추적에서 제외하되 로컬 연구 캐시는 보존한다. 과거 smoke/pilot 보고서는
+  성공·실패 조건을 확인하는 감사 기록이므로 유지하고, Pages용 83-frame 압축
+  gallery도 원격 검토 산출물로 유지한다. 초기 Translator 계획 문서는 삭제하지
+  않고 보관본으로 표시하며, 현재 계획의 기준 문서는 `docs/experimental_plan.md`로
+  단일화한다. 루트 README와 RunPod 가이드는 이 정책과 현재 실험 순서에 맞춰
+  한국어로 갱신한다.
 - **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.

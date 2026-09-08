@@ -42,6 +42,10 @@ runs/
 wandb/
 mlruns/
 
+# Third-party papers stay in a local reference cache; Git keeps links/notes only.
+references/papers/
+references/extracted_text/
+
 # Package build artifacts.
 build/
 dist/
