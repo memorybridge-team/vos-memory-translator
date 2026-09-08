@@ -99,9 +99,18 @@ def davis_main(argv: list[str] | None = None) -> None:
     parser.add_argument("--root", required=True, type=Path)
     parser.add_argument("--sequence", required=True)
     parser.add_argument("--resolution", default="480p")
+    parser.add_argument(
+        "--split",
+        choices=("train", "val", "none"),
+        default="val",
+        help="Dataset split membership to validate. Use 'none' to skip membership checking.",
+    )
     args = parser.parse_args(argv)
     sequence = validate_davis_sequence(
-        args.root, args.sequence, resolution=args.resolution
+        args.root,
+        args.sequence,
+        resolution=args.resolution,
+        split=None if args.split == "none" else args.split,
     )
     print(
         json.dumps(
@@ -187,6 +196,13 @@ def paired_experiment_main(argv: list[str] | None = None) -> None:
     parser.add_argument("--learning-rate", type=float, default=2e-2)
     parser.add_argument("--ridge-lambda", type=float, default=0.01)
     parser.add_argument("--hidden-dim", type=int, default=128)
+    parser.add_argument(
+        "--translator",
+        action="append",
+        choices=("direct", "ridge", "linear", "residual_mlp"),
+        default=[],
+        help="Translator to run; repeat as needed. Default: all.",
+    )
     args = parser.parse_args(argv)
     if len(args.train_source) != len(args.train_target) or not args.train_source:
         parser.error("provide the same non-zero number of --train-source/--train-target")
@@ -209,6 +225,7 @@ def paired_experiment_main(argv: list[str] | None = None) -> None:
         learning_rate=args.learning_rate,
         ridge_lambda=args.ridge_lambda,
         hidden_dim=args.hidden_dim,
+        translator_names=tuple(args.translator) or None,
     )
     print(json.dumps(report, indent=2))
 

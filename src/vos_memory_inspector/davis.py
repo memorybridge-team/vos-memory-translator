@@ -26,7 +26,7 @@ def validate_davis_sequence(
     sequence: str,
     *,
     resolution: str = "480p",
-    require_val_split: bool = True,
+    split: str | None = "val",
 ) -> DavisSequence:
     root = Path(root).resolve()
     frames = root / "JPEGImages" / resolution / sequence
@@ -35,16 +35,22 @@ def validate_davis_sequence(
         raise FileNotFoundError(f"DAVIS frame directory not found: {frames}")
     if not annotations.is_dir():
         raise FileNotFoundError(f"DAVIS annotation directory not found: {annotations}")
-    if require_val_split:
-        val_file = root / "ImageSets" / "2017" / "val.txt"
-        if not val_file.is_file():
-            raise FileNotFoundError(f"DAVIS 2017 val split file not found: {val_file}")
-        val_sequences = {
-            line.strip() for line in val_file.read_text(encoding="utf-8").splitlines()
+    if split is not None:
+        if split not in {"train", "val"}:
+            raise ValueError("split must be 'train', 'val', or None")
+        split_file = root / "ImageSets" / "2017" / f"{split}.txt"
+        if not split_file.is_file():
+            raise FileNotFoundError(
+                f"DAVIS 2017 {split} split file not found: {split_file}"
+            )
+        split_sequences = {
+            line.strip() for line in split_file.read_text(encoding="utf-8").splitlines()
             if line.strip()
         }
-        if sequence not in val_sequences:
-            raise ValueError(f"Sequence {sequence!r} is not in DAVIS 2017 val.txt")
+        if sequence not in split_sequences:
+            raise ValueError(
+                f"Sequence {sequence!r} is not in DAVIS 2017 {split}.txt"
+            )
     images = sorted(frames.glob("*.jpg"))
     masks = sorted(annotations.glob("*.png"))
     if not images:

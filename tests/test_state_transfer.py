@@ -10,6 +10,7 @@ from vos_memory_inspector.hf_cache import (
     unflatten_kv_tokens,
 )
 from vos_memory_inspector.metrics import evaluate_state
+from vos_memory_inspector.paired_experiment import run_paired_experiment
 from vos_memory_inspector.sam2_state import (
     canonicalize_sam2_inference_state,
     inject_sam2_canonical_state,
@@ -236,3 +237,30 @@ def test_mlp_residuals_are_only_enabled_for_equal_feature_dimensions() -> None:
     assert matched.pointer_residual
     grid_mismatch = ResidualMLPStateTranslator(source_spec, StateSpec(3, 3, 2, 5))
     assert not grid_mismatch.feature_residual
+
+
+def test_paired_experiment_can_run_direct_and_ridge_only(tmp_path: Path) -> None:
+    source = _state(
+        torch.randn(1, 1, 2, 3, 2, 2),
+        torch.randn(1, 1, 2, 4),
+        torch.randn(1, 1, 2, 1),
+    )
+    target = source.with_continuous(
+        spatial_memory=source.spatial_memory * 1.2 + 0.1,
+        object_pointer=source.object_pointer * 0.8 - 0.2,
+        presence_logits=source.presence_logits + 0.3,
+    )
+    report = run_paired_experiment(
+        [(source, target)],
+        [(source, target)],
+        tmp_path,
+        translator_names=("direct", "ridge"),
+    )
+    assert report["translator_names"] == ["direct", "ridge"]
+    assert set(report["results"]) == {"direct", "ridge"}
+    assert "linear_initial_loss" not in report["training"]
+    saved = torch.load(
+        tmp_path / "paired_translators.pt", map_location="cpu", weights_only=True
+    )
+    assert set(saved) == {"ridge"}
+    assert set(saved["ridge"]) >= {"feature_weight", "pointer_weight"}

@@ -266,30 +266,53 @@ def run_paired_experiment(
     learning_rate: float = 2e-2,
     ridge_lambda: float = 0.01,
     hidden_dim: int = 128,
+    translator_names: tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Fit/evaluate offline paired canonical state without claiming injection."""
 
     if not train_pairs or not test_pairs:
         raise ValueError("separate non-empty train_pairs and test_pairs are required")
+    allowed = ("direct", "ridge", "linear", "residual_mlp")
+    selected = allowed if translator_names is None else tuple(dict.fromkeys(translator_names))
+    if not selected:
+        raise ValueError("at least one translator must be selected")
+    invalid = sorted(set(selected) - set(allowed))
+    if invalid:
+        raise ValueError(f"unknown translators: {invalid}; allowed={list(allowed)}")
     torch.manual_seed(seed)
     source_spec = train_pairs[0][0].spec
     target_spec = train_pairs[0][1].spec
     direct = DirectCopyTranslator(target_spec)
-    ridge = RidgeStateTranslator.fit(train_pairs, ridge_lambda=ridge_lambda)
-    linear = LinearStateTranslator(source_spec, target_spec)
-    mlp = ResidualMLPStateTranslator(source_spec, target_spec, hidden_dim=hidden_dim)
-    linear_history = fit_gradient_translator(
-        linear, train_pairs, epochs=epochs, learning_rate=learning_rate
-    )
-    mlp_history = fit_gradient_translator(
-        mlp, train_pairs, epochs=epochs, learning_rate=learning_rate
-    )
-    translators = {
-        "direct": direct,
-        "ridge": ridge,
-        "linear": linear,
-        "residual_mlp": mlp,
+    translators: dict[str, Any] = {}
+    training: dict[str, Any] = {
+        "epochs": epochs,
+        "learning_rate": learning_rate,
+        "ridge_lambda": ridge_lambda,
     }
+    if "direct" in selected:
+        translators["direct"] = direct
+    if "ridge" in selected:
+        translators["ridge"] = RidgeStateTranslator.fit(
+            train_pairs, ridge_lambda=ridge_lambda
+        )
+    if "linear" in selected:
+        linear = LinearStateTranslator(source_spec, target_spec)
+        linear_history = fit_gradient_translator(
+            linear, train_pairs, epochs=epochs, learning_rate=learning_rate
+        )
+        translators["linear"] = linear
+        training["linear_initial_loss"] = linear_history[0]
+        training["linear_final_loss"] = linear_history[-1]
+    if "residual_mlp" in selected:
+        mlp = ResidualMLPStateTranslator(
+            source_spec, target_spec, hidden_dim=hidden_dim
+        )
+        mlp_history = fit_gradient_translator(
+            mlp, train_pairs, epochs=epochs, learning_rate=learning_rate
+        )
+        translators["residual_mlp"] = mlp
+        training["mlp_initial_loss"] = mlp_history[0]
+        training["mlp_final_loss"] = mlp_history[-1]
     direct_mse = _mean_evaluation(direct, test_pairs)["aggregate_mse"]
     results: dict[str, Any] = {}
     for name, translator in translators.items():
@@ -314,17 +337,10 @@ def run_paired_experiment(
         "seed": seed,
         "train_pairs": len(train_pairs),
         "test_pairs": len(test_pairs),
+        "translator_names": list(selected),
         "source_spec": source_spec.to_dict(),
         "target_spec": target_spec.to_dict(),
-        "training": {
-            "epochs": epochs,
-            "learning_rate": learning_rate,
-            "ridge_lambda": ridge_lambda,
-            "linear_initial_loss": linear_history[0],
-            "linear_final_loss": linear_history[-1],
-            "mlp_initial_loss": mlp_history[0],
-            "mlp_final_loss": mlp_history[-1],
-        },
+        "training": training,
         "results": results,
         "actual_sam2_injection": {
             "ran": False,
@@ -335,17 +351,35 @@ def run_paired_experiment(
     (output_dir / "paired_report.json").write_text(
         json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
     )
-    torch.save(
-        {"linear": linear.state_dict(), "residual_mlp": mlp.state_dict()},
-        output_dir / "paired_translators.pt",
-    )
+    serialized: dict[str, Any] = {}
+    ridge = translators.get("ridge")
+    if ridge is not None:
+        serialized["ridge"] = {
+            "target_spec": ridge.target_spec.to_dict(),
+            "ridge_lambda": ridge.ridge_lambda,
+            "feature_weight": ridge.feature_map.weight,
+            "feature_bias": ridge.feature_map.bias,
+            "pointer_weight": ridge.pointer_map.weight,
+            "pointer_bias": ridge.pointer_map.bias,
+            "presence_weight": ridge.presence_map.weight,
+            "presence_bias": ridge.presence_map.bias,
+        }
+    for name in ("linear", "residual_mlp"):
+        translator = translators.get(name)
+        if translator is not None:
+            serialized[name] = translator.state_dict()
+    torch.save(serialized, output_dir / "paired_translators.pt")
     _write_markdown_report(report, output_dir / "paired_report.md")
     return report
 
 
 def _write_markdown_report(report: dict[str, Any], path: Path) -> None:
     lines = [
-        "# Synthetic paired-state smoke result",
+        (
+            "# Synthetic paired-state smoke result"
+            if report["synthetic"]
+            else "# Paired-state translator result"
+        ),
         "",
         f"> {report['warning']}",
         "",
