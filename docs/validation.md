@@ -157,3 +157,37 @@ Interpretation boundary:
   documented warning and skipped optional hole filling.
 - DAVIS download and any learned checkpoint-backed Ridge/Linear/MLP experiment
   remain pending.
+
+## 2026-09-08 RunPod A40 and DAVIS round-trip milestone
+
+Environment:
+
+- NVIDIA A40, 46,068 MiB reported VRAM
+- NVIDIA driver 580.173.02
+- Python 3.12.3
+- PyTorch 2.8.0+cu128, CUDA available
+- Project virtual environment: `/workspace/CMMT/.venv`
+- Official SAM 2 commit:
+  `2b90b9f5ceec907a1c18123530e92e794ad901a4`
+- DAVIS 2017 trainval 480p:
+  `/workspace/CMMT/data/DAVIS`
+
+Verification performed:
+
+- RunPod unit suite: `14 passed in 5.81s`.
+- Official SAM 2 CUDA extension built against the Pod's existing CUDA 12.8
+  PyTorch by disabling pip build isolation.
+- Tiny→Direct Copy→Large synthetic CUDA smoke completed in 17.56 seconds with
+  peak CUDA memory 1,656,067,584 bytes. Its single future-frame IoU against
+  Large-native was 0.0; this remains a diagnostic synthetic failure case.
+- DAVIS `blackswan`, object 1, switch frame 10 same-checkpoint round-trip:
+  Tiny mean IoU 0.9998837611 and Large mean IoU 0.9999313743 over 39 future
+  frames. Both made zero prefix-backbone calls before/during injection.
+
+Interpretation boundary:
+
+- The DAVIS result validates near-identical behavioral continuation for one
+  sequence and one object. It is not exact logit equality.
+- Multi-object and interactive closure, paired-state collection, learned
+  translator injection, required baselines, and DAVIS ground-truth J&F remain
+  pending.

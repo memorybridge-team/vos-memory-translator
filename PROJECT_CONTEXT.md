@@ -1,7 +1,7 @@
 # Cross-Model Memory Translator — Project Context
 
 > 새 채팅을 위한 프로젝트 영구 컨텍스트  
-> 로컬 스냅샷 기준일: **2026-08-26 (KST)**
+> 로컬 스냅샷 기준일: **2026-09-08 (KST)**
 > 원자료: 프로젝트 노션 데이터베이스 및 현재까지의 대화  
 > 상태 표기: **[확인]** 문헌·코드·기록으로 확인 / **[가설]** 실험 필요 / **[Pilot]** 제한적 예비 결과
 
@@ -407,6 +407,123 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
 - **[구현]** translator ladder는 Direct Copy, centered OLS/Ridge, component-wise Linear, separate feature/pointer residual two-layer MLP와 scalar presence calibrator다. Grid mismatch는 bilinear resampling, channel/pointer mismatch는 explicit projection 또는 Direct의 zero-pad/truncate로 처리하고 residual identity는 input/output dimension이 같을 때만 쓴다. Global spatial attention은 추가하지 않았다.
 - **[Pilot — synthetic only]** Windows/Python 3.13/PyTorch 2.13 CPU에서 unit test `12 passed`; generated affine+quadratic paired state에서 Direct aggregate MSE 1.44755, Ridge 0.030507, Linear 0.111864, residual MLP 0.019728이었다. 이는 schema/fitting/metric/serialization smoke이며 SAM 2 J&F나 real handoff 성능이 아니다.
 - **[미검증]** 로컬에 official SAM 2 checkout과 Tiny/Large checkpoint가 없어 paired runtime dump, same-checkpoint round-trip, target PE 재생성을 포함한 next-frame injection, DAVIS/J&F/identity/recovery/latency 측정은 실행하지 않았다. Checkpoint와 dataset은 자동 다운로드하지 않았다.
+
+### 2026-08-26 — 회의 원문 및 회의록 관리
+
+- 결정: 프로젝트 루트의 `meetings/` 폴더에서 회의 원문 `.txt`와 요약 회의록을 관리한다.
+- 운영: 원문 파일마다 같은 폴더에 `<원문명>_회의록.md`를 작성한다. 잡담과 프로젝트 무관 대화는 제외하고 핵심 논의, 결정사항, 액션 아이템, 미해결 쟁점을 정리한다.
+- 변경: 사용자 후속 지시에 따라 회의 정보에서 참석자와 원문 항목을 제외하고, 액션 아이템은 같은 담당자별로 묶으며 기한 항목은 작성하지 않는다.
+- 정확성: 원문에 없는 결정·담당자를 추측하지 않고, 불명확한 사항은 `미확정`으로 표시한다.
+- Notion 동기화: 사용자 지시에 따라 Markdown 회의록 생성 후 지정된 Notion `회의 보고서` 데이터베이스에 자동 업로드한다. `Doc name`은 `YYYY-MM-DD` 날짜로 지정하고 `참석자` 속성은 비워 둔다. 같은 날짜 페이지가 있으면 중복 생성하지 않고 최신 회의록으로 갱신한다.
+- 적용 범위: 위 지속 권한은 회의록 업로드에만 적용하며 다른 Notion 페이지의 자동 수정으로 확장하지 않는다.
+- 동기화: 회의 내용이 프로젝트의 검증된 핵심 문맥이나 결정을 실질적으로 바꾸면 해당 회의록을 근거로 이 문서도 갱신한다.
+
+### 2026-08-26 — 첫 팀 회의의 staged execution 및 benchmark 운영 결정
+
+- 근거: `meetings/2026-08-26 20-21-00.txt` 및 요약 회의록 `meetings/2026-08-26 20-21-00_회의록.md`.
+- 결정: SAM 2의 네 checkpoint에서 가능한 12개 ordered pair를 처음부터 모두 구현하지 않고, 한 controlled model pair/전환의 end-to-end handoff를 먼저 성공시킨다. 양방향성과 여러 pair 확장은 이후 단계의 목표로 유지한다.
+- 결정: 기본 state-to-state handoff를 우선 구현하고, source/target의 최적 중간 연결 지점을 탐색하는 아이디어는 후속 과제로 둔다.
+- 결정: DAVIS는 빠른 개발·debugging에 사용하고, 긴 영상 평가는 LVOS v2, hard condition 평가는 MOSEv2를 최종 평가의 주요 후보로 삼는다. 정확한 version, split, metric은 문헌 확인 후 고정한다.
+- **[미검증]** 회의에서 SAM 2 학습 데이터와 DAVIS의 overlap 가능성이 제기됐다. 공식 SAM 2 dataset 명세로 확인하기 전에는 평가 leakage가 확인된 것으로 간주하지 않는다.
+- **[가설]** model 규모 차이가 작을 때 Linear, 클 때 Nonlinear translator가 유리할 수 있다는 LLM 기반 가설을 SAM 2에서 검증한다. 구조 선택은 규모 차이만으로 미리 확정하지 않는다.
+- 확인 필요: positional information의 source-side 분리와 target-side 재생성은 기존 설계와 일치하지만, 정확한 구현 및 근거는 pinned SAM 2 코드와 관련 논문을 기준으로 재검증한다.
+
+### 2026-08-31 — handoff baseline 메모 검토
+
+- 근거: Notion `베이스라인` 페이지(2026-08-31 갱신).
+- 유지: 핵심 비교군은 Target Reset, Last-Mask, Replay-k, Direct State Copy, Learned Translator, Target-Native Oracle/Full Replay다.
+- 추가 후보: First-Frame prompt only와 First+Last prompt는 memory가 아니라 최소 prompt 정보의 효과를 분리하는 진단용 baseline으로 유용하다. GT mask at switch, cross-video state, partial-state copy 등은 sanity check 또는 ablation이며 핵심 성능 비교군과 구분한다.
+- **[설계·미검증]** 메모에는 SAM 2의 최근 non-conditioning memory 수를 근거로 replay-6을 실용적 상한처럼 제안했지만, conditioning frame, object pointer, frame-selection 정책을 포함한 정확한 state contract와 실행 비용을 확인하기 전에는 고정 상한으로 간주하지 않는다. 초기 sweep는 기존 결정대로 replay-1/2/4를 우선하고, Pareto 개선이 이어질 때 6 이상을 추가한다.
+- **[구현 확인 필요]** 빈 state·prompt 없이 frame `t+1`에서 시작하는 Reset이 공식 predictor interface에서 실행 가능한지 먼저 확인한다. 실행 불가능하면 연구 개념을 바꾸지 않는 범위에서 최소 유효 초기화와 완전한 state reset을 분리해 정의한다.
+
+### 2026-09-01 — 협업 운영 가이드 경량화와 자동 적용
+
+- 근거: 사용자 요청에 따라 Notion `AI 연구 프로젝트 협업 운영 가이드`를 검토했다.
+- 결정: 도구별 source of truth, 산출물 기반 완료 판정, 재현성, blocker 조기 공유, 결정 기록은 유지한다. 가상의 날짜·담당자, 고정 22시 일간 보고, 월/수/금 회의, 주당 업무시간, 모든 작업의 의무적 reviewer·deadline 같은 예시·권고는 팀의 명시적 합의가 없으면 자동 강제하지 않는다.
+- 결정: 향후 AI 작업은 `AGENTS.md`의 `업무와 결과물의 기본 운영`을 자동 적용한다. 분석 요청은 근거 확인과 보고에 한정하고, 구현·문서 변경 요청은 실제 산출물과 검증까지 수행한다. 외부 게시·PR·메시지·Notion 수정은 사용자 요청 또는 기존의 명시적 지속 권한 범위에서만 수행한다.
+- 운영: 새 플러그인 설치나 계정·권한 승인이 필요하면 제품 승인 절차를 따른다. AI가 사용자 승인 단계를 우회하거나 대신 승인하지 않는다.
+- 현재 검증 상태: 2026-08-25의 synthetic unit test `12 passed`는 당시 확인된 기록이다. 2026-09-01 현재 PC에서 `python -m pytest -q`를 재실행했으나 `pytest`가 설치되어 있지 않아 실행 전 단계에서 중단됐다. 이는 코드 실패가 아니라 현재 환경 dependency blocker이며, 재검증 완료로 해석하지 않는다.
+
+### 2026-09-07 — checkpoint 기반 state injection과 첫 Tiny→Large Direct smoke
+
+- 근거: `docs/design/SAM2_TRANSLATOR_EXPERIMENT_PLAN.md`, `docs/validation.md`,
+  로컬 `outputs/sam2_smoke/` 실행 산출물.
+- **[확인]** 공식 SAM 2를 `.external/sam2`에 별도 clone하고 pinned commit
+  `2b90b9f5ceec907a1c18123530e92e794ad901a4`로 고정했다. 공식 Tiny/Large
+  checkpoint를 확보했고 CPU에서 각각 38,962,498/224,446,642 parameter의
+  `SAM2VideoPredictor` construction을 확인했다. 이 대용량 자산은 Git에서 제외한다.
+- **[구현]** target predictor의 spatial positional encoding을 source PE 복사 없이
+  target memory encoder의 position module로 재생성하고, canonical history·object
+  registry·prompt/tracking metadata를 fresh target inference state에 주입하는 경로를
+  추가했다. 공식 `init_state`의 frame-0 warmup을 피하는 pinned-contract 초기화와
+  backbone-call counter도 추가했다.
+- **[Pilot — checkpoint-backed synthetic video]** Tiny와 Large 각각의
+  same-checkpoint export→inject round-trip에서 switch 다음 frame mask MSE 0,
+  max absolute error 0, binary IoU 1.0을 얻었다. Injection 전·도중 과거-frame
+  backbone 호출은 0회였고 미래 frame에서만 1회 호출됐다. Unit test는
+  PyTorch 2.14 CPU 환경에서 `13 passed`였다.
+- **[Pilot — checkpoint-backed synthetic video]** 같은 3-frame/1-object 입력의
+  Tiny→Direct Copy→Large는 end-to-end injection에는 성공했지만 Large-native
+  state 대비 spatial cosine -0.007345, pointer cosine -0.052801,
+  aggregate MSE 1.637971이었고 다음-frame binary mask IoU는 0이었다.
+  이는 단일 synthetic-video 진단 결과이며 DAVIS J&F나 일반적 Direct failure의
+  근거로 확대하지 않는다.
+- **[미검증]** DAVIS/LVOS/MOSE 데이터 기반 paired training, learned
+  Ridge/Linear/MLP의 actual injection, Last-Mask/replay-k/oracle 비교,
+  J&F·identity·recovery·CUDA latency/VRAM 평가는 남아 있다. DAVIS downloader는
+  사용자의 dataset terms 명시적 확인 없이 실행하지 않는다.
+- **[구현]** RunPod용 bootstrap/smoke script와 Git-friendly 결과 번들을 추가했다.
+  결과 번들은 target-native oracle와 handoff mask의 binary PNG, 4-panel 비교 PNG,
+  `report.json`, `report.md`를 포함한다. 첫 실제 번들은
+  `reports/experiments/2026-09-07_tiny_to_large_direct_smoke/`에 저장했고 이미지까지
+  육안 검증했다. Checkpoint, dataset, raw tensor, 대량 mask는 계속 Git에서 제외한다.
+- **[계획·미검증]** 2026-09-07 RunPod 공식 표시가 기준 A40 48 GB는 $0.49/hour다.
+  $12 잔액 중 $2를 저장공간·실수 여유로 남기고 compute $10(약 20.4 A40 hours)을
+  첫 파일럿 상한으로 삼는다. 이는 실제 runtime/VRAM 측정 전의 예산 계획이며,
+  전 dataset·switch sweep를 의미하는 대규모 학습 예산은 아니다.
+
+### 2026-09-08 — RunPod SSH 접속 방식 선택
+
+- 결정: 사용자는 RunPod GPU Pod에 SSH 공개키 인증 방식으로 연결해 실험을 진행한다.
+- **[구현]** 프로젝트 전용 Ed25519 keypair를 로컬 Git 제외 경로 `.runpod_ssh/`에
+  만들었다. 공개키 fingerprint는
+  `SHA256:Ix3S1RmlEUKFmeHNea+BXMxb638pyGnVfRmgKWoQiik`이며, 개인키·API key·비밀번호는
+  채팅이나 Git에 공유하지 않는다.
+- **[확인]** 사용자가 Pod의 SSH over exposed TCP 접속 정보를 제공했고, 2026-09-08에
+  전용 키 인증으로 접속을 확인했다. 확인된 장비는 NVIDIA A40 (표시 VRAM 46,068 MiB),
+  driver 580.173.02이며 persistent workspace mount는 `/workspace`다. 개인키 ACL은
+  현재 Windows 사용자만 읽도록 제한했고 Git에는 계속 포함하지 않는다.
+- 당시 다음 gate는 GPU smoke와 environment bootstrap, DAVIS 이용조건 확인이었다.
+  사용자는 이후 이용조건에 동의했고 아래 실행 기록에 따라 모두 완료했다.
+
+### 2026-09-08 — RunPod 환경 구성·DAVIS·첫 CUDA smoke
+
+- **[확인]** 사용자는 DAVIS 2017 이용 조건에 명시 동의했다. 공식 DAVIS 2017
+  trainval 480p archive를 RunPod persistent workspace의
+  `/workspace/CMMT/data/DAVIS`로 다운로드·안전 압축 해제했고 archive는 삭제했다.
+  `bike-packing` validation sequence는 480p, 69 frames, first mask 존재를 확인했다.
+- **[확인]** `/workspace/CMMT`에는 작업 branch commit
+  `4c2793da95cceb2e60d57a9cfff1a7138e980b76`를 clone했다. 프로젝트 venv와 pinned
+  official SAM 2 commit `2b90b9f5ceec907a1c18123530e92e794ad901a4`, SAM 2.1
+  Tiny/Large checkpoint를 설치했다. RunPod에서 `14 passed in 5.81s`였다.
+- **[Pilot — synthetic only]** A40 CUDA에서 Tiny→Large Direct Copy smoke를 실행했다.
+  synthetic 3-frame input의 switch frame 1에서 next-frame target-native 비교 IoU는
+  0.0, logit MSE 1,008,050.4375, wall time 17.56 s, peak CUDA memory 1.656 GB였다.
+  translated state alignment aggregate MSE는 0.9818이다. 이는 Direct Copy가 이
+  controlled synthetic case에서 target-native continuation과 일치하지 않음을 보이는
+  진단일 뿐, DAVIS 성능 또는 learned translator 성능의 증거가 아니다.
+- 결과: Pod와 local `reports/experiments/20260908T135000Z_tiny_to_large_direct_a40/`
+  에 `report.md`, JSON, oracle/candidate mask, comparison PNG를 저장했다.
+- **[구현]** RunPod의 PEP 668 격리 환경과 CUDA build isolation 충돌을 피하도록
+  bootstrap script를 venv 및 `--no-build-isolation` 방식으로 보완해 local commit
+  `47e1602`, `da35015`를 만들었다. 사용자는 2026-09-08 작업 브랜치로의 GitHub
+  push를 명시적으로 허용했다.
+- **[Pilot — DAVIS round-trip]** DAVIS 2017 val `blackswan`(50 frames), object 1,
+  switch frame 10에서 same-checkpoint continuation을 검증했다. 후속 39 frames의
+  native 대비 평균 binary IoU는 Tiny 0.9998837611, Large 0.9999313743이었다.
+  prefix backbone 호출은 주입 전·도중 모두 0회였고 future backbone은 각 39회였다.
+  이는 one-sequence/one-object behavioral closure 근거이며 exact logit equality,
+  multi-object/interactive closure, cross-model 성능 또는 DAVIS J&F 근거는 아니다.
 
 ## 18. 노션 원자료 인덱스
 

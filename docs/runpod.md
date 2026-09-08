@@ -5,7 +5,8 @@ Git. Checkpoints, datasets, raw tensors, and bulk masks stay outside Git.
 
 ## Recommended first Pod
 
-- Use a PyTorch image with CUDA and at least 40 GB of persistent volume.
+- Use a PyTorch image with CUDA and at least 30 GB of persistent volume for the
+  first pilot; 40 GB is more comfortable if raw state dumps will be retained.
 - Prefer one A40 48 GB GPU for the first Tiny→Large pilot. The pipeline currently
   loads source, target oracle, and target handoff models sequentially, so it does
   not require all three predictors to occupy VRAM at once.
@@ -55,5 +56,6 @@ A practical initial cap for A40 is 20 GPU-hours: at most 1 hour for setup/smoke,
 These are planning limits, not measured runtimes; record the actual time and VRAM
 from the first run before expanding the dataset.
 
-Dataset download remains a separate action because the DAVIS downloader requires
-explicit acceptance of its dataset terms.
+The user accepted the DAVIS terms on 2026-09-08 and the official DAVIS 2017
+trainval 480p archive was downloaded and extracted to
+`/workspace/CMMT/data/DAVIS`. The dataset remains outside Git.

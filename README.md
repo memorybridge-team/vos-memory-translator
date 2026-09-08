@@ -27,6 +27,7 @@ scope, state contract, baselines, or evaluation design.
 | `docs/design/CROSS_MODEL_KV_TO_SAM2_IMPLEMENTATION_REPORT.md` | KV paper analysis, SAM 2 state contract, implementation and smoke results |
 | `docs/validation.md` | Commands and tests run for the current probe milestone |
 | `references/` | Source papers and searchable page-level text extracts |
+| `meetings/` | Raw meeting `.txt` files and project-focused meeting minutes |
 | `src/vos_memory_inspector/` | Inspection, canonical state, translators, metrics, and experiments |
 | `tests/` | Synthetic unit and integration tests |
 | `configs/` | Repository-owned experiment configuration files |
@@ -172,16 +173,61 @@ cmmt-paired-experiment \
 This command evaluates serialized tensors only; it does not claim downstream
 SAM 2 continuation quality.
 
+## Checkpoint-backed continuation smoke
+
+Validate that one checkpoint can export and re-inject a continuation-closed
+state without replaying past-frame backbones:
+
+```bash
+sam2-roundtrip-smoke \
+  --sam2-repo /content/sam2 \
+  --config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --checkpoint /content/checkpoints/sam2.1_hiera_large.pt \
+  --model-id sam2.1-hiera-large \
+  --video-dir /content/smoke/frames \
+  --prompt-mask /content/smoke/00000.png \
+  --object-id 1 --switch-frame 1 \
+  --json /content/probe/large_roundtrip.json
+```
+
+Run the first cross-model Direct Copy baseline and compare its future masks to
+target-native continuation:
+
+```bash
+sam2-direct-handoff-smoke \
+  --sam2-repo /content/sam2 \
+  --source-config configs/sam2.1/sam2.1_hiera_t.yaml \
+  --source-checkpoint /content/checkpoints/sam2.1_hiera_tiny.pt \
+  --source-model-id sam2.1-hiera-tiny \
+  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --target-checkpoint /content/checkpoints/sam2.1_hiera_large.pt \
+  --target-model-id sam2.1-hiera-large \
+  --video-dir /content/smoke/frames \
+  --prompt-mask /content/smoke/00000.png \
+  --object-id 1 --switch-frame 1 \
+  --json /content/probe/tiny_to_large_direct.json \
+  --artifact-dir /content/probe/tiny_to_large_direct
+```
+
+The artifact directory contains binary mask PNGs, a four-panel comparison image,
+`report.json`, and a `report.md` that renders in both VS Code and GitHub. For a
+budget-safe RunPod setup and one-command smoke run, see
+[`docs/runpod.md`](docs/runpod.md).
+
 ## Current verification boundary
 
 - Memory-flow inventory: verified from pinned upstream source.
 - Synthetic-state and hook tests: implemented; see
   [`docs/validation.md`](docs/validation.md) for commands actually run.
-- Tiny/Large checkpoint and DAVIS GPU run: not run in the local CPU-only
-  environment; no compatibility result is claimed.
+- Tiny/Large checkpoints: model construction, canonical-state collection,
+  same-checkpoint round-trip and Tiny→Direct→Large smoke verified on CPU using
+  a deterministic synthetic video. An A40 CUDA smoke and a one-object DAVIS
+  `blackswan` same-checkpoint round-trip have also run; full DAVIS J&F and
+  learned-translator evaluation remain pending.
 - Translator fitting: implemented and verified on synthetic paired state only.
-- Target history materialization: implemented behind a required target
-  positional factory; actual checkpoint next-frame injection is not yet run.
+- Target history materialization and injection: checkpoint-backed next-frame
+  continuation verified for Tiny and Large. Current closure evidence covers a
+  one-object forward smoke, not the full interactive/multi-object matrix.
 
 Private API risks and the translator candidate rationale are documented in
 [`docs/memory_tensor_inventory.md`](docs/memory_tensor_inventory.md).
