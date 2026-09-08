@@ -589,7 +589,11 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   이유로 표본을 몰래 줄이거나 결론을 조기 확정하지 않는다.
 - **[결과 공개 — 2026-09-09]** 실험 영상·frame slider·J&F 그래프 같은 비민감
   시각화 결과는 GitHub Pages로 게시해 다른 컴퓨터에서도 확인할 수 있게 한다.
-  checkpoint, DAVIS 원본 데이터와 대형 raw state는 계속 Git에서 제외한다.
+  checkpoint, DAVIS 원본 데이터 폴더와 대형 raw state는 계속 Git에서 제외한다.
+  첫 pilot gallery는 `kim/exp-sam2-state-translator` branch의 `/docs`에서 배포했고
+  공개 URL은 `https://memorybridge-team.github.io/vos-memory-translator/`이다.
+  DAVIS 2017 frame/annotation을 포함한 qualitative output에는 공식 dataset
+  metadata의 CC BY-NC 4.0 출처·인용 고지를 표시한다.
 - **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.
