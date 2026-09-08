@@ -42,3 +42,17 @@ def test_partial_davis_evaluation_uses_object_label_and_start_frame(tmp_path) ->
     assert report["scope"] == "partial_sequence_after_switch"
     assert report["evaluated_frames"] == 2
     assert report["mean_J_and_F"] == 1.0
+
+    truncated = evaluate_davis_future_masks(
+        prediction_directory=predictions,
+        annotation_directory=annotations,
+        object_id=2,
+        start_frame=1,
+        end_frame=1,
+        iou_metric=_iou,
+        boundary_metric=_same_as_iou,
+        metric_source="test",
+        sequence="demo",
+    )
+    assert truncated["end_frame"] == 1
+    assert truncated["evaluated_frames"] == 1

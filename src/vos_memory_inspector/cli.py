@@ -162,6 +162,14 @@ def davis_future_evaluation_main(argv: list[str] | None = None) -> None:
     parser.add_argument("--sequence", required=True)
     parser.add_argument("--object-id", required=True, type=int)
     parser.add_argument("--start-frame", required=True, type=int)
+    parser.add_argument(
+        "--end-frame",
+        type=int,
+        help=(
+            "Inclusive last frame. DAVIS semi-supervised evaluation excludes "
+            "the video last frame."
+        ),
+    )
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args(argv)
     iou_metric, boundary_metric, commit = load_official_davis_metrics(
@@ -172,6 +180,7 @@ def davis_future_evaluation_main(argv: list[str] | None = None) -> None:
         annotation_directory=args.annotation_dir,
         object_id=args.object_id,
         start_frame=args.start_frame,
+        end_frame=args.end_frame,
         iou_metric=iou_metric,
         boundary_metric=boundary_metric,
         metric_source=f"davisvideochallenge/davis2017-evaluation@{commit}",

@@ -58,6 +58,7 @@ def evaluate_davis_future_masks(
     annotation_directory: str | Path,
     object_id: int,
     start_frame: int,
+    end_frame: int | None = None,
     iou_metric: Metric,
     boundary_metric: Metric,
     metric_source: str,
@@ -66,10 +67,15 @@ def evaluate_davis_future_masks(
     prediction_directory = Path(prediction_directory).resolve()
     annotation_directory = Path(annotation_directory).resolve()
     predictions = _prediction_files(prediction_directory)
-    frames = sorted(frame for frame in predictions if frame >= start_frame)
+    frames = sorted(
+        frame
+        for frame in predictions
+        if frame >= start_frame and (end_frame is None or frame <= end_frame)
+    )
     if not frames:
         raise ValueError(f"No predictions at or after frame {start_frame}")
-    expected = list(range(start_frame, frames[-1] + 1))
+    expected_end = frames[-1] if end_frame is None else end_frame
+    expected = list(range(start_frame, expected_end + 1))
     if frames != expected:
         missing = sorted(set(expected) - set(frames))
         raise ValueError(f"Prediction frame sequence is not contiguous; missing={missing}")
