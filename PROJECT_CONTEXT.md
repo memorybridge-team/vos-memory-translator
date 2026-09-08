@@ -525,6 +525,28 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   이는 one-sequence/one-object behavioral closure 근거이며 exact logit equality,
   multi-object/interactive closure, cross-model 성능 또는 DAVIS J&F 근거는 아니다.
 
+### 2026-09-08 — 실제 DAVIS paired state와 첫 Direct/Ridge 비교
+
+- **[구현]** `cmmt-paired-experiment`가 Direct/Ridge/Linear/Residual MLP 중
+  요청한 translator만 실행하도록 확장했고 Ridge parameter 직렬화를 추가했다.
+  DAVIS 검사 명령은 `train|val|none` split을 명시할 수 있다. Local과 RunPod에서
+  `17 passed`를 확인했으며 코드 commit은 `e0f9466`이다.
+- **[Pilot — offline state metric only]** 공식 DAVIS 2017 train의 `bear`를 학습
+  상태 쌍, `bmx-bumps`를 held-out 상태 쌍으로 사용했다. 양쪽 모두 object 1,
+  frames 0–6, seed 7이며 공식 SAM 2.1 Tiny/Large checkpoint로 생성했다.
+- **[Pilot 결과]** held-out `bmx-bumps`에서 Ridge는 Direct 대비 spatial-memory
+  MSE를 3.0086→0.8187, pointer MSE를 0.6973→0.4891로 낮췄다. cosine도 각각
+  0.0365→0.8093, -0.0215→0.4662로 개선됐다. 반면 presence-logit MSE는
+  1.1686→4.0098로 악화했다. 세 component의 무가중 평균 MSE는 Ridge가 9.1%
+  나빴으므로 이 aggregate만으로 우열을 판단하지 않는다.
+- **[판단·가설]** component별 translator가 필요할 수 있다. 첫 실제 injection
+  후보는 spatial/pointer에 Ridge, presence에 Direct를 쓰는 hybrid다. 이 판단은
+  1 train sequence/1 held-out sequence의 engineering smoke에 불과하다.
+- **[미검증]** 번역된 Ridge/hybrid state의 Large 주입, switch 이후 J&F,
+  switch shock, identity break, recovery length 및 reset/Last-Mask/replay-k/oracle
+  비교는 아직 수행하지 않았다. Raw state `.pt`는 RunPod persistent storage에만
+  두고 작은 JSON/Markdown report만 Git에 보존한다.
+
 ## 18. 노션 원자료 인덱스
 
 프로젝트 데이터베이스:

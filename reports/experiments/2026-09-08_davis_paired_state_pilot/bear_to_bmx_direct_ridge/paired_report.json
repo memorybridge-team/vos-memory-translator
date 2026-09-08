@@ -1,0 +1,97 @@
+{
+  "schema_version": "cmmt.paired_experiment.v1",
+  "synthetic": false,
+  "warning": "Offline paired-state result only; target next-frame injection and downstream video quality are not evaluated by this command.",
+  "seed": 7,
+  "train_pairs": 1,
+  "test_pairs": 1,
+  "translator_names": [
+    "direct",
+    "ridge"
+  ],
+  "source_spec": {
+    "feature_channels": 64,
+    "height": 64,
+    "width": 64,
+    "pointer_dim": 256,
+    "positional_policy": "regenerate_at_target"
+  },
+  "target_spec": {
+    "feature_channels": 64,
+    "height": 64,
+    "width": 64,
+    "pointer_dim": 256,
+    "positional_policy": "regenerate_at_target"
+  },
+  "training": {
+    "epochs": 120,
+    "learning_rate": 0.02,
+    "ridge_lambda": 0.01
+  },
+  "results": {
+    "direct": {
+      "components": {
+        "spatial_memory": {
+          "mse": 3.0086379051208496,
+          "cosine": 0.03651082143187523,
+          "relative_error": 1.1357234716415405
+        },
+        "object_pointer": {
+          "mse": 0.6973044276237488,
+          "cosine": -0.021480118855834007,
+          "relative_error": 1.4425389766693115
+        },
+        "presence_logits": {
+          "mse": 1.1685888767242432,
+          "cosine": 1.0,
+          "relative_error": 0.10135863721370697
+        }
+      },
+      "aggregate_mse": 1.6248437364896138,
+      "valid_records": 7,
+      "translated_bytes_per_state": 3677212,
+      "parameter_count": 0,
+      "latency_cpu": {
+        "median_ms": 0.100261764600873,
+        "min_ms": 0.09554484859108925,
+        "max_ms": 0.1142001710832119,
+        "repeats": 8.0
+      },
+      "direct_mse_improvement": 0.0
+    },
+    "ridge": {
+      "components": {
+        "spatial_memory": {
+          "mse": 0.8187265992164612,
+          "cosine": 0.8092652559280396,
+          "relative_error": 0.5922545194625854
+        },
+        "object_pointer": {
+          "mse": 0.4891412854194641,
+          "cosine": 0.466168075799942,
+          "relative_error": 1.1298823356628418
+        },
+        "presence_logits": {
+          "mse": 4.009842395782471,
+          "cosine": 1.0,
+          "relative_error": 0.20748727023601532
+        }
+      },
+      "aggregate_mse": 1.7725700934727986,
+      "valid_records": 7,
+      "translated_bytes_per_state": 3677212,
+      "parameter_count": 69954,
+      "latency_cpu": {
+        "median_ms": 1.109253615140915,
+        "min_ms": 0.9564072825014591,
+        "max_ms": 1.527989748865366,
+        "repeats": 8.0
+      },
+      "direct_mse_improvement": -0.09091727017537056
+    }
+  },
+  "actual_sam2_injection": {
+    "ran": false,
+    "reason": "This command evaluates serialized states only."
+  }
+}

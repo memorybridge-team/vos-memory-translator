@@ -1,0 +1,1537 @@
+{
+  "source_manifest": "/workspace/CMMT/outputs/paired_states/bear_switch6/tiny.jsonl",
+  "target_manifest": "/workspace/CMMT/outputs/paired_states/bear_switch6/large.jsonl",
+  "source_models": [
+    "sam2.1-hiera-tiny"
+  ],
+  "target_models": [
+    "sam2.1-hiera-large"
+  ],
+  "matched_rows": 47,
+  "all_matched_shapes_equal": true,
+  "disposition_counts": {
+    "direct_copy_shape_candidate_semantics_unverified": 21,
+    "supporting_state_not_primary_translator_target": 14,
+    "transient_target_assembled_input": 12
+  },
+  "comparisons": [
+    {
+      "key": [
+        "bear",
+        0,
+        "1",
+        "cond",
+        "maskmem_features"
+      ],
+      "tensor_name": "maskmem_features",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.bfloat16",
+      "target_dtype": "torch.bfloat16",
+      "source_num_bytes": 524288,
+      "target_num_bytes": 524288,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        0,
+        "1",
+        "cond",
+        "maskmem_pos_enc[0]"
+      ],
+      "tensor_name": "maskmem_pos_enc[0]",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1048576,
+      "target_num_bytes": 1048576,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        0,
+        "1",
+        "cond",
+        "obj_ptr"
+      ],
+      "tensor_name": "obj_ptr",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        256
+      ],
+      "target_shape": [
+        1,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1024,
+      "target_num_bytes": 1024,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        0,
+        "1",
+        "cond",
+        "object_score_logits"
+      ],
+      "tensor_name": "object_score_logits",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1
+      ],
+      "target_shape": [
+        1,
+        1
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4,
+      "target_num_bytes": 4,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        0,
+        "1",
+        "cond",
+        "pred_masks"
+      ],
+      "tensor_name": "pred_masks",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "target_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 262144,
+      "target_num_bytes": 262144,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        1,
+        "1",
+        "non_cond",
+        "maskmem_features"
+      ],
+      "tensor_name": "maskmem_features",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.bfloat16",
+      "target_dtype": "torch.bfloat16",
+      "source_num_bytes": 524288,
+      "target_num_bytes": 524288,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        1,
+        "1",
+        "non_cond",
+        "maskmem_pos_enc[0]"
+      ],
+      "tensor_name": "maskmem_pos_enc[0]",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1048576,
+      "target_num_bytes": 1048576,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        1,
+        "1",
+        "non_cond",
+        "memory_attention.memory"
+      ],
+      "tensor_name": "memory_attention.memory",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        4100,
+        1,
+        64
+      ],
+      "target_shape": [
+        4100,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1049600,
+      "target_num_bytes": 1049600,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        1,
+        "1",
+        "non_cond",
+        "memory_attention.memory_pos"
+      ],
+      "tensor_name": "memory_attention.memory_pos",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        4100,
+        1,
+        64
+      ],
+      "target_shape": [
+        4100,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1049600,
+      "target_num_bytes": 1049600,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        1,
+        "1",
+        "non_cond",
+        "obj_ptr"
+      ],
+      "tensor_name": "obj_ptr",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        256
+      ],
+      "target_shape": [
+        1,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1024,
+      "target_num_bytes": 1024,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        1,
+        "1",
+        "non_cond",
+        "object_score_logits"
+      ],
+      "tensor_name": "object_score_logits",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1
+      ],
+      "target_shape": [
+        1,
+        1
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4,
+      "target_num_bytes": 4,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        1,
+        "1",
+        "non_cond",
+        "pred_masks"
+      ],
+      "tensor_name": "pred_masks",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "target_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 262144,
+      "target_num_bytes": 262144,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        2,
+        "1",
+        "non_cond",
+        "maskmem_features"
+      ],
+      "tensor_name": "maskmem_features",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.bfloat16",
+      "target_dtype": "torch.bfloat16",
+      "source_num_bytes": 524288,
+      "target_num_bytes": 524288,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        2,
+        "1",
+        "non_cond",
+        "maskmem_pos_enc[0]"
+      ],
+      "tensor_name": "maskmem_pos_enc[0]",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1048576,
+      "target_num_bytes": 1048576,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        2,
+        "1",
+        "non_cond",
+        "memory_attention.memory"
+      ],
+      "tensor_name": "memory_attention.memory",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        8200,
+        1,
+        64
+      ],
+      "target_shape": [
+        8200,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 2099200,
+      "target_num_bytes": 2099200,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        2,
+        "1",
+        "non_cond",
+        "memory_attention.memory_pos"
+      ],
+      "tensor_name": "memory_attention.memory_pos",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        8200,
+        1,
+        64
+      ],
+      "target_shape": [
+        8200,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 2099200,
+      "target_num_bytes": 2099200,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        2,
+        "1",
+        "non_cond",
+        "obj_ptr"
+      ],
+      "tensor_name": "obj_ptr",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        256
+      ],
+      "target_shape": [
+        1,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1024,
+      "target_num_bytes": 1024,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        2,
+        "1",
+        "non_cond",
+        "object_score_logits"
+      ],
+      "tensor_name": "object_score_logits",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1
+      ],
+      "target_shape": [
+        1,
+        1
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4,
+      "target_num_bytes": 4,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        2,
+        "1",
+        "non_cond",
+        "pred_masks"
+      ],
+      "tensor_name": "pred_masks",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "target_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 262144,
+      "target_num_bytes": 262144,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        3,
+        "1",
+        "non_cond",
+        "maskmem_features"
+      ],
+      "tensor_name": "maskmem_features",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.bfloat16",
+      "target_dtype": "torch.bfloat16",
+      "source_num_bytes": 524288,
+      "target_num_bytes": 524288,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        3,
+        "1",
+        "non_cond",
+        "maskmem_pos_enc[0]"
+      ],
+      "tensor_name": "maskmem_pos_enc[0]",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1048576,
+      "target_num_bytes": 1048576,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        3,
+        "1",
+        "non_cond",
+        "memory_attention.memory"
+      ],
+      "tensor_name": "memory_attention.memory",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        12300,
+        1,
+        64
+      ],
+      "target_shape": [
+        12300,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 3148800,
+      "target_num_bytes": 3148800,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        3,
+        "1",
+        "non_cond",
+        "memory_attention.memory_pos"
+      ],
+      "tensor_name": "memory_attention.memory_pos",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        12300,
+        1,
+        64
+      ],
+      "target_shape": [
+        12300,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 3148800,
+      "target_num_bytes": 3148800,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        3,
+        "1",
+        "non_cond",
+        "obj_ptr"
+      ],
+      "tensor_name": "obj_ptr",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        256
+      ],
+      "target_shape": [
+        1,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1024,
+      "target_num_bytes": 1024,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        3,
+        "1",
+        "non_cond",
+        "object_score_logits"
+      ],
+      "tensor_name": "object_score_logits",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1
+      ],
+      "target_shape": [
+        1,
+        1
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4,
+      "target_num_bytes": 4,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        3,
+        "1",
+        "non_cond",
+        "pred_masks"
+      ],
+      "tensor_name": "pred_masks",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "target_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 262144,
+      "target_num_bytes": 262144,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        4,
+        "1",
+        "non_cond",
+        "maskmem_features"
+      ],
+      "tensor_name": "maskmem_features",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.bfloat16",
+      "target_dtype": "torch.bfloat16",
+      "source_num_bytes": 524288,
+      "target_num_bytes": 524288,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        4,
+        "1",
+        "non_cond",
+        "maskmem_pos_enc[0]"
+      ],
+      "tensor_name": "maskmem_pos_enc[0]",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1048576,
+      "target_num_bytes": 1048576,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        4,
+        "1",
+        "non_cond",
+        "memory_attention.memory"
+      ],
+      "tensor_name": "memory_attention.memory",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        16400,
+        1,
+        64
+      ],
+      "target_shape": [
+        16400,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4198400,
+      "target_num_bytes": 4198400,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        4,
+        "1",
+        "non_cond",
+        "memory_attention.memory_pos"
+      ],
+      "tensor_name": "memory_attention.memory_pos",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        16400,
+        1,
+        64
+      ],
+      "target_shape": [
+        16400,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4198400,
+      "target_num_bytes": 4198400,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        4,
+        "1",
+        "non_cond",
+        "obj_ptr"
+      ],
+      "tensor_name": "obj_ptr",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        256
+      ],
+      "target_shape": [
+        1,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1024,
+      "target_num_bytes": 1024,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        4,
+        "1",
+        "non_cond",
+        "object_score_logits"
+      ],
+      "tensor_name": "object_score_logits",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1
+      ],
+      "target_shape": [
+        1,
+        1
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4,
+      "target_num_bytes": 4,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        4,
+        "1",
+        "non_cond",
+        "pred_masks"
+      ],
+      "tensor_name": "pred_masks",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "target_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 262144,
+      "target_num_bytes": 262144,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        5,
+        "1",
+        "non_cond",
+        "maskmem_features"
+      ],
+      "tensor_name": "maskmem_features",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.bfloat16",
+      "target_dtype": "torch.bfloat16",
+      "source_num_bytes": 524288,
+      "target_num_bytes": 524288,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        5,
+        "1",
+        "non_cond",
+        "maskmem_pos_enc[0]"
+      ],
+      "tensor_name": "maskmem_pos_enc[0]",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1048576,
+      "target_num_bytes": 1048576,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        5,
+        "1",
+        "non_cond",
+        "memory_attention.memory"
+      ],
+      "tensor_name": "memory_attention.memory",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        20500,
+        1,
+        64
+      ],
+      "target_shape": [
+        20500,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 5248000,
+      "target_num_bytes": 5248000,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        5,
+        "1",
+        "non_cond",
+        "memory_attention.memory_pos"
+      ],
+      "tensor_name": "memory_attention.memory_pos",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        20500,
+        1,
+        64
+      ],
+      "target_shape": [
+        20500,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 5248000,
+      "target_num_bytes": 5248000,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        5,
+        "1",
+        "non_cond",
+        "obj_ptr"
+      ],
+      "tensor_name": "obj_ptr",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        256
+      ],
+      "target_shape": [
+        1,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1024,
+      "target_num_bytes": 1024,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        5,
+        "1",
+        "non_cond",
+        "object_score_logits"
+      ],
+      "tensor_name": "object_score_logits",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1
+      ],
+      "target_shape": [
+        1,
+        1
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4,
+      "target_num_bytes": 4,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        5,
+        "1",
+        "non_cond",
+        "pred_masks"
+      ],
+      "tensor_name": "pred_masks",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "target_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 262144,
+      "target_num_bytes": 262144,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        6,
+        "1",
+        "non_cond",
+        "maskmem_features"
+      ],
+      "tensor_name": "maskmem_features",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.bfloat16",
+      "target_dtype": "torch.bfloat16",
+      "source_num_bytes": 524288,
+      "target_num_bytes": 524288,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        6,
+        "1",
+        "non_cond",
+        "maskmem_pos_enc[0]"
+      ],
+      "tensor_name": "maskmem_pos_enc[0]",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "target_shape": [
+        1,
+        64,
+        64,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1048576,
+      "target_num_bytes": 1048576,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        6,
+        "1",
+        "non_cond",
+        "memory_attention.memory"
+      ],
+      "tensor_name": "memory_attention.memory",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        24600,
+        1,
+        64
+      ],
+      "target_shape": [
+        24600,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 6297600,
+      "target_num_bytes": 6297600,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        6,
+        "1",
+        "non_cond",
+        "memory_attention.memory_pos"
+      ],
+      "tensor_name": "memory_attention.memory_pos",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        24600,
+        1,
+        64
+      ],
+      "target_shape": [
+        24600,
+        1,
+        64
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 6297600,
+      "target_num_bytes": 6297600,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "transient_target_assembled_input"
+    },
+    {
+      "key": [
+        "bear",
+        6,
+        "1",
+        "non_cond",
+        "obj_ptr"
+      ],
+      "tensor_name": "obj_ptr",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        256
+      ],
+      "target_shape": [
+        1,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 1024,
+      "target_num_bytes": 1024,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "direct_copy_shape_candidate_semantics_unverified"
+    },
+    {
+      "key": [
+        "bear",
+        6,
+        "1",
+        "non_cond",
+        "object_score_logits"
+      ],
+      "tensor_name": "object_score_logits",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1
+      ],
+      "target_shape": [
+        1,
+        1
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 4,
+      "target_num_bytes": 4,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": null,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    },
+    {
+      "key": [
+        "bear",
+        6,
+        "1",
+        "non_cond",
+        "pred_masks"
+      ],
+      "tensor_name": "pred_masks",
+      "source_present": true,
+      "target_present": true,
+      "source_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "target_shape": [
+        1,
+        1,
+        256,
+        256
+      ],
+      "source_dtype": "torch.float32",
+      "target_dtype": "torch.float32",
+      "source_num_bytes": 262144,
+      "target_num_bytes": 262144,
+      "shape_equal": true,
+      "dtype_equal": true,
+      "num_bytes_equal": true,
+      "spatial_resolution_equal": true,
+      "channel_equal": true,
+      "disposition": "supporting_state_not_primary_translator_target"
+    }
+  ]
+}
