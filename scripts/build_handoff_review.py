@@ -129,6 +129,7 @@ def main() -> None:
 <main><h1>CMMT: bmx-bumps handoff review</h1><p class='note'>Red=GT, green=Large-native, pink=Direct, blue=Ridge hybrid. Frame 89 is visual-only and excluded from official aggregate metrics.</p>
 <video controls loop muted style='width:100%' src='handoff_review.mp4'></video><img src='jf_by_frame.png' alt='J&F by frame'>
 <h2 id='frame-title'></h2><input id='slider' type='range' min='0' value='0'><div class='scores' id='scores'></div><img id='frame-image'>
+<p class='note'>Dataset: <a href='https://davischallenge.org/'>DAVIS 2017</a>, licensed <a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>. Used for non-commercial research evaluation; please cite the DAVIS benchmark papers.</p>
 <script>const rows=__FRAME_ROWS__;const s=document.querySelector('#slider'),im=document.querySelector('#frame-image'),t=document.querySelector('#frame-title'),v=document.querySelector('#scores');s.max=rows.length-1;function show(){const r=rows[+s.value];t.textContent=`Frame ${r.frame}`;im.src=r.image;v.textContent=`Large-native ${fmt(r['Large-native'])} | Direct ${fmt(r.Direct)} | Hybrid ${fmt(r.Hybrid)}`};function fmt(x){return x==null?'visual only':x.toFixed(3)}s.oninput=show;show()</script></main>"""
     html = html.replace("__FRAME_ROWS__", json.dumps(records, separators=(",", ":")))
     (args.output_dir / "index.html").write_text(html, encoding="utf-8")
