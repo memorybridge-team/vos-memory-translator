@@ -209,6 +209,39 @@ sam2-direct-handoff-smoke \
   --artifact-dir /content/probe/tiny_to_large_direct
 ```
 
+Apply a Ridge model saved by `cmmt-paired-experiment`. The default hybrid uses
+Ridge for spatial memory/object pointers and preserves source presence logits:
+
+```bash
+sam2-ridge-handoff-smoke \
+  --sam2-repo /workspace/CMMT/.external/sam2 \
+  --source-config configs/sam2.1/sam2.1_hiera_t.yaml \
+  --source-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_tiny.pt \
+  --source-model-id sam2.1-hiera-tiny \
+  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --target-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_large.pt \
+  --target-model-id sam2.1-hiera-large \
+  --translator-artifact /workspace/CMMT/outputs/paired_translators.pt \
+  --presence-policy direct \
+  --video-dir /workspace/CMMT/data/DAVIS/JPEGImages/480p/bmx-bumps \
+  --prompt-mask /workspace/CMMT/data/DAVIS/Annotations/480p/bmx-bumps/00000.png \
+  --object-id 1 --switch-frame 6 \
+  --artifact-dir /workspace/CMMT/outputs/ridge_handoff
+```
+
+Evaluate saved future-mask PNGs with the official DAVIS metric functions. This
+example is explicitly a partial sequence, not a full benchmark run:
+
+```bash
+cmmt-davis-future-eval \
+  --evaluation-repo /workspace/CMMT/.external/davis2017-evaluation \
+  --prediction-dir /workspace/CMMT/outputs/ridge_handoff/candidate_masks \
+  --annotation-dir /workspace/CMMT/data/DAVIS/Annotations/480p/bmx-bumps \
+  --sequence bmx-bumps --object-id 1 \
+  --start-frame 7 --end-frame 88 \
+  --output /workspace/CMMT/outputs/ridge_handoff/davis_future.json
+```
+
 The artifact directory contains binary mask PNGs, a four-panel comparison image,
 `report.json`, and a `report.md` that renders in both VS Code and GitHub. For a
 budget-safe RunPod setup and one-command smoke run, see
@@ -219,12 +252,12 @@ budget-safe RunPod setup and one-command smoke run, see
 - Memory-flow inventory: verified from pinned upstream source.
 - Synthetic-state and hook tests: implemented; see
   [`docs/validation.md`](docs/validation.md) for commands actually run.
-- Tiny/Large checkpoints: model construction, canonical-state collection,
-  same-checkpoint round-trip and Tiny→Direct→Large smoke verified on CPU using
-  a deterministic synthetic video. An A40 CUDA smoke and a one-object DAVIS
-  `blackswan` same-checkpoint round-trip have also run; full DAVIS J&F and
-  learned-translator evaluation remain pending.
-- Translator fitting: implemented and verified on synthetic paired state only.
+- Tiny/Large checkpoints: construction, canonical-state collection and
+  same-checkpoint round-trip are checkpoint-backed. A40 CUDA runs include a
+  one-object DAVIS `blackswan` same-checkpoint round-trip.
+- Translator fitting/injection: an actual Tiny→Ridge-hybrid→Large handoff ran on
+  held-out DAVIS train `bmx-bumps`. Its switch-future partial J&F nearly matched
+  Large-native in this one pilot; full validation-set evaluation remains pending.
 - Target history materialization and injection: checkpoint-backed next-frame
   continuation verified for Tiny and Large. Current closure evidence covers a
   one-object forward smoke, not the full interactive/multi-object matrix.

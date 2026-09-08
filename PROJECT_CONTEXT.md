@@ -542,10 +542,36 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
 - **[판단·가설]** component별 translator가 필요할 수 있다. 첫 실제 injection
   후보는 spatial/pointer에 Ridge, presence에 Direct를 쓰는 hybrid다. 이 판단은
   1 train sequence/1 held-out sequence의 engineering smoke에 불과하다.
-- **[미검증]** 번역된 Ridge/hybrid state의 Large 주입, switch 이후 J&F,
+- **[당시 미검증; 2026-09-09 일부 해소]** 번역된 Ridge/hybrid state의 Large 주입, switch 이후 J&F,
   switch shock, identity break, recovery length 및 reset/Last-Mask/replay-k/oracle
   비교는 아직 수행하지 않았다. Raw state `.pt`는 RunPod persistent storage에만
   두고 작은 JSON/Markdown report만 Git에 보존한다.
+
+### 2026-09-09 — 첫 learned translator 실제 주입과 DAVIS 정답 평가
+
+- **[구현]** 저장된 Ridge payload를 재로드하고 spatial memory/object pointer는
+  Ridge, presence logit은 Direct Copy로 처리하는 component-wise hybrid를 실제
+  target predictor에 주입하는 `sam2-ridge-handoff-smoke`를 추가했다. 공식 DAVIS
+  metric 함수로 switch 이후 부분구간을 평가하는 `cmmt-davis-future-eval`도
+  추가했다. Local/RunPod test는 `19 passed`, 최신 코드 commit은 `18a1ecf`다.
+- **[Pilot — actual injection]** `bear` frames 0–6 한 상태 쌍으로 학습한 hybrid를
+  held-out DAVIS train `bmx-bumps`, object 1, switch frame 6에 주입했다. Target
+  backbone past replay는 0회였다. Future 83 frames의 Large-native 대비 binary
+  IoU는 Direct 0.561646, hybrid 0.949390이고 첫 future frame은 0.245965→0.858173,
+  mean logit MSE는 121,852.47→1.8787이었다.
+- **[Pilot — ground truth]** 공식 `davisvideochallenge/davis2017-evaluation`
+  commit `ac7c43fca936f9722837b7fbd337d284ba37004b`의 `J`/`F` 함수를 사용했다.
+  Video last frame을 제외한 partial frames 7–88에서 Large-native/Direct/hybrid
+  J&F는 각각 0.862989/0.638527/0.860456이었다. Hybrid는 Direct보다 +0.221929,
+  Large-native보다 -0.002533이었다.
+- **[중요 한계]** 이 결과는 DAVIS train의 1 train sequence/1 held-out sequence,
+  single object/switch 결과이며 full DAVIS benchmark가 아니다. Frame 50처럼
+  hybrid가 Large-native와 동일해도 세 방법 모두 ground-truth J&F가 0인 경우가
+  있어 native agreement를 task 정답으로 취급하면 안 된다.
+- **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
+  필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
+  여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.
+  Identity break와 recovery length 정의·집계는 여전히 미구현이다.
 
 ## 18. 노션 원자료 인덱스
 
