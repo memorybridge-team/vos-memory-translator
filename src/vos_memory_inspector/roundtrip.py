@@ -432,6 +432,8 @@ def run_cross_model_translator_handoff(
     if artifact_dir is not None:
         report["artifacts"] = write_handoff_artifacts(
             video_dir=video_dir,
+            annotation_dir=Path(prompt_mask).resolve().parent,
+            object_id=object_id,
             oracle_masks=oracle_future,
             candidate_masks=candidate_future,
             output_dir=artifact_dir,

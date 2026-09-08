@@ -1,0 +1,583 @@
+[
+  {
+    "frame": 7,
+    "image": "frames/frame_00007.jpg",
+    "Large-native": 0.8793318757531949,
+    "Direct": 0.5526707919350292,
+    "Hybrid": 0.8729121257826896
+  },
+  {
+    "frame": 8,
+    "image": "frames/frame_00008.jpg",
+    "Large-native": 0.8890693592601102,
+    "Direct": 0.580964969213041,
+    "Hybrid": 0.8828897598692125
+  },
+  {
+    "frame": 9,
+    "image": "frames/frame_00009.jpg",
+    "Large-native": 0.8874386398589442,
+    "Direct": 0.5822871786651495,
+    "Hybrid": 0.884574418488858
+  },
+  {
+    "frame": 10,
+    "image": "frames/frame_00010.jpg",
+    "Large-native": 0.8773993905357478,
+    "Direct": 0.5815481841638708,
+    "Hybrid": 0.8743770546069776
+  },
+  {
+    "frame": 11,
+    "image": "frames/frame_00011.jpg",
+    "Large-native": 0.8764097986627764,
+    "Direct": 0.5854051868957293,
+    "Hybrid": 0.8710777336883451
+  },
+  {
+    "frame": 12,
+    "image": "frames/frame_00012.jpg",
+    "Large-native": 0.8713149267619905,
+    "Direct": 0.5905165050864198,
+    "Hybrid": 0.8779682447284682
+  },
+  {
+    "frame": 13,
+    "image": "frames/frame_00013.jpg",
+    "Large-native": 0.8771187035704152,
+    "Direct": 0.593627660149563,
+    "Hybrid": 0.8752715377809595
+  },
+  {
+    "frame": 14,
+    "image": "frames/frame_00014.jpg",
+    "Large-native": 0.8867973896355995,
+    "Direct": 0.5963219741880259,
+    "Hybrid": 0.8892834948632174
+  },
+  {
+    "frame": 15,
+    "image": "frames/frame_00015.jpg",
+    "Large-native": 0.8783195564219843,
+    "Direct": 0.6045277665121094,
+    "Hybrid": 0.8795924857165038
+  },
+  {
+    "frame": 16,
+    "image": "frames/frame_00016.jpg",
+    "Large-native": 0.8809133919468728,
+    "Direct": 0.6114088871809745,
+    "Hybrid": 0.8830703951520527
+  },
+  {
+    "frame": 17,
+    "image": "frames/frame_00017.jpg",
+    "Large-native": 0.8828100561127556,
+    "Direct": 0.6138186717024084,
+    "Hybrid": 0.8825252299898119
+  },
+  {
+    "frame": 18,
+    "image": "frames/frame_00018.jpg",
+    "Large-native": 0.874299306544593,
+    "Direct": 0.6069639140294663,
+    "Hybrid": 0.8772164186485523
+  },
+  {
+    "frame": 19,
+    "image": "frames/frame_00019.jpg",
+    "Large-native": 0.8741748232296264,
+    "Direct": 0.616301828797746,
+    "Hybrid": 0.8712984346327406
+  },
+  {
+    "frame": 20,
+    "image": "frames/frame_00020.jpg",
+    "Large-native": 0.8816775240291186,
+    "Direct": 0.6167834540634919,
+    "Hybrid": 0.8777042836050634
+  },
+  {
+    "frame": 21,
+    "image": "frames/frame_00021.jpg",
+    "Large-native": 0.8799314322432916,
+    "Direct": 0.6228957839718705,
+    "Hybrid": 0.8742035265315855
+  },
+  {
+    "frame": 22,
+    "image": "frames/frame_00022.jpg",
+    "Large-native": 0.8421360619798532,
+    "Direct": 0.6074025231395587,
+    "Hybrid": 0.8401121099153765
+  },
+  {
+    "frame": 23,
+    "image": "frames/frame_00023.jpg",
+    "Large-native": 0.8515029310182056,
+    "Direct": 0.596562877099742,
+    "Hybrid": 0.843309521997714
+  },
+  {
+    "frame": 24,
+    "image": "frames/frame_00024.jpg",
+    "Large-native": 0.8380523617502383,
+    "Direct": 0.5757079621167548,
+    "Hybrid": 0.8354753392142655
+  },
+  {
+    "frame": 25,
+    "image": "frames/frame_00025.jpg",
+    "Large-native": 0.864993813617401,
+    "Direct": 0.5772149506477202,
+    "Hybrid": 0.8625811118261517
+  },
+  {
+    "frame": 26,
+    "image": "frames/frame_00026.jpg",
+    "Large-native": 0.8656016862036979,
+    "Direct": 0.5740568434523005,
+    "Hybrid": 0.8634401777213583
+  },
+  {
+    "frame": 27,
+    "image": "frames/frame_00027.jpg",
+    "Large-native": 0.8547556798947189,
+    "Direct": 0.5762249547995675,
+    "Hybrid": 0.8548124270108447
+  },
+  {
+    "frame": 28,
+    "image": "frames/frame_00028.jpg",
+    "Large-native": 0.8585417630272317,
+    "Direct": 0.5844078348046257,
+    "Hybrid": 0.8626817447495961
+  },
+  {
+    "frame": 29,
+    "image": "frames/frame_00029.jpg",
+    "Large-native": 0.8498163889566017,
+    "Direct": 0.5876429308519349,
+    "Hybrid": 0.8468288654008473
+  },
+  {
+    "frame": 30,
+    "image": "frames/frame_00030.jpg",
+    "Large-native": 0.8419259187044519,
+    "Direct": 0.5668743830127297,
+    "Hybrid": 0.8352002358850561
+  },
+  {
+    "frame": 31,
+    "image": "frames/frame_00031.jpg",
+    "Large-native": 0.8270892807463237,
+    "Direct": 0.5418655092042107,
+    "Hybrid": 0.8299607109226748
+  },
+  {
+    "frame": 32,
+    "image": "frames/frame_00032.jpg",
+    "Large-native": 0.833949370774568,
+    "Direct": 0.5275246075876701,
+    "Hybrid": 0.8307364673827695
+  },
+  {
+    "frame": 33,
+    "image": "frames/frame_00033.jpg",
+    "Large-native": 0.8600578075266805,
+    "Direct": 0.5818176110360311,
+    "Hybrid": 0.8496695604685096
+  },
+  {
+    "frame": 34,
+    "image": "frames/frame_00034.jpg",
+    "Large-native": 0.8782222871058152,
+    "Direct": 0.727580493090519,
+    "Hybrid": 0.8676070700203943
+  },
+  {
+    "frame": 35,
+    "image": "frames/frame_00035.jpg",
+    "Large-native": 0.8514047806058547,
+    "Direct": 0.8532372322606572,
+    "Hybrid": 0.8405081242395089
+  },
+  {
+    "frame": 36,
+    "image": "frames/frame_00036.jpg",
+    "Large-native": 0.8726919339164236,
+    "Direct": 0.8524816176470589,
+    "Hybrid": 0.86875
+  },
+  {
+    "frame": 37,
+    "image": "frames/frame_00037.jpg",
+    "Large-native": 0.9238461538461539,
+    "Direct": 0.9161676646706587,
+    "Hybrid": 0.9252696456086287
+  },
+  {
+    "frame": 38,
+    "image": "frames/frame_00038.jpg",
+    "Large-native": 0.8865930169121659,
+    "Direct": 0.8844118844118845,
+    "Hybrid": 0.9010668587698536
+  },
+  {
+    "frame": 39,
+    "image": "frames/frame_00039.jpg",
+    "Large-native": 0.9348484848484848,
+    "Direct": 0.9324324324324325,
+    "Hybrid": 0.9401840490797546
+  },
+  {
+    "frame": 40,
+    "image": "frames/frame_00040.jpg",
+    "Large-native": 0.9309440559440559,
+    "Direct": 0.9289383561643836,
+    "Hybrid": 0.9398230088495575
+  },
+  {
+    "frame": 41,
+    "image": "frames/frame_00041.jpg",
+    "Large-native": 0.9041420118343195,
+    "Direct": 0.8987414187643021,
+    "Hybrid": 0.9069493521790342
+  },
+  {
+    "frame": 42,
+    "image": "frames/frame_00042.jpg",
+    "Large-native": 0.8984098939929328,
+    "Direct": 0.9114391143911439,
+    "Hybrid": 0.8907599309153713
+  },
+  {
+    "frame": 43,
+    "image": "frames/frame_00043.jpg",
+    "Large-native": 0.8571709951628289,
+    "Direct": 0.8311643523335446,
+    "Hybrid": 0.8623436325437057
+  },
+  {
+    "frame": 44,
+    "image": "frames/frame_00044.jpg",
+    "Large-native": 0.8474836332119833,
+    "Direct": 0.7955077874329517,
+    "Hybrid": 0.8063219883297419
+  },
+  {
+    "frame": 45,
+    "image": "frames/frame_00045.jpg",
+    "Large-native": 0.8212831159806867,
+    "Direct": 0.6386056342757362,
+    "Hybrid": 0.8029234155426379
+  },
+  {
+    "frame": 46,
+    "image": "frames/frame_00046.jpg",
+    "Large-native": 0.7739002310155323,
+    "Direct": 0.55026241339931,
+    "Hybrid": 0.7606950436177295
+  },
+  {
+    "frame": 47,
+    "image": "frames/frame_00047.jpg",
+    "Large-native": 0.7076712184241447,
+    "Direct": 0.42024343721464585,
+    "Hybrid": 0.7021069208684011
+  },
+  {
+    "frame": 48,
+    "image": "frames/frame_00048.jpg",
+    "Large-native": 0.8452661543130724,
+    "Direct": 0.37213290129128984,
+    "Hybrid": 0.850046738777924
+  },
+  {
+    "frame": 49,
+    "image": "frames/frame_00049.jpg",
+    "Large-native": 0.8740743332283758,
+    "Direct": 0.2798624261807012,
+    "Hybrid": 0.8777811991725488
+  },
+  {
+    "frame": 50,
+    "image": "frames/frame_00050.jpg",
+    "Large-native": 0.0,
+    "Direct": 0.0,
+    "Hybrid": 0.0
+  },
+  {
+    "frame": 51,
+    "image": "frames/frame_00051.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 52,
+    "image": "frames/frame_00052.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 53,
+    "image": "frames/frame_00053.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 54,
+    "image": "frames/frame_00054.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 55,
+    "image": "frames/frame_00055.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 56,
+    "image": "frames/frame_00056.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 57,
+    "image": "frames/frame_00057.jpg",
+    "Large-native": 0.0,
+    "Direct": 0.07109883691523428,
+    "Hybrid": 0.0
+  },
+  {
+    "frame": 58,
+    "image": "frames/frame_00058.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 59,
+    "image": "frames/frame_00059.jpg",
+    "Large-native": 1.0,
+    "Direct": 0.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 60,
+    "image": "frames/frame_00060.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 61,
+    "image": "frames/frame_00061.jpg",
+    "Large-native": 0.0,
+    "Direct": 0.0,
+    "Hybrid": 0.0
+  },
+  {
+    "frame": 62,
+    "image": "frames/frame_00062.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 63,
+    "image": "frames/frame_00063.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 64,
+    "image": "frames/frame_00064.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 65,
+    "image": "frames/frame_00065.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 66,
+    "image": "frames/frame_00066.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 67,
+    "image": "frames/frame_00067.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 68,
+    "image": "frames/frame_00068.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 69,
+    "image": "frames/frame_00069.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 70,
+    "image": "frames/frame_00070.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 71,
+    "image": "frames/frame_00071.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 72,
+    "image": "frames/frame_00072.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 73,
+    "image": "frames/frame_00073.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 74,
+    "image": "frames/frame_00074.jpg",
+    "Large-native": 1.0,
+    "Direct": 1.0,
+    "Hybrid": 1.0
+  },
+  {
+    "frame": 75,
+    "image": "frames/frame_00075.jpg",
+    "Large-native": 0.8052959501557633,
+    "Direct": 0.5913391049068095,
+    "Hybrid": 0.7524195804195803
+  },
+  {
+    "frame": 76,
+    "image": "frames/frame_00076.jpg",
+    "Large-native": 0.8215254586379886,
+    "Direct": 0.5910358471901644,
+    "Hybrid": 0.8380333241783393
+  },
+  {
+    "frame": 77,
+    "image": "frames/frame_00077.jpg",
+    "Large-native": 0.7446988435322628,
+    "Direct": 0.6071857533281246,
+    "Hybrid": 0.7127514125676041
+  },
+  {
+    "frame": 78,
+    "image": "frames/frame_00078.jpg",
+    "Large-native": 0.7791289728285582,
+    "Direct": 0.5401889539304385,
+    "Hybrid": 0.7544662163076921
+  },
+  {
+    "frame": 79,
+    "image": "frames/frame_00079.jpg",
+    "Large-native": 0.8009114974858842,
+    "Direct": 0.7956746621447087,
+    "Hybrid": 0.8006445768881794
+  },
+  {
+    "frame": 80,
+    "image": "frames/frame_00080.jpg",
+    "Large-native": 0.8480776979649115,
+    "Direct": 0.8278445336579118,
+    "Hybrid": 0.8415773936434328
+  },
+  {
+    "frame": 81,
+    "image": "frames/frame_00081.jpg",
+    "Large-native": 0.8607462285944685,
+    "Direct": 0.8460725779211096,
+    "Hybrid": 0.862220966567701
+  },
+  {
+    "frame": 82,
+    "image": "frames/frame_00082.jpg",
+    "Large-native": 0.8621946124070573,
+    "Direct": 0.8446642797951572,
+    "Hybrid": 0.8617375903044822
+  },
+  {
+    "frame": 83,
+    "image": "frames/frame_00083.jpg",
+    "Large-native": 0.8547910188660273,
+    "Direct": 0.8469722897114501,
+    "Hybrid": 0.8578321333275609
+  },
+  {
+    "frame": 84,
+    "image": "frames/frame_00084.jpg",
+    "Large-native": 0.8632518091857788,
+    "Direct": 0.850914976745272,
+    "Hybrid": 0.863500095814107
+  },
+  {
+    "frame": 85,
+    "image": "frames/frame_00085.jpg",
+    "Large-native": 0.8469328231292517,
+    "Direct": 0.849499574917981,
+    "Hybrid": 0.8494807377372569
+  },
+  {
+    "frame": 86,
+    "image": "frames/frame_00086.jpg",
+    "Large-native": 0.8213841545241474,
+    "Direct": 0.8051160805339541,
+    "Hybrid": 0.8244130352462421
+  },
+  {
+    "frame": 87,
+    "image": "frames/frame_00087.jpg",
+    "Large-native": 0.8340979076305788,
+    "Direct": 0.8234656762591366,
+    "Hybrid": 0.8351288148041892
+  },
+  {
+    "frame": 88,
+    "image": "frames/frame_00088.jpg",
+    "Large-native": 0.8287045530143434,
+    "Direct": 0.8215889860648411,
+    "Hybrid": 0.8312477290444944
+  },
+  {
+    "frame": 89,
+    "image": "frames/frame_00089.jpg",
+    "Large-native": null,
+    "Direct": null,
+    "Hybrid": null
+  }
+]

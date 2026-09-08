@@ -53,12 +53,14 @@ def _panel(image: np.ndarray, title: str) -> Image.Image:
 
 def _comparison_canvas(
     image: Image.Image,
+    ground_truth: np.ndarray,
     oracle: np.ndarray,
     candidate: np.ndarray,
     *,
     candidate_label: str,
 ) -> Image.Image:
     rgb = np.asarray(image.convert("RGB"))
+    ground_truth_overlay = _overlay(rgb, ground_truth, (255, 45, 35))
     oracle_overlay = _overlay(rgb, oracle, (30, 210, 80))
     candidate_overlay = _overlay(rgb, candidate, (210, 50, 190))
     agreement = rgb.copy()
@@ -69,8 +71,8 @@ def _comparison_canvas(
     agreement = _overlay(agreement, false_positive, (220, 40, 190))
     agreement = _overlay(agreement, false_negative, (255, 150, 20))
     panels = [
-        _panel(rgb, "Input"),
-        _panel(oracle_overlay, "Oracle"),
+        _panel(ground_truth_overlay, "Ground Truth"),
+        _panel(oracle_overlay, "Large-native"),
         _panel(candidate_overlay, candidate_label),
         _panel(agreement, "Agreement G/P/O"),
     ]
@@ -89,6 +91,8 @@ def _comparison_canvas(
 def write_handoff_artifacts(
     *,
     video_dir: str | Path,
+    annotation_dir: str | Path,
+    object_id: int,
     oracle_masks: Mapping[int, torch.Tensor],
     candidate_masks: Mapping[int, torch.Tensor],
     output_dir: str | Path,
@@ -98,6 +102,7 @@ def write_handoff_artifacts(
     """Write compact PNG previews plus machine- and human-readable reports."""
 
     video_dir = Path(video_dir).resolve()
+    annotation_dir = Path(annotation_dir).resolve()
     output_dir = Path(output_dir).resolve()
     frame_paths = _indexed_frames(video_dir)
     if oracle_masks.keys() != candidate_masks.keys():
@@ -116,6 +121,15 @@ def write_handoff_artifacts(
             raise FileNotFoundError(f"video frame {frame} is unavailable in {video_dir}")
         with Image.open(frame_path) as raw_image:
             image = raw_image.convert("RGB")
+        annotation_path = annotation_dir / f"{frame:05d}.png"
+        if not annotation_path.is_file():
+            raise FileNotFoundError(f"ground-truth annotation is unavailable: {annotation_path}")
+        ground_truth = np.asarray(Image.open(annotation_path)) == object_id
+        if ground_truth.shape != (image.height, image.width):
+            raise ValueError(
+                f"ground-truth shape {ground_truth.shape} differs from image "
+                f"shape {(image.height, image.width)}"
+            )
         oracle = _binary_mask(oracle_masks[frame], image.size)
         candidate = _binary_mask(candidate_masks[frame], image.size)
         name = f"{frame:05d}.png"
@@ -124,6 +138,7 @@ def write_handoff_artifacts(
         comparison_name = f"frame_{frame:05d}.png"
         _comparison_canvas(
             image,
+            ground_truth,
             oracle,
             candidate,
             candidate_label=candidate_label,
@@ -158,7 +173,9 @@ def write_handoff_artifacts(
         f"- Wall time (seconds): `{resources.get('wall_time_seconds', 'n/a')}`",
         f"- Peak CUDA memory (bytes): `{resources.get('peak_cuda_memory_bytes', 'n/a')}`",
         "",
-        "Green means both methods selected the pixel; pink is candidate-only; orange is oracle-only.",
+        "The first panel overlays DAVIS ground truth in red. In the agreement panel, "
+        "green means both methods selected the pixel, pink is candidate-only, and "
+        "orange is Large-native-only.",
         "",
     ]
     for path in comparisons:

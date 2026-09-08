@@ -52,7 +52,10 @@ pilot이므로 DAVIS validation benchmark 점수로 인용하면 안 된다.
 
 ## 대표 프레임 육안 확인
 
-각 이미지는 왼쪽부터 Input, Large-native(초록), candidate(보라), 겹침을 보여 준다.
+현재 저장된 이미지는 왼쪽부터 Input, Large-native(초록), candidate(보라), 겹침을
+보여 준다. 이후 생성되는 비교 이미지는 Input 대신 DAVIS GT(빨강)를 원본 위에
+표시한다. 이 pilot의 기존 PNG는 재생성 전 산출물이므로 아래 링크에는 아직
+Input이 남아 있다.
 
 | Frame | Direct Copy | Ridge hybrid | 관찰 |
 |---|---|---|---|
@@ -66,6 +69,10 @@ Frame 50은 중요한 반례다. Large-native를 모방하는 것만으로 항�
 ground-truth J&F가 최종 지표여야 한다.
 
 ## 산출물
+
+- 공개 검토 페이지: [전체 83-frame 인터랙티브 갤러리](https://memorybridge-team.github.io/vos-memory-translator/experiments/2026-09-08-davis-handoff/)
+- 페이지에는 GT / Large-native / Direct / Ridge-hybrid 비교 영상, frame slider와
+  frame별 J&F 그래프가 포함된다.
 
 - `direct/report.json`: frame별 Large-native agreement와 실행 자원
 - `ridge_hybrid/report.json`: frame별 hybrid agreement와 실행 자원
@@ -85,4 +92,3 @@ ground-truth J&F가 최종 지표여야 한다.
 다음 실험 gate는 여러 train sequence/switch pair로 학습 데이터를 늘리고, 고정된
 DAVIS val subset에서 Direct, hybrid, reset, Last-Mask, replay-k, Large-native를
 동일하게 비교하는 것이다.
-

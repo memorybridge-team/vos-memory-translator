@@ -568,6 +568,28 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   single object/switch 결과이며 full DAVIS benchmark가 아니다. Frame 50처럼
   hybrid가 Large-native와 동일해도 세 방법 모두 ground-truth J&F가 0인 경우가
   있어 native agreement를 task 정답으로 취급하면 안 된다.
+- **[Frame 50 재검증 — 2026-09-09]** 원본 annotation의 label별 픽셀 수는
+  background 403,038, object 1은 27, object 2는 6,855였다. 평가 대상 object 1은
+  완전히 사라진 것이 아니라 27픽셀이 남아 있었다. Large-native와 hybrid는
+  0픽셀을 예측해 이를 놓쳤고, Direct는 7,148픽셀을 예측했지만 object-1 정답과
+  겹치지 않아 세 방법 모두 J=0, F=0이었다. 따라서 hybrid의 native agreement
+  IoU 1.0은 target의 빈-mask 판단을 정확히 복제했다는 뜻이지 GT 정답이라는
+  뜻이 아니다. 27픽셀의 원본 854×480 좌표 범위는 `x=204–221, y=404–408`이며,
+  기존 4-panel에는 GT 패널이 없어 육안으로 확인할 수 없었다.
+- **[시각화 결정 — 2026-09-09]** 이후 handoff 비교 PNG의 첫 패널은 단순 Input
+  대신 평가 대상 `object_id`의 DAVIS GT를 빨강으로 원본 위에 표시한다. 패널
+  순서는 GT / Large-native / candidate / Large-native–candidate agreement다.
+  요약 보고서는 대표 프레임만 담을 수 있지만, 전체 frame-by-frame 비교 산출물도
+  별도로 보존하고 접근 경로를 명시한다.
+- **[자원·공개 정책 — 2026-09-09]** 사용자는 RunPod 예산 때문에 연구에 필요한
+  데이터·baseline·반복 수를 축소하지 않도록 결정했다. GPU 비용은 기록하되 연구
+  설계의 축소 기준으로 사용하지 않는다. Codex는 정확한 잔여 token 수가 아니라
+  5시간/주간 사용률만 제공하므로, 큰 단계 전후에 이를 확인하고 80%에서 신규 장기
+  작업을 멈춰 산출물·로그를 저장하며 90%에서는 안전한 종료만 수행한다. 사용량을
+  이유로 표본을 몰래 줄이거나 결론을 조기 확정하지 않는다.
+- **[결과 공개 — 2026-09-09]** 실험 영상·frame slider·J&F 그래프 같은 비민감
+  시각화 결과는 GitHub Pages로 게시해 다른 컴퓨터에서도 확인할 수 있게 한다.
+  checkpoint, DAVIS 원본 데이터와 대형 raw state는 계속 Git에서 제외한다.
 - **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.

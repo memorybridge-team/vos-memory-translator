@@ -15,6 +15,11 @@ def test_write_handoff_artifacts(tmp_path) -> None:
     image = np.zeros((12, 20, 3), dtype=np.uint8)
     image[..., 2] = 80
     Image.fromarray(image).save(video_dir / "00002.jpg")
+    annotation_dir = tmp_path / "annotations"
+    annotation_dir.mkdir()
+    ground_truth = np.zeros((12, 20), dtype=np.uint8)
+    ground_truth[1:4, 2:5] = 1
+    Image.fromarray(ground_truth).save(annotation_dir / "00002.png")
     oracle = torch.full((1, 1, 12, 20), -1.0)
     oracle[..., 2:8, 4:10] = 1.0
     candidate = oracle.clone()
@@ -22,6 +27,8 @@ def test_write_handoff_artifacts(tmp_path) -> None:
     output_dir = tmp_path / "artifacts"
     manifest = write_handoff_artifacts(
         video_dir=video_dir,
+        annotation_dir=annotation_dir,
+        object_id=1,
         oracle_masks={2: oracle},
         candidate_masks={2: candidate},
         output_dir=output_dir,
