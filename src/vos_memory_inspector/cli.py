@@ -6,6 +6,11 @@ from pathlib import Path
 
 from .compatibility import compare_manifests, write_compatibility_report
 from .davis import download_davis_2017_trainval_480p, validate_davis_sequence
+from .davis_evaluation import (
+    evaluate_davis_future_masks,
+    load_official_davis_metrics,
+    write_davis_future_report,
+)
 from .paired_experiment import (
     load_canonical_state,
     run_paired_experiment,
@@ -145,6 +150,35 @@ def davis_download_main(argv: list[str] | None = None) -> None:
         keep_archive=args.keep_archive,
     )
     print(json.dumps({"davis_root": str(root)}, indent=2))
+
+
+def davis_future_evaluation_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description="Evaluate switch-future masks with official DAVIS J/F functions."
+    )
+    parser.add_argument("--evaluation-repo", required=True, type=Path)
+    parser.add_argument("--prediction-dir", required=True, type=Path)
+    parser.add_argument("--annotation-dir", required=True, type=Path)
+    parser.add_argument("--sequence", required=True)
+    parser.add_argument("--object-id", required=True, type=int)
+    parser.add_argument("--start-frame", required=True, type=int)
+    parser.add_argument("--output", required=True, type=Path)
+    args = parser.parse_args(argv)
+    iou_metric, boundary_metric, commit = load_official_davis_metrics(
+        args.evaluation_repo
+    )
+    report = evaluate_davis_future_masks(
+        prediction_directory=args.prediction_dir,
+        annotation_directory=args.annotation_dir,
+        object_id=args.object_id,
+        start_frame=args.start_frame,
+        iou_metric=iou_metric,
+        boundary_metric=boundary_metric,
+        metric_source=f"davisvideochallenge/davis2017-evaluation@{commit}",
+        sequence=args.sequence,
+    )
+    write_davis_future_report(report, args.output)
+    print(json.dumps(report, indent=2))
 
 
 def state_inspect_main(argv: list[str] | None = None) -> None:
