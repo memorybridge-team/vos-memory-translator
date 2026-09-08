@@ -8,16 +8,23 @@ fi
 
 project_dir="$(cd "$1" && pwd)"
 cd "${project_dir}"
+python_bin="${project_dir}/.venv/bin/python"
+handoff_bin="${project_dir}/.venv/bin/sam2-direct-handoff-smoke"
+
+if [[ ! -x "${python_bin}" || ! -x "${handoff_bin}" ]]; then
+  echo "Run bash scripts/runpod_bootstrap.sh ${project_dir} first."
+  exit 2
+fi
 
 run_id="$(date -u +%Y%m%dT%H%M%SZ)_tiny_to_large_direct"
 work_dir="outputs/${run_id}"
 artifact_dir="reports/experiments/${run_id}"
 
-python scripts/make_synthetic_video.py \
+"${python_bin}" scripts/make_synthetic_video.py \
   --output-dir "${work_dir}/video" \
   --frames 3 --height 192 --width 320
 
-sam2-direct-handoff-smoke \
+"${handoff_bin}" \
   --sam2-repo .external/sam2 \
   --source-config configs/sam2.1/sam2.1_hiera_t.yaml \
   --source-checkpoint checkpoints/sam2.1_hiera_tiny.pt \
