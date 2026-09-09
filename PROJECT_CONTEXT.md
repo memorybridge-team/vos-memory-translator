@@ -666,6 +666,24 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.
   Identity break와 recovery length 정의·집계는 여전히 미구현이다.
+- **[구현 — 2026-09-10]** checksummed prepared-case cache를 소비하는 Target Reset,
+  Last-Mask, Replay-k, Full Replay runner와 Direct를 포함한 고정 baseline suite를
+  구현했다. Reset은 SAM 2가 prompt 없는 object를 propagate할 수 없어 switch frame에
+  all-zero mask로 object slot만 등록하는 명시적 proxy다. Replay-k는 switch를 포함한
+  최근 k frames를 target이 처리하며, Replay-1과 Last-Mask는 같은 정의다. Local과
+  L4 test는 `29 passed`였다.
+- **[Pilot — 2026-09-10 baseline suite]** DAVIS val `bike-packing`, object 1,
+  switch 14, 평가 frames 15–67에서 Direct/Reset/Last-Mask/Replay-1/Replay-2/
+  Replay-4/Full-Replay J&F는 각각 0/0/0.857995/0.857995/0.859054/0.857450/
+  0.861535였다. Last-Mask와 Replay-1은 frame별로 일치해 sanity check를 통과했다.
+  switch 이전 target backbone 호출은 각각 0/1/1/1/2/4/15회였다. 이는 one-case
+  partial result다.
+- **[판단 — 2026-09-10]** 이 easy case에서 Last-Mask는 Full Replay보다 J&F
+  0.003540만 낮아 매우 강하고 Replay-2의 추가 이득은 0.001060에 그쳤다. Replay-4는
+  Last-Mask보다 낮아 replay 길이의 단조 개선도 관찰되지 않았다. 따라서 same-family
+  translator의 다음 가치는 평균 easy case가 아니라 고정 manifest의 occlusion,
+  reappearance, fast-motion hard cases에서 검증해야 한다. 전체 raw suite 378MB는
+  RunPod에, 53-frame×7-method 선택형 Pages gallery 22MB는 Git에 보존한다.
 
 ## 18. 노션 원자료 인덱스
 

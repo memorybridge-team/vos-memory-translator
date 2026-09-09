@@ -1,0 +1,1221 @@
+[
+  {
+    "frame": 15,
+    "images": {
+      "gt": "frames/gt_00015.jpg",
+      "large_native": "frames/large_native_00015.jpg",
+      "direct_copy": "frames/direct_copy_00015.jpg",
+      "target_reset": "frames/target_reset_00015.jpg",
+      "last_mask": "frames/last_mask_00015.jpg",
+      "replay_1": "frames/replay_1_00015.jpg",
+      "replay_2": "frames/replay_2_00015.jpg",
+      "replay_4": "frames/replay_4_00015.jpg",
+      "full_replay": "frames/large_native_00015.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.7787709617948138,
+      "replay_1": 0.7787709617948138,
+      "replay_2": 0.8038001945095267,
+      "replay_4": 0.8040155941698461,
+      "full_replay": 0.8059752196436454
+    }
+  },
+  {
+    "frame": 16,
+    "images": {
+      "gt": "frames/gt_00016.jpg",
+      "large_native": "frames/large_native_00016.jpg",
+      "direct_copy": "frames/direct_copy_00016.jpg",
+      "target_reset": "frames/target_reset_00016.jpg",
+      "last_mask": "frames/last_mask_00016.jpg",
+      "replay_1": "frames/replay_1_00016.jpg",
+      "replay_2": "frames/replay_2_00016.jpg",
+      "replay_4": "frames/replay_4_00016.jpg",
+      "full_replay": "frames/large_native_00016.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8413821776900599,
+      "replay_1": 0.8413821776900599,
+      "replay_2": 0.8472375488510991,
+      "replay_4": 0.8589513138833915,
+      "full_replay": 0.8685215098560868
+    }
+  },
+  {
+    "frame": 17,
+    "images": {
+      "gt": "frames/gt_00017.jpg",
+      "large_native": "frames/large_native_00017.jpg",
+      "direct_copy": "frames/direct_copy_00017.jpg",
+      "target_reset": "frames/target_reset_00017.jpg",
+      "last_mask": "frames/last_mask_00017.jpg",
+      "replay_1": "frames/replay_1_00017.jpg",
+      "replay_2": "frames/replay_2_00017.jpg",
+      "replay_4": "frames/replay_4_00017.jpg",
+      "full_replay": "frames/large_native_00017.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8572082134621363,
+      "replay_1": 0.8572082134621363,
+      "replay_2": 0.869465793253988,
+      "replay_4": 0.8611162110890229,
+      "full_replay": 0.8818747703103087
+    }
+  },
+  {
+    "frame": 18,
+    "images": {
+      "gt": "frames/gt_00018.jpg",
+      "large_native": "frames/large_native_00018.jpg",
+      "direct_copy": "frames/direct_copy_00018.jpg",
+      "target_reset": "frames/target_reset_00018.jpg",
+      "last_mask": "frames/last_mask_00018.jpg",
+      "replay_1": "frames/replay_1_00018.jpg",
+      "replay_2": "frames/replay_2_00018.jpg",
+      "replay_4": "frames/replay_4_00018.jpg",
+      "full_replay": "frames/large_native_00018.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8660988529731539,
+      "replay_1": 0.8660988529731539,
+      "replay_2": 0.8506400966361318,
+      "replay_4": 0.8504493924252563,
+      "full_replay": 0.8607178983099625
+    }
+  },
+  {
+    "frame": 19,
+    "images": {
+      "gt": "frames/gt_00019.jpg",
+      "large_native": "frames/large_native_00019.jpg",
+      "direct_copy": "frames/direct_copy_00019.jpg",
+      "target_reset": "frames/target_reset_00019.jpg",
+      "last_mask": "frames/last_mask_00019.jpg",
+      "replay_1": "frames/replay_1_00019.jpg",
+      "replay_2": "frames/replay_2_00019.jpg",
+      "replay_4": "frames/replay_4_00019.jpg",
+      "full_replay": "frames/large_native_00019.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8721017416282385,
+      "replay_1": 0.8721017416282385,
+      "replay_2": 0.870885493060725,
+      "replay_4": 0.8707084504332127,
+      "full_replay": 0.8708692461211669
+    }
+  },
+  {
+    "frame": 20,
+    "images": {
+      "gt": "frames/gt_00020.jpg",
+      "large_native": "frames/large_native_00020.jpg",
+      "direct_copy": "frames/direct_copy_00020.jpg",
+      "target_reset": "frames/target_reset_00020.jpg",
+      "last_mask": "frames/last_mask_00020.jpg",
+      "replay_1": "frames/replay_1_00020.jpg",
+      "replay_2": "frames/replay_2_00020.jpg",
+      "replay_4": "frames/replay_4_00020.jpg",
+      "full_replay": "frames/large_native_00020.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8724961587205922,
+      "replay_1": 0.8724961587205922,
+      "replay_2": 0.8709065924994859,
+      "replay_4": 0.8695652760595387,
+      "full_replay": 0.8705976242725542
+    }
+  },
+  {
+    "frame": 21,
+    "images": {
+      "gt": "frames/gt_00021.jpg",
+      "large_native": "frames/large_native_00021.jpg",
+      "direct_copy": "frames/direct_copy_00021.jpg",
+      "target_reset": "frames/target_reset_00021.jpg",
+      "last_mask": "frames/last_mask_00021.jpg",
+      "replay_1": "frames/replay_1_00021.jpg",
+      "replay_2": "frames/replay_2_00021.jpg",
+      "replay_4": "frames/replay_4_00021.jpg",
+      "full_replay": "frames/large_native_00021.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8514159905864169,
+      "replay_1": 0.8514159905864169,
+      "replay_2": 0.8500203571761596,
+      "replay_4": 0.8484141915961607,
+      "full_replay": 0.851540712456841
+    }
+  },
+  {
+    "frame": 22,
+    "images": {
+      "gt": "frames/gt_00022.jpg",
+      "large_native": "frames/large_native_00022.jpg",
+      "direct_copy": "frames/direct_copy_00022.jpg",
+      "target_reset": "frames/target_reset_00022.jpg",
+      "last_mask": "frames/last_mask_00022.jpg",
+      "replay_1": "frames/replay_1_00022.jpg",
+      "replay_2": "frames/replay_2_00022.jpg",
+      "replay_4": "frames/replay_4_00022.jpg",
+      "full_replay": "frames/large_native_00022.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8603586856746452,
+      "replay_1": 0.8603586856746452,
+      "replay_2": 0.8589624465263315,
+      "replay_4": 0.8568994087272017,
+      "full_replay": 0.8571638309730916
+    }
+  },
+  {
+    "frame": 23,
+    "images": {
+      "gt": "frames/gt_00023.jpg",
+      "large_native": "frames/large_native_00023.jpg",
+      "direct_copy": "frames/direct_copy_00023.jpg",
+      "target_reset": "frames/target_reset_00023.jpg",
+      "last_mask": "frames/last_mask_00023.jpg",
+      "replay_1": "frames/replay_1_00023.jpg",
+      "replay_2": "frames/replay_2_00023.jpg",
+      "replay_4": "frames/replay_4_00023.jpg",
+      "full_replay": "frames/large_native_00023.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8532673108681359,
+      "replay_1": 0.8532673108681359,
+      "replay_2": 0.8529817428824148,
+      "replay_4": 0.8516352890713641,
+      "full_replay": 0.8525196872605123
+    }
+  },
+  {
+    "frame": 24,
+    "images": {
+      "gt": "frames/gt_00024.jpg",
+      "large_native": "frames/large_native_00024.jpg",
+      "direct_copy": "frames/direct_copy_00024.jpg",
+      "target_reset": "frames/target_reset_00024.jpg",
+      "last_mask": "frames/last_mask_00024.jpg",
+      "replay_1": "frames/replay_1_00024.jpg",
+      "replay_2": "frames/replay_2_00024.jpg",
+      "replay_4": "frames/replay_4_00024.jpg",
+      "full_replay": "frames/large_native_00024.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8521550165916266,
+      "replay_1": 0.8521550165916266,
+      "replay_2": 0.8516304300777822,
+      "replay_4": 0.8519880487433484,
+      "full_replay": 0.8543796730073815
+    }
+  },
+  {
+    "frame": 25,
+    "images": {
+      "gt": "frames/gt_00025.jpg",
+      "large_native": "frames/large_native_00025.jpg",
+      "direct_copy": "frames/direct_copy_00025.jpg",
+      "target_reset": "frames/target_reset_00025.jpg",
+      "last_mask": "frames/last_mask_00025.jpg",
+      "replay_1": "frames/replay_1_00025.jpg",
+      "replay_2": "frames/replay_2_00025.jpg",
+      "replay_4": "frames/replay_4_00025.jpg",
+      "full_replay": "frames/large_native_00025.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8458504409213301,
+      "replay_1": 0.8458504409213301,
+      "replay_2": 0.8480374821769177,
+      "replay_4": 0.8477423156837731,
+      "full_replay": 0.8524109309241732
+    }
+  },
+  {
+    "frame": 26,
+    "images": {
+      "gt": "frames/gt_00026.jpg",
+      "large_native": "frames/large_native_00026.jpg",
+      "direct_copy": "frames/direct_copy_00026.jpg",
+      "target_reset": "frames/target_reset_00026.jpg",
+      "last_mask": "frames/last_mask_00026.jpg",
+      "replay_1": "frames/replay_1_00026.jpg",
+      "replay_2": "frames/replay_2_00026.jpg",
+      "replay_4": "frames/replay_4_00026.jpg",
+      "full_replay": "frames/large_native_00026.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.851616210993835,
+      "replay_1": 0.851616210993835,
+      "replay_2": 0.8510091693326957,
+      "replay_4": 0.8473742862504606,
+      "full_replay": 0.8535091754987696
+    }
+  },
+  {
+    "frame": 27,
+    "images": {
+      "gt": "frames/gt_00027.jpg",
+      "large_native": "frames/large_native_00027.jpg",
+      "direct_copy": "frames/direct_copy_00027.jpg",
+      "target_reset": "frames/target_reset_00027.jpg",
+      "last_mask": "frames/last_mask_00027.jpg",
+      "replay_1": "frames/replay_1_00027.jpg",
+      "replay_2": "frames/replay_2_00027.jpg",
+      "replay_4": "frames/replay_4_00027.jpg",
+      "full_replay": "frames/large_native_00027.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8513944896977936,
+      "replay_1": 0.8513944896977936,
+      "replay_2": 0.8503736693889035,
+      "replay_4": 0.8478401262897544,
+      "full_replay": 0.8526940598988799
+    }
+  },
+  {
+    "frame": 28,
+    "images": {
+      "gt": "frames/gt_00028.jpg",
+      "large_native": "frames/large_native_00028.jpg",
+      "direct_copy": "frames/direct_copy_00028.jpg",
+      "target_reset": "frames/target_reset_00028.jpg",
+      "last_mask": "frames/last_mask_00028.jpg",
+      "replay_1": "frames/replay_1_00028.jpg",
+      "replay_2": "frames/replay_2_00028.jpg",
+      "replay_4": "frames/replay_4_00028.jpg",
+      "full_replay": "frames/large_native_00028.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8531598353242004,
+      "replay_1": 0.8531598353242004,
+      "replay_2": 0.8525138050113327,
+      "replay_4": 0.8511138456043357,
+      "full_replay": 0.8567941454900453
+    }
+  },
+  {
+    "frame": 29,
+    "images": {
+      "gt": "frames/gt_00029.jpg",
+      "large_native": "frames/large_native_00029.jpg",
+      "direct_copy": "frames/direct_copy_00029.jpg",
+      "target_reset": "frames/target_reset_00029.jpg",
+      "last_mask": "frames/last_mask_00029.jpg",
+      "replay_1": "frames/replay_1_00029.jpg",
+      "replay_2": "frames/replay_2_00029.jpg",
+      "replay_4": "frames/replay_4_00029.jpg",
+      "full_replay": "frames/large_native_00029.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8541203837793649,
+      "replay_1": 0.8541203837793649,
+      "replay_2": 0.8522350804369601,
+      "replay_4": 0.8488514431383802,
+      "full_replay": 0.8521132913630957
+    }
+  },
+  {
+    "frame": 30,
+    "images": {
+      "gt": "frames/gt_00030.jpg",
+      "large_native": "frames/large_native_00030.jpg",
+      "direct_copy": "frames/direct_copy_00030.jpg",
+      "target_reset": "frames/target_reset_00030.jpg",
+      "last_mask": "frames/last_mask_00030.jpg",
+      "replay_1": "frames/replay_1_00030.jpg",
+      "replay_2": "frames/replay_2_00030.jpg",
+      "replay_4": "frames/replay_4_00030.jpg",
+      "full_replay": "frames/large_native_00030.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8538317176381027,
+      "replay_1": 0.8538317176381027,
+      "replay_2": 0.8517004275169204,
+      "replay_4": 0.8478679789334327,
+      "full_replay": 0.8516696671199111
+    }
+  },
+  {
+    "frame": 31,
+    "images": {
+      "gt": "frames/gt_00031.jpg",
+      "large_native": "frames/large_native_00031.jpg",
+      "direct_copy": "frames/direct_copy_00031.jpg",
+      "target_reset": "frames/target_reset_00031.jpg",
+      "last_mask": "frames/last_mask_00031.jpg",
+      "replay_1": "frames/replay_1_00031.jpg",
+      "replay_2": "frames/replay_2_00031.jpg",
+      "replay_4": "frames/replay_4_00031.jpg",
+      "full_replay": "frames/large_native_00031.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8569705664326461,
+      "replay_1": 0.8569705664326461,
+      "replay_2": 0.8524638250337542,
+      "replay_4": 0.8512091619218132,
+      "full_replay": 0.854088447500105
+    }
+  },
+  {
+    "frame": 32,
+    "images": {
+      "gt": "frames/gt_00032.jpg",
+      "large_native": "frames/large_native_00032.jpg",
+      "direct_copy": "frames/direct_copy_00032.jpg",
+      "target_reset": "frames/target_reset_00032.jpg",
+      "last_mask": "frames/last_mask_00032.jpg",
+      "replay_1": "frames/replay_1_00032.jpg",
+      "replay_2": "frames/replay_2_00032.jpg",
+      "replay_4": "frames/replay_4_00032.jpg",
+      "full_replay": "frames/large_native_00032.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8566817646706986,
+      "replay_1": 0.8566817646706986,
+      "replay_2": 0.8520158490004379,
+      "replay_4": 0.8465877585717732,
+      "full_replay": 0.8513225216100594
+    }
+  },
+  {
+    "frame": 33,
+    "images": {
+      "gt": "frames/gt_00033.jpg",
+      "large_native": "frames/large_native_00033.jpg",
+      "direct_copy": "frames/direct_copy_00033.jpg",
+      "target_reset": "frames/target_reset_00033.jpg",
+      "last_mask": "frames/last_mask_00033.jpg",
+      "replay_1": "frames/replay_1_00033.jpg",
+      "replay_2": "frames/replay_2_00033.jpg",
+      "replay_4": "frames/replay_4_00033.jpg",
+      "full_replay": "frames/large_native_00033.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8547694364841709,
+      "replay_1": 0.8547694364841709,
+      "replay_2": 0.8541141083418169,
+      "replay_4": 0.8483954228766579,
+      "full_replay": 0.8525693338544301
+    }
+  },
+  {
+    "frame": 34,
+    "images": {
+      "gt": "frames/gt_00034.jpg",
+      "large_native": "frames/large_native_00034.jpg",
+      "direct_copy": "frames/direct_copy_00034.jpg",
+      "target_reset": "frames/target_reset_00034.jpg",
+      "last_mask": "frames/last_mask_00034.jpg",
+      "replay_1": "frames/replay_1_00034.jpg",
+      "replay_2": "frames/replay_2_00034.jpg",
+      "replay_4": "frames/replay_4_00034.jpg",
+      "full_replay": "frames/large_native_00034.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8548489146438842,
+      "replay_1": 0.8548489146438842,
+      "replay_2": 0.8539475950955411,
+      "replay_4": 0.8456432819285962,
+      "full_replay": 0.851412359609917
+    }
+  },
+  {
+    "frame": 35,
+    "images": {
+      "gt": "frames/gt_00035.jpg",
+      "large_native": "frames/large_native_00035.jpg",
+      "direct_copy": "frames/direct_copy_00035.jpg",
+      "target_reset": "frames/target_reset_00035.jpg",
+      "last_mask": "frames/last_mask_00035.jpg",
+      "replay_1": "frames/replay_1_00035.jpg",
+      "replay_2": "frames/replay_2_00035.jpg",
+      "replay_4": "frames/replay_4_00035.jpg",
+      "full_replay": "frames/large_native_00035.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8524151666929682,
+      "replay_1": 0.8524151666929682,
+      "replay_2": 0.8521985966045127,
+      "replay_4": 0.8452521278482534,
+      "full_replay": 0.8509892692079526
+    }
+  },
+  {
+    "frame": 36,
+    "images": {
+      "gt": "frames/gt_00036.jpg",
+      "large_native": "frames/large_native_00036.jpg",
+      "direct_copy": "frames/direct_copy_00036.jpg",
+      "target_reset": "frames/target_reset_00036.jpg",
+      "last_mask": "frames/last_mask_00036.jpg",
+      "replay_1": "frames/replay_1_00036.jpg",
+      "replay_2": "frames/replay_2_00036.jpg",
+      "replay_4": "frames/replay_4_00036.jpg",
+      "full_replay": "frames/large_native_00036.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8562866256602586,
+      "replay_1": 0.8562866256602586,
+      "replay_2": 0.8546408465326045,
+      "replay_4": 0.8527409941374176,
+      "full_replay": 0.8542504002287077
+    }
+  },
+  {
+    "frame": 37,
+    "images": {
+      "gt": "frames/gt_00037.jpg",
+      "large_native": "frames/large_native_00037.jpg",
+      "direct_copy": "frames/direct_copy_00037.jpg",
+      "target_reset": "frames/target_reset_00037.jpg",
+      "last_mask": "frames/last_mask_00037.jpg",
+      "replay_1": "frames/replay_1_00037.jpg",
+      "replay_2": "frames/replay_2_00037.jpg",
+      "replay_4": "frames/replay_4_00037.jpg",
+      "full_replay": "frames/large_native_00037.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8545843556704577,
+      "replay_1": 0.8545843556704577,
+      "replay_2": 0.8542569307356249,
+      "replay_4": 0.8506967422045316,
+      "full_replay": 0.8544376395213803
+    }
+  },
+  {
+    "frame": 38,
+    "images": {
+      "gt": "frames/gt_00038.jpg",
+      "large_native": "frames/large_native_00038.jpg",
+      "direct_copy": "frames/direct_copy_00038.jpg",
+      "target_reset": "frames/target_reset_00038.jpg",
+      "last_mask": "frames/last_mask_00038.jpg",
+      "replay_1": "frames/replay_1_00038.jpg",
+      "replay_2": "frames/replay_2_00038.jpg",
+      "replay_4": "frames/replay_4_00038.jpg",
+      "full_replay": "frames/large_native_00038.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8540427889947262,
+      "replay_1": 0.8540427889947262,
+      "replay_2": 0.8533004288796819,
+      "replay_4": 0.8480936633039917,
+      "full_replay": 0.8534764210182122
+    }
+  },
+  {
+    "frame": 39,
+    "images": {
+      "gt": "frames/gt_00039.jpg",
+      "large_native": "frames/large_native_00039.jpg",
+      "direct_copy": "frames/direct_copy_00039.jpg",
+      "target_reset": "frames/target_reset_00039.jpg",
+      "last_mask": "frames/last_mask_00039.jpg",
+      "replay_1": "frames/replay_1_00039.jpg",
+      "replay_2": "frames/replay_2_00039.jpg",
+      "replay_4": "frames/replay_4_00039.jpg",
+      "full_replay": "frames/large_native_00039.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8521899773807433,
+      "replay_1": 0.8521899773807433,
+      "replay_2": 0.8515365341917486,
+      "replay_4": 0.850412854608413,
+      "full_replay": 0.8509495615222433
+    }
+  },
+  {
+    "frame": 40,
+    "images": {
+      "gt": "frames/gt_00040.jpg",
+      "large_native": "frames/large_native_00040.jpg",
+      "direct_copy": "frames/direct_copy_00040.jpg",
+      "target_reset": "frames/target_reset_00040.jpg",
+      "last_mask": "frames/last_mask_00040.jpg",
+      "replay_1": "frames/replay_1_00040.jpg",
+      "replay_2": "frames/replay_2_00040.jpg",
+      "replay_4": "frames/replay_4_00040.jpg",
+      "full_replay": "frames/large_native_00040.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8507751642773742,
+      "replay_1": 0.8507751642773742,
+      "replay_2": 0.8513323225991392,
+      "replay_4": 0.8511619155789213,
+      "full_replay": 0.8507963278190176
+    }
+  },
+  {
+    "frame": 41,
+    "images": {
+      "gt": "frames/gt_00041.jpg",
+      "large_native": "frames/large_native_00041.jpg",
+      "direct_copy": "frames/direct_copy_00041.jpg",
+      "target_reset": "frames/target_reset_00041.jpg",
+      "last_mask": "frames/last_mask_00041.jpg",
+      "replay_1": "frames/replay_1_00041.jpg",
+      "replay_2": "frames/replay_2_00041.jpg",
+      "replay_4": "frames/replay_4_00041.jpg",
+      "full_replay": "frames/large_native_00041.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8499884112101859,
+      "replay_1": 0.8499884112101859,
+      "replay_2": 0.8514792398603694,
+      "replay_4": 0.850593911153229,
+      "full_replay": 0.8517495795275514
+    }
+  },
+  {
+    "frame": 42,
+    "images": {
+      "gt": "frames/gt_00042.jpg",
+      "large_native": "frames/large_native_00042.jpg",
+      "direct_copy": "frames/direct_copy_00042.jpg",
+      "target_reset": "frames/target_reset_00042.jpg",
+      "last_mask": "frames/last_mask_00042.jpg",
+      "replay_1": "frames/replay_1_00042.jpg",
+      "replay_2": "frames/replay_2_00042.jpg",
+      "replay_4": "frames/replay_4_00042.jpg",
+      "full_replay": "frames/large_native_00042.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.85309501159236,
+      "replay_1": 0.85309501159236,
+      "replay_2": 0.8501306150659574,
+      "replay_4": 0.8496490695763415,
+      "full_replay": 0.8543560461806756
+    }
+  },
+  {
+    "frame": 43,
+    "images": {
+      "gt": "frames/gt_00043.jpg",
+      "large_native": "frames/large_native_00043.jpg",
+      "direct_copy": "frames/direct_copy_00043.jpg",
+      "target_reset": "frames/target_reset_00043.jpg",
+      "last_mask": "frames/last_mask_00043.jpg",
+      "replay_1": "frames/replay_1_00043.jpg",
+      "replay_2": "frames/replay_2_00043.jpg",
+      "replay_4": "frames/replay_4_00043.jpg",
+      "full_replay": "frames/large_native_00043.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8570139402700472,
+      "replay_1": 0.8570139402700472,
+      "replay_2": 0.8557615811925781,
+      "replay_4": 0.8521162376618427,
+      "full_replay": 0.8563709326486106
+    }
+  },
+  {
+    "frame": 44,
+    "images": {
+      "gt": "frames/gt_00044.jpg",
+      "large_native": "frames/large_native_00044.jpg",
+      "direct_copy": "frames/direct_copy_00044.jpg",
+      "target_reset": "frames/target_reset_00044.jpg",
+      "last_mask": "frames/last_mask_00044.jpg",
+      "replay_1": "frames/replay_1_00044.jpg",
+      "replay_2": "frames/replay_2_00044.jpg",
+      "replay_4": "frames/replay_4_00044.jpg",
+      "full_replay": "frames/large_native_00044.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8562622384896001,
+      "replay_1": 0.8562622384896001,
+      "replay_2": 0.8513152538892281,
+      "replay_4": 0.8493555443679744,
+      "full_replay": 0.8566302226409185
+    }
+  },
+  {
+    "frame": 45,
+    "images": {
+      "gt": "frames/gt_00045.jpg",
+      "large_native": "frames/large_native_00045.jpg",
+      "direct_copy": "frames/direct_copy_00045.jpg",
+      "target_reset": "frames/target_reset_00045.jpg",
+      "last_mask": "frames/last_mask_00045.jpg",
+      "replay_1": "frames/replay_1_00045.jpg",
+      "replay_2": "frames/replay_2_00045.jpg",
+      "replay_4": "frames/replay_4_00045.jpg",
+      "full_replay": "frames/large_native_00045.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8524832661587192,
+      "replay_1": 0.8524832661587192,
+      "replay_2": 0.8517662368485897,
+      "replay_4": 0.8493391107798243,
+      "full_replay": 0.8526401952081066
+    }
+  },
+  {
+    "frame": 46,
+    "images": {
+      "gt": "frames/gt_00046.jpg",
+      "large_native": "frames/large_native_00046.jpg",
+      "direct_copy": "frames/direct_copy_00046.jpg",
+      "target_reset": "frames/target_reset_00046.jpg",
+      "last_mask": "frames/last_mask_00046.jpg",
+      "replay_1": "frames/replay_1_00046.jpg",
+      "replay_2": "frames/replay_2_00046.jpg",
+      "replay_4": "frames/replay_4_00046.jpg",
+      "full_replay": "frames/large_native_00046.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8567056080021846,
+      "replay_1": 0.8567056080021846,
+      "replay_2": 0.8560068401989862,
+      "replay_4": 0.8537798403956789,
+      "full_replay": 0.8563067121006946
+    }
+  },
+  {
+    "frame": 47,
+    "images": {
+      "gt": "frames/gt_00047.jpg",
+      "large_native": "frames/large_native_00047.jpg",
+      "direct_copy": "frames/direct_copy_00047.jpg",
+      "target_reset": "frames/target_reset_00047.jpg",
+      "last_mask": "frames/last_mask_00047.jpg",
+      "replay_1": "frames/replay_1_00047.jpg",
+      "replay_2": "frames/replay_2_00047.jpg",
+      "replay_4": "frames/replay_4_00047.jpg",
+      "full_replay": "frames/large_native_00047.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8475963466082128,
+      "replay_1": 0.8475963466082128,
+      "replay_2": 0.8490242586237813,
+      "replay_4": 0.8459362207036216,
+      "full_replay": 0.8509205975527758
+    }
+  },
+  {
+    "frame": 48,
+    "images": {
+      "gt": "frames/gt_00048.jpg",
+      "large_native": "frames/large_native_00048.jpg",
+      "direct_copy": "frames/direct_copy_00048.jpg",
+      "target_reset": "frames/target_reset_00048.jpg",
+      "last_mask": "frames/last_mask_00048.jpg",
+      "replay_1": "frames/replay_1_00048.jpg",
+      "replay_2": "frames/replay_2_00048.jpg",
+      "replay_4": "frames/replay_4_00048.jpg",
+      "full_replay": "frames/large_native_00048.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8475069562014418,
+      "replay_1": 0.8475069562014418,
+      "replay_2": 0.8494271296351588,
+      "replay_4": 0.8472677648294771,
+      "full_replay": 0.8485739078817872
+    }
+  },
+  {
+    "frame": 49,
+    "images": {
+      "gt": "frames/gt_00049.jpg",
+      "large_native": "frames/large_native_00049.jpg",
+      "direct_copy": "frames/direct_copy_00049.jpg",
+      "target_reset": "frames/target_reset_00049.jpg",
+      "last_mask": "frames/last_mask_00049.jpg",
+      "replay_1": "frames/replay_1_00049.jpg",
+      "replay_2": "frames/replay_2_00049.jpg",
+      "replay_4": "frames/replay_4_00049.jpg",
+      "full_replay": "frames/large_native_00049.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8280765243322799,
+      "replay_1": 0.8280765243322799,
+      "replay_2": 0.8285470695437298,
+      "replay_4": 0.8280739910737063,
+      "full_replay": 0.8294629748477222
+    }
+  },
+  {
+    "frame": 50,
+    "images": {
+      "gt": "frames/gt_00050.jpg",
+      "large_native": "frames/large_native_00050.jpg",
+      "direct_copy": "frames/direct_copy_00050.jpg",
+      "target_reset": "frames/target_reset_00050.jpg",
+      "last_mask": "frames/last_mask_00050.jpg",
+      "replay_1": "frames/replay_1_00050.jpg",
+      "replay_2": "frames/replay_2_00050.jpg",
+      "replay_4": "frames/replay_4_00050.jpg",
+      "full_replay": "frames/large_native_00050.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8398109866621648,
+      "replay_1": 0.8398109866621648,
+      "replay_2": 0.845936746531984,
+      "replay_4": 0.8429016131668692,
+      "full_replay": 0.8460037076522451
+    }
+  },
+  {
+    "frame": 51,
+    "images": {
+      "gt": "frames/gt_00051.jpg",
+      "large_native": "frames/large_native_00051.jpg",
+      "direct_copy": "frames/direct_copy_00051.jpg",
+      "target_reset": "frames/target_reset_00051.jpg",
+      "last_mask": "frames/last_mask_00051.jpg",
+      "replay_1": "frames/replay_1_00051.jpg",
+      "replay_2": "frames/replay_2_00051.jpg",
+      "replay_4": "frames/replay_4_00051.jpg",
+      "full_replay": "frames/large_native_00051.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8529201606769611,
+      "replay_1": 0.8529201606769611,
+      "replay_2": 0.85404963003383,
+      "replay_4": 0.854275157042399,
+      "full_replay": 0.8576572402764315
+    }
+  },
+  {
+    "frame": 52,
+    "images": {
+      "gt": "frames/gt_00052.jpg",
+      "large_native": "frames/large_native_00052.jpg",
+      "direct_copy": "frames/direct_copy_00052.jpg",
+      "target_reset": "frames/target_reset_00052.jpg",
+      "last_mask": "frames/last_mask_00052.jpg",
+      "replay_1": "frames/replay_1_00052.jpg",
+      "replay_2": "frames/replay_2_00052.jpg",
+      "replay_4": "frames/replay_4_00052.jpg",
+      "full_replay": "frames/large_native_00052.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8557367946436978,
+      "replay_1": 0.8557367946436978,
+      "replay_2": 0.8563010933880166,
+      "replay_4": 0.8557754283041562,
+      "full_replay": 0.8567826364468383
+    }
+  },
+  {
+    "frame": 53,
+    "images": {
+      "gt": "frames/gt_00053.jpg",
+      "large_native": "frames/large_native_00053.jpg",
+      "direct_copy": "frames/direct_copy_00053.jpg",
+      "target_reset": "frames/target_reset_00053.jpg",
+      "last_mask": "frames/last_mask_00053.jpg",
+      "replay_1": "frames/replay_1_00053.jpg",
+      "replay_2": "frames/replay_2_00053.jpg",
+      "replay_4": "frames/replay_4_00053.jpg",
+      "full_replay": "frames/large_native_00053.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8510288239673582,
+      "replay_1": 0.8510288239673582,
+      "replay_2": 0.8567698461629883,
+      "replay_4": 0.8574145957704222,
+      "full_replay": 0.8572623779367687
+    }
+  },
+  {
+    "frame": 54,
+    "images": {
+      "gt": "frames/gt_00054.jpg",
+      "large_native": "frames/large_native_00054.jpg",
+      "direct_copy": "frames/direct_copy_00054.jpg",
+      "target_reset": "frames/target_reset_00054.jpg",
+      "last_mask": "frames/last_mask_00054.jpg",
+      "replay_1": "frames/replay_1_00054.jpg",
+      "replay_2": "frames/replay_2_00054.jpg",
+      "replay_4": "frames/replay_4_00054.jpg",
+      "full_replay": "frames/large_native_00054.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8574236177542867,
+      "replay_1": 0.8574236177542867,
+      "replay_2": 0.863922865491628,
+      "replay_4": 0.8637722125256633,
+      "full_replay": 0.8654205088362164
+    }
+  },
+  {
+    "frame": 55,
+    "images": {
+      "gt": "frames/gt_00055.jpg",
+      "large_native": "frames/large_native_00055.jpg",
+      "direct_copy": "frames/direct_copy_00055.jpg",
+      "target_reset": "frames/target_reset_00055.jpg",
+      "last_mask": "frames/last_mask_00055.jpg",
+      "replay_1": "frames/replay_1_00055.jpg",
+      "replay_2": "frames/replay_2_00055.jpg",
+      "replay_4": "frames/replay_4_00055.jpg",
+      "full_replay": "frames/large_native_00055.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8663117169906945,
+      "replay_1": 0.8663117169906945,
+      "replay_2": 0.873591276835335,
+      "replay_4": 0.8739005690498911,
+      "full_replay": 0.8814425424253884
+    }
+  },
+  {
+    "frame": 56,
+    "images": {
+      "gt": "frames/gt_00056.jpg",
+      "large_native": "frames/large_native_00056.jpg",
+      "direct_copy": "frames/direct_copy_00056.jpg",
+      "target_reset": "frames/target_reset_00056.jpg",
+      "last_mask": "frames/last_mask_00056.jpg",
+      "replay_1": "frames/replay_1_00056.jpg",
+      "replay_2": "frames/replay_2_00056.jpg",
+      "replay_4": "frames/replay_4_00056.jpg",
+      "full_replay": "frames/large_native_00056.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8780690454021907,
+      "replay_1": 0.8780690454021907,
+      "replay_2": 0.8849847665671757,
+      "replay_4": 0.884453366379998,
+      "full_replay": 0.8869117259957486
+    }
+  },
+  {
+    "frame": 57,
+    "images": {
+      "gt": "frames/gt_00057.jpg",
+      "large_native": "frames/large_native_00057.jpg",
+      "direct_copy": "frames/direct_copy_00057.jpg",
+      "target_reset": "frames/target_reset_00057.jpg",
+      "last_mask": "frames/last_mask_00057.jpg",
+      "replay_1": "frames/replay_1_00057.jpg",
+      "replay_2": "frames/replay_2_00057.jpg",
+      "replay_4": "frames/replay_4_00057.jpg",
+      "full_replay": "frames/large_native_00057.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8629665136297215,
+      "replay_1": 0.8629665136297215,
+      "replay_2": 0.871326401225738,
+      "replay_4": 0.8669736172747421,
+      "full_replay": 0.8893399598428784
+    }
+  },
+  {
+    "frame": 58,
+    "images": {
+      "gt": "frames/gt_00058.jpg",
+      "large_native": "frames/large_native_00058.jpg",
+      "direct_copy": "frames/direct_copy_00058.jpg",
+      "target_reset": "frames/target_reset_00058.jpg",
+      "last_mask": "frames/last_mask_00058.jpg",
+      "replay_1": "frames/replay_1_00058.jpg",
+      "replay_2": "frames/replay_2_00058.jpg",
+      "replay_4": "frames/replay_4_00058.jpg",
+      "full_replay": "frames/large_native_00058.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8719380075844672,
+      "replay_1": 0.8719380075844672,
+      "replay_2": 0.8760866502652971,
+      "replay_4": 0.8756470668677006,
+      "full_replay": 0.876452673153134
+    }
+  },
+  {
+    "frame": 59,
+    "images": {
+      "gt": "frames/gt_00059.jpg",
+      "large_native": "frames/large_native_00059.jpg",
+      "direct_copy": "frames/direct_copy_00059.jpg",
+      "target_reset": "frames/target_reset_00059.jpg",
+      "last_mask": "frames/last_mask_00059.jpg",
+      "replay_1": "frames/replay_1_00059.jpg",
+      "replay_2": "frames/replay_2_00059.jpg",
+      "replay_4": "frames/replay_4_00059.jpg",
+      "full_replay": "frames/large_native_00059.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.883205113057295,
+      "replay_1": 0.883205113057295,
+      "replay_2": 0.8782885636946093,
+      "replay_4": 0.8782721668113531,
+      "full_replay": 0.8825473133004438
+    }
+  },
+  {
+    "frame": 60,
+    "images": {
+      "gt": "frames/gt_00060.jpg",
+      "large_native": "frames/large_native_00060.jpg",
+      "direct_copy": "frames/direct_copy_00060.jpg",
+      "target_reset": "frames/target_reset_00060.jpg",
+      "last_mask": "frames/last_mask_00060.jpg",
+      "replay_1": "frames/replay_1_00060.jpg",
+      "replay_2": "frames/replay_2_00060.jpg",
+      "replay_4": "frames/replay_4_00060.jpg",
+      "full_replay": "frames/large_native_00060.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8758299467231325,
+      "replay_1": 0.8758299467231325,
+      "replay_2": 0.8818736754460448,
+      "replay_4": 0.8812246462248569,
+      "full_replay": 0.8814154666765825
+    }
+  },
+  {
+    "frame": 61,
+    "images": {
+      "gt": "frames/gt_00061.jpg",
+      "large_native": "frames/large_native_00061.jpg",
+      "direct_copy": "frames/direct_copy_00061.jpg",
+      "target_reset": "frames/target_reset_00061.jpg",
+      "last_mask": "frames/last_mask_00061.jpg",
+      "replay_1": "frames/replay_1_00061.jpg",
+      "replay_2": "frames/replay_2_00061.jpg",
+      "replay_4": "frames/replay_4_00061.jpg",
+      "full_replay": "frames/large_native_00061.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8798832893275299,
+      "replay_1": 0.8798832893275299,
+      "replay_2": 0.8810078773710103,
+      "replay_4": 0.8810612819742245,
+      "full_replay": 0.8809795135530685
+    }
+  },
+  {
+    "frame": 62,
+    "images": {
+      "gt": "frames/gt_00062.jpg",
+      "large_native": "frames/large_native_00062.jpg",
+      "direct_copy": "frames/direct_copy_00062.jpg",
+      "target_reset": "frames/target_reset_00062.jpg",
+      "last_mask": "frames/last_mask_00062.jpg",
+      "replay_1": "frames/replay_1_00062.jpg",
+      "replay_2": "frames/replay_2_00062.jpg",
+      "replay_4": "frames/replay_4_00062.jpg",
+      "full_replay": "frames/large_native_00062.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8826024789953482,
+      "replay_1": 0.8826024789953482,
+      "replay_2": 0.8874550948484522,
+      "replay_4": 0.887214586232898,
+      "full_replay": 0.8870617866139867
+    }
+  },
+  {
+    "frame": 63,
+    "images": {
+      "gt": "frames/gt_00063.jpg",
+      "large_native": "frames/large_native_00063.jpg",
+      "direct_copy": "frames/direct_copy_00063.jpg",
+      "target_reset": "frames/target_reset_00063.jpg",
+      "last_mask": "frames/last_mask_00063.jpg",
+      "replay_1": "frames/replay_1_00063.jpg",
+      "replay_2": "frames/replay_2_00063.jpg",
+      "replay_4": "frames/replay_4_00063.jpg",
+      "full_replay": "frames/large_native_00063.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8851428963815873,
+      "replay_1": 0.8851428963815873,
+      "replay_2": 0.8807499520117201,
+      "replay_4": 0.8820733063871125,
+      "full_replay": 0.8885339575456302
+    }
+  },
+  {
+    "frame": 64,
+    "images": {
+      "gt": "frames/gt_00064.jpg",
+      "large_native": "frames/large_native_00064.jpg",
+      "direct_copy": "frames/direct_copy_00064.jpg",
+      "target_reset": "frames/target_reset_00064.jpg",
+      "last_mask": "frames/last_mask_00064.jpg",
+      "replay_1": "frames/replay_1_00064.jpg",
+      "replay_2": "frames/replay_2_00064.jpg",
+      "replay_4": "frames/replay_4_00064.jpg",
+      "full_replay": "frames/large_native_00064.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.881053275706073,
+      "replay_1": 0.881053275706073,
+      "replay_2": 0.8798037584078774,
+      "replay_4": 0.8801959511898786,
+      "full_replay": 0.8869337663044558
+    }
+  },
+  {
+    "frame": 65,
+    "images": {
+      "gt": "frames/gt_00065.jpg",
+      "large_native": "frames/large_native_00065.jpg",
+      "direct_copy": "frames/direct_copy_00065.jpg",
+      "target_reset": "frames/target_reset_00065.jpg",
+      "last_mask": "frames/last_mask_00065.jpg",
+      "replay_1": "frames/replay_1_00065.jpg",
+      "replay_2": "frames/replay_2_00065.jpg",
+      "replay_4": "frames/replay_4_00065.jpg",
+      "full_replay": "frames/large_native_00065.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8855181246707029,
+      "replay_1": 0.8855181246707029,
+      "replay_2": 0.8867013353250529,
+      "replay_4": 0.8869474404300743,
+      "full_replay": 0.888262511677075
+    }
+  },
+  {
+    "frame": 66,
+    "images": {
+      "gt": "frames/gt_00066.jpg",
+      "large_native": "frames/large_native_00066.jpg",
+      "direct_copy": "frames/direct_copy_00066.jpg",
+      "target_reset": "frames/target_reset_00066.jpg",
+      "last_mask": "frames/last_mask_00066.jpg",
+      "replay_1": "frames/replay_1_00066.jpg",
+      "replay_2": "frames/replay_2_00066.jpg",
+      "replay_4": "frames/replay_4_00066.jpg",
+      "full_replay": "frames/large_native_00066.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.8798424361121975,
+      "replay_1": 0.8798424361121975,
+      "replay_2": 0.8811771306423537,
+      "replay_4": 0.8815773826233586,
+      "full_replay": 0.8869949280763122
+    }
+  },
+  {
+    "frame": 67,
+    "images": {
+      "gt": "frames/gt_00067.jpg",
+      "large_native": "frames/large_native_00067.jpg",
+      "direct_copy": "frames/direct_copy_00067.jpg",
+      "target_reset": "frames/target_reset_00067.jpg",
+      "last_mask": "frames/last_mask_00067.jpg",
+      "replay_1": "frames/replay_1_00067.jpg",
+      "replay_2": "frames/replay_2_00067.jpg",
+      "replay_4": "frames/replay_4_00067.jpg",
+      "full_replay": "frames/large_native_00067.jpg"
+    },
+    "scores": {
+      "direct_copy": 0.0,
+      "target_reset": 0.0,
+      "last_mask": 0.876914460540558,
+      "replay_1": 0.876914460540558,
+      "replay_2": 0.8841868859233584,
+      "replay_4": 0.8803553769147792,
+      "full_replay": 0.8867007131807614
+    }
+  }
+]
