@@ -645,6 +645,21 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   cache 이후 target continuation만 실행하고 공통 준비 비용과 candidate 비용을
   따로 보고한다. 로컬 test는 `26 passed`; 실제 SAM 2 checkpoint smoke는 RunPod
   접속 복구 후 수행할 미검증 항목이다.
+- **[실제 L4 검증 — 2026-09-09]** 새 Secure Cloud Pod는 L4 23,034MiB,
+  20GB container disk, 200GB Network Volume(`/workspace`)이다. 빈 volume에 최신
+  CMMT `92629a9`, pinned SAM 2 `2b90b9f5...`, checksum이 일치하는 Tiny/Large
+  checkpoint와 DAVIS 2017 TrainVal 480p를 재구성했고 RunPod test `26 passed`였다.
+- **[고정 평가 manifest — 2026-09-09]** 실제 DAVIS val 30 sequences에서 249개
+  video/object/switch case를 생성했으며 제외 case는 0이다. Content SHA-256은
+  `7b8fdab3abf312eaf8972a2fd579f54b35b388b23e741c0af07480e6e375b6d1`이다.
+  GT는 case 선택과 tag에만 사용되며 model input으로 사용하지 않는다.
+- **[Pilot — cache equivalence/throughput]** val `bike-packing`, object 1, switch 14에서
+  공통 Tiny prefix+Large oracle 준비는 45.2708초, peak 1.660GB, cache 184.1MB였다.
+  Cached Direct는 30.6552초, 기존 전체 Direct는 73.2373초였고 54개 future frame의
+  결과가 정확히 같았다. 주입 전/중 target backbone 호출은 0, future 호출은 54다.
+  Direct의 target-native agreement IoU는 0, logit MSE는 94.9600으로 Direct 실패
+  case지만 cache correctness는 통과했다. 6개 동일비용 candidate 가정 시 439초에서
+  229초로 약 48% 줄어든다. GT J&F 평가는 아직 별도다.
 - **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.

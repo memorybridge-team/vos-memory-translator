@@ -1,0 +1,332 @@
+{
+  "source_model_id": "sam2.1-hiera-tiny",
+  "target_model_id": "sam2.1-hiera-large",
+  "upstream_commit": "2b90b9f5ceec907a1c18123530e92e794ad901a4",
+  "video_id": "bike-packing",
+  "object_id": 1,
+  "switch_frame": 14,
+  "num_frames": 69,
+  "seed": 7,
+  "device": "cuda",
+  "path_policy": "runtime_paths_not_stored",
+  "preparation_resources": {
+    "wall_time_seconds": 45.27081607654691,
+    "peak_cuda_memory_bytes": 1660070400
+  },
+  "source_contract": {
+    "schema_version": "cmmt.canonical_state.v1",
+    "switch_frame": 14,
+    "object_ids": [
+      "1"
+    ],
+    "valid_record_count": 15,
+    "continuous_bytes": 7879740,
+    "tensors": {
+      "spatial_memory": {
+        "shape": [
+          1,
+          1,
+          15,
+          64,
+          64,
+          64
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record",
+          "channel",
+          "height",
+          "width"
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu",
+        "bytes": 7864320,
+        "policy": "translate"
+      },
+      "object_pointer": {
+        "shape": [
+          1,
+          1,
+          15,
+          256
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record",
+          "feature"
+        ],
+        "dtype": "torch.float32",
+        "device": "cuda:0",
+        "bytes": 15360,
+        "policy": "translate"
+      },
+      "presence_logits": {
+        "shape": [
+          1,
+          1,
+          15,
+          1
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record",
+          "scalar"
+        ],
+        "dtype": "torch.float32",
+        "device": "cuda:0",
+        "bytes": 60,
+        "policy": "calibrate"
+      },
+      "frame_indices": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.int64",
+        "device": "cpu",
+        "bytes": 120,
+        "policy": "preserve"
+      },
+      "slot_order": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.int64",
+        "device": "cpu",
+        "bytes": 120,
+        "policy": "preserve"
+      },
+      "is_conditioning": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.bool",
+        "device": "cpu",
+        "bytes": 15,
+        "policy": "preserve"
+      },
+      "validity": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.bool",
+        "device": "cpu",
+        "bytes": 15,
+        "policy": "preserve"
+      }
+    },
+    "positional_information": {
+      "policy": "source_observed_do_not_translate",
+      "keys": [
+        "policy",
+        "records"
+      ]
+    },
+    "metadata_keys": [
+      "compute_device",
+      "frames_tracked_per_obj",
+      "num_frames",
+      "object_indices",
+      "preserved_inputs",
+      "preserved_pred_masks",
+      "source",
+      "storage_device",
+      "video_height",
+      "video_width"
+    ]
+  },
+  "target_contract": {
+    "schema_version": "cmmt.canonical_state.v1",
+    "switch_frame": 14,
+    "object_ids": [
+      "1"
+    ],
+    "valid_record_count": 15,
+    "continuous_bytes": 7879740,
+    "tensors": {
+      "spatial_memory": {
+        "shape": [
+          1,
+          1,
+          15,
+          64,
+          64,
+          64
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record",
+          "channel",
+          "height",
+          "width"
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cpu",
+        "bytes": 7864320,
+        "policy": "translate"
+      },
+      "object_pointer": {
+        "shape": [
+          1,
+          1,
+          15,
+          256
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record",
+          "feature"
+        ],
+        "dtype": "torch.float32",
+        "device": "cuda:0",
+        "bytes": 15360,
+        "policy": "translate"
+      },
+      "presence_logits": {
+        "shape": [
+          1,
+          1,
+          15,
+          1
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record",
+          "scalar"
+        ],
+        "dtype": "torch.float32",
+        "device": "cuda:0",
+        "bytes": 60,
+        "policy": "calibrate"
+      },
+      "frame_indices": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.int64",
+        "device": "cpu",
+        "bytes": 120,
+        "policy": "preserve"
+      },
+      "slot_order": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.int64",
+        "device": "cpu",
+        "bytes": 120,
+        "policy": "preserve"
+      },
+      "is_conditioning": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.bool",
+        "device": "cpu",
+        "bytes": 15,
+        "policy": "preserve"
+      },
+      "validity": {
+        "shape": [
+          1,
+          1,
+          15
+        ],
+        "axes": [
+          "batch",
+          "object",
+          "record"
+        ],
+        "dtype": "torch.bool",
+        "device": "cpu",
+        "bytes": 15,
+        "policy": "preserve"
+      }
+    },
+    "positional_information": {
+      "policy": "source_observed_do_not_translate",
+      "keys": [
+        "policy",
+        "records"
+      ]
+    },
+    "metadata_keys": [
+      "compute_device",
+      "frames_tracked_per_obj",
+      "num_frames",
+      "object_indices",
+      "preserved_inputs",
+      "preserved_pred_masks",
+      "source",
+      "storage_device",
+      "video_height",
+      "video_width"
+    ]
+  },
+  "resources": {
+    "wall_time_seconds": 45.27081607654691,
+    "peak_cuda_memory_bytes": 1660070400
+  },
+  "cache": {
+    "schema_version": "cmmt.prepared_handoff_case.v1",
+    "path": "/workspace/CMMT/outputs/case_cache/bike-packing_obj1_switch14.pt",
+    "sha256": "2d0a8b88d47095f28ca25bb156e326ab98a46c1cd51baff83894721f835663cd",
+    "bytes": 184075799,
+    "source_prefix_frames": 15,
+    "target_oracle_future_frames": 54
+  }
+}

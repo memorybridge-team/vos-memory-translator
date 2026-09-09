@@ -5,3 +5,7 @@
 - `davis2017_phase1_manifest_policy.json`: DAVIS Phase 1 manifest의 일반
   quantile, 최소 prefix/future 길이와 GT event tag 기준입니다. 실제 case 목록에는
   절대 dataset 경로를 저장하지 않습니다.
+- `manifests/davis2017_val_phase1.json`: 실제 DAVIS 2017 val 30 sequences에서
+  생성한 249개 video/object/switch case. Content SHA-256은
+  `7b8fdab3abf312eaf8972a2fd579f54b35b388b23e741c0af07480e6e375b6d1`이며
+  dataset 절대 경로나 GT pixel을 포함하지 않습니다.
