@@ -1,5 +1,9 @@
 # SAM 2.1 temporal-memory tensor inventory
 
+The injection-oriented Small/Large schema is maintained in
+[`sam2_memory_schema.md`](sam2_memory_schema.md). This original inventory
+documents the probe milestone and remains the source for manifest field routes.
+
 ## Reproducibility boundary
 
 This inventory was verified against the official `facebookresearch/sam2`
@@ -104,4 +108,3 @@ shape, dtype, device placement, per-frame variation, and consumer-input capture.
   fail clearly if the expected methods or keyword arguments disappear.
 - Checkpoint architecture equality must be checked from runtime manifests, not
   inferred solely from YAML files.
-
