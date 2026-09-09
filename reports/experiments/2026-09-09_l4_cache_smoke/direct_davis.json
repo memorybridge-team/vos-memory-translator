@@ -1,0 +1,334 @@
+{
+  "schema_version": "cmmt.davis_future_evaluation.v1",
+  "scope": "partial_sequence_after_switch",
+  "warning": "This is a single-object, partial-sequence score from start_frame onward; it is not the full DAVIS benchmark score.",
+  "metric_source": "davisvideochallenge/davis2017-evaluation@ac7c43fca936f9722837b7fbd337d284ba37004b",
+  "sequence": "bike-packing",
+  "object_id": 1,
+  "start_frame": 15,
+  "end_frame": 67,
+  "evaluated_frames": 53,
+  "mean_J": 0.0,
+  "mean_F": 0.0,
+  "mean_J_and_F": 0.0,
+  "frames": [
+    {
+      "frame": 15,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 16,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 17,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 18,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 19,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 20,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 21,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 22,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 23,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 24,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 25,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 26,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 27,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 28,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 29,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 30,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 31,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 32,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 33,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 34,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 35,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 36,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 37,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 38,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 39,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 40,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 41,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 42,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 43,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 44,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 45,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 46,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 47,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 48,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 49,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 50,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 51,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 52,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 53,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 54,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 55,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 56,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 57,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 58,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 59,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 60,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 61,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 62,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 63,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 64,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 65,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 66,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    },
+    {
+      "frame": 67,
+      "J": 0.0,
+      "F": 0.0,
+      "J_and_F": 0.0
+    }
+  ]
+}

@@ -32,11 +32,16 @@ future output을 만드는지 검증했다.
 | Future backbone 호출 | 54 |
 | Large-native agreement IoU | 0.0 |
 | Large-native logit MSE | 94.9600334 |
+| Large-native DAVIS J&F, frames 15–67 | 0.8615351 |
+| Direct DAVIS J&F, frames 15–67 | 0.0 |
 
 Cached와 legacy 실행의 54개 frame별 결과는 정확히 같았다. 따라서 cache 경로는
 실험 결과를 바꾸지 않으면서 두 번째 방법부터 source prefix와 oracle 재계산을
 제거한다. Direct의 native-agreement IoU 0은 이 case에서 Direct Transfer가 실패한
-결과이지 cache 실패가 아니다. DAVIS GT J&F는 아직 이 smoke에 포함하지 않았다.
+결과이지 cache 실패가 아니다. 공식 DAVIS evaluator로 마지막 video frame을 제외한
+frames 15–67을 평가했을 때 Large-native J&F는 0.861535, Direct는 0이었다. 즉 이
+case는 단순 state shape copy가 target의 의미 공간을 전혀 보존하지 못한 명확한
+실패 사례다. 한 case의 partial score이므로 전체 DAVIS benchmark 결과는 아니다.
 
 6개 candidate를 비교하면 기존 방식의 단순 예상은 약 `6×73.24=439초`, cache
 방식은 `45.27+6×30.66=229초`로 약 48% 줄어든다. 실제 각 baseline의 replay 비용이
@@ -47,6 +52,19 @@ Cached와 legacy 실행의 54개 frame별 결과는 정확히 같았다. 따라�
 - `bike-packing_obj1_switch14.prepare.json`: 공통 reference/cache 생성
 - `bike-packing_obj1_switch14.direct.json`: cached Direct
 - `bike-packing_obj1_switch14.legacy-direct.json`: 기존 전체 Direct 대조
+- `oracle_davis.json`, `direct_davis.json`: 공식 DAVIS partial J&F
+- `frame_00015.png`, `frame_00030.png`, `frame_00050.png`, `frame_00067.png`:
+  GT / Large-native / Direct / agreement 대표 프레임
 
 Raw `.pt` cache, DAVIS 원본과 checkpoint는 Network Volume에만 보존하고 Git에는
 올리지 않는다.
+
+## 대표 프레임
+
+![frame 15](frame_00015.png)
+
+![frame 30](frame_00030.png)
+
+![frame 50](frame_00050.png)
+
+![frame 67](frame_00067.png)

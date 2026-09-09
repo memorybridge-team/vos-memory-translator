@@ -659,7 +659,9 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   결과가 정확히 같았다. 주입 전/중 target backbone 호출은 0, future 호출은 54다.
   Direct의 target-native agreement IoU는 0, logit MSE는 94.9600으로 Direct 실패
   case지만 cache correctness는 통과했다. 6개 동일비용 candidate 가정 시 439초에서
-  229초로 약 48% 줄어든다. GT J&F 평가는 아직 별도다.
+  229초로 약 48% 줄어든다. 공식 DAVIS evaluator로 마지막 frame을 제외한 15–67을
+  평가한 Large-native J&F는 0.861535, Direct는 0이었다. 이는 one-case partial
+  result이지 전체 DAVIS benchmark가 아니다.
 - **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.
