@@ -42,6 +42,10 @@ def test_partial_davis_evaluation_uses_object_label_and_start_frame(tmp_path) ->
     assert report["scope"] == "partial_sequence_after_switch"
     assert report["evaluated_frames"] == 2
     assert report["mean_J_and_F"] == 1.0
+    assert report["ground_truth_visible"]["frames"] == 2
+    assert report["ground_truth_visible"]["mean_J_and_F"] == 1.0
+    assert report["ground_truth_absent"]["frames"] == 0
+    assert report["ground_truth_absent"]["mean_J_and_F"] is None
 
     truncated = evaluate_davis_future_masks(
         prediction_directory=predictions,
@@ -56,3 +60,42 @@ def test_partial_davis_evaluation_uses_object_label_and_start_frame(tmp_path) ->
     )
     assert truncated["end_frame"] == 1
     assert truncated["evaluated_frames"] == 1
+
+
+def test_partial_davis_evaluation_separates_visible_and_absent_gt(tmp_path) -> None:
+    predictions = tmp_path / "predictions"
+    annotations = tmp_path / "annotations"
+    predictions.mkdir()
+    annotations.mkdir()
+
+    visible_gt = np.zeros((4, 4), dtype=np.uint8)
+    visible_gt[1:3, 1:3] = 3
+    Image.fromarray(np.zeros((4, 4), dtype=np.uint8)).save(
+        predictions / "frame_00001.png"
+    )
+    Image.fromarray(visible_gt).save(annotations / "00001.png")
+    Image.fromarray(np.zeros((4, 4), dtype=np.uint8)).save(
+        predictions / "frame_00002.png"
+    )
+    Image.fromarray(np.zeros((4, 4), dtype=np.uint8)).save(
+        annotations / "00002.png"
+    )
+
+    report = evaluate_davis_future_masks(
+        prediction_directory=predictions,
+        annotation_directory=annotations,
+        object_id=3,
+        start_frame=1,
+        iou_metric=_iou,
+        boundary_metric=_same_as_iou,
+        metric_source="test",
+        sequence="occlusion",
+    )
+
+    assert report["mean_J_and_F"] == 0.5
+    assert report["ground_truth_visible"]["frames"] == 1
+    assert report["ground_truth_visible"]["mean_J_and_F"] == 0.0
+    assert report["ground_truth_absent"]["frames"] == 1
+    assert report["ground_truth_absent"]["mean_J_and_F"] == 1.0
+    assert report["frames"][0]["ground_truth_present"] is True
+    assert report["frames"][1]["ground_truth_present"] is False

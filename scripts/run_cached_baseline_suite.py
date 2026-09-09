@@ -72,6 +72,10 @@ def _metric_row(
         "mean_J": davis["mean_J"],
         "mean_F": davis["mean_F"],
         "mean_J_and_F": davis["mean_J_and_F"],
+        "ground_truth_visible_frames": davis["ground_truth_visible"]["frames"],
+        "mean_visible_J_and_F": davis["ground_truth_visible"]["mean_J_and_F"],
+        "ground_truth_absent_frames": davis["ground_truth_absent"]["frames"],
+        "mean_absent_J_and_F": davis["ground_truth_absent"]["mean_J_and_F"],
         "mean_binary_iou_to_target_native": comparison["mean_binary_iou"],
         "wall_time_seconds": resources["wall_time_seconds"],
         "peak_cuda_memory_bytes": resources["peak_cuda_memory_bytes"],
@@ -97,18 +101,20 @@ def _write_summary(output_dir: Path, summary: dict[str, Any]) -> None:
         f"- Evaluated frames: `{summary['start_frame']}–{summary['end_frame']}`",
         f"- Last-Mask = Replay-1 sanity check: `{summary['sanity_checks']['last_mask_equals_replay_1']}`",
         "",
-        "| Method | Prompt/input | Prefix frames | J&F | Native IoU | Wall s | Peak GiB | Past backbone | Future backbone |",
-        "|---|---|---:|---:|---:|---:|---:|---:|---:|",
+        "| Method | Prompt/input | Prefix frames | J&F | Visible J&F | Native IoU | Wall s | Peak GiB | Past backbone | Future backbone |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in summary["methods"]:
         peak = row["peak_cuda_memory_bytes"]
         peak_gib = "n/a" if peak is None else f"{peak / (1024 ** 3):.3f}"
+        visible_jf = row["mean_visible_J_and_F"]
+        visible_jf_text = "n/a" if visible_jf is None else f"{visible_jf:.6f}"
         lines.append(
             "| {label} | `{prompt_source}` | {history_frames_reprocessed} | "
-            "{mean_J_and_F:.6f} | {mean_binary_iou_to_target_native:.6f} | "
+            "{mean_J_and_F:.6f} | {visible_jf_text} | {mean_binary_iou_to_target_native:.6f} | "
             "{wall_time_seconds:.3f} | {peak_gib} | "
             "{backbone_calls_before_or_at_switch} | {backbone_calls_during_future} |".format(
-                peak_gib=peak_gib, **row
+                peak_gib=peak_gib, visible_jf_text=visible_jf_text, **row
             )
         )
     lines.extend(
@@ -117,6 +123,10 @@ def _write_summary(output_dir: Path, summary: dict[str, Any]) -> None:
             "`target_reset` is a SAM 2 runtime proxy: an all-zero mask registers the "
             "object on the switch frame, but no source object information or temporal "
             "memory is transferred.",
+            "",
+            "Visible J&F averages only frames where the selected object exists in "
+            "DAVIS GT. It prevents empty-GT/empty-prediction frames from making a "
+            "failed reappearance look successful.",
             "",
         )
     )

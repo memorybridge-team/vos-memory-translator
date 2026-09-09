@@ -80,7 +80,7 @@ def evaluate_davis_future_masks(
         missing = sorted(set(expected) - set(frames))
         raise ValueError(f"Prediction frame sequence is not contiguous; missing={missing}")
 
-    rows: list[dict[str, float | int]] = []
+    rows: list[dict[str, float | int | bool]] = []
     for frame in frames:
         annotation_path = annotation_directory / f"{frame:05d}.png"
         if not annotation_path.is_file():
@@ -95,7 +95,28 @@ def evaluate_davis_future_masks(
             )
         j = float(iou_metric(annotation, prediction))
         f = float(boundary_metric(annotation, prediction))
-        rows.append({"frame": frame, "J": j, "F": f, "J_and_F": (j + f) / 2})
+        rows.append(
+            {
+                "frame": frame,
+                "ground_truth_present": bool(annotation.any()),
+                "prediction_present": bool(prediction.any()),
+                "J": j,
+                "F": f,
+                "J_and_F": (j + f) / 2,
+            }
+        )
+
+    visible_rows = [row for row in rows if row["ground_truth_present"]]
+    absent_rows = [row for row in rows if not row["ground_truth_present"]]
+
+    def subset_means(subset: list[dict[str, float | int | bool]]) -> dict[str, Any]:
+        if not subset:
+            return {"mean_J": None, "mean_F": None, "mean_J_and_F": None}
+        return {
+            "mean_J": mean(float(row["J"]) for row in subset),
+            "mean_F": mean(float(row["F"]) for row in subset),
+            "mean_J_and_F": mean(float(row["J_and_F"]) for row in subset),
+        }
 
     return {
         "schema_version": "cmmt.davis_future_evaluation.v1",
@@ -113,6 +134,14 @@ def evaluate_davis_future_masks(
         "mean_J": mean(float(row["J"]) for row in rows),
         "mean_F": mean(float(row["F"]) for row in rows),
         "mean_J_and_F": mean(float(row["J_and_F"]) for row in rows),
+        "ground_truth_visible": {
+            "frames": len(visible_rows),
+            **subset_means(visible_rows),
+        },
+        "ground_truth_absent": {
+            "frames": len(absent_rows),
+            **subset_means(absent_rows),
+        },
         "frames": rows,
     }
 
@@ -122,6 +151,10 @@ def write_davis_future_report(report: dict[str, Any], output: str | Path) -> Non
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")
     markdown = output.with_suffix(".md")
+    visible = report["ground_truth_visible"]
+    absent = report["ground_truth_absent"]
+    visible_jf = visible["mean_J_and_F"]
+    absent_jf = absent["mean_J_and_F"]
     markdown.write_text(
         "\n".join(
             [
@@ -136,6 +169,12 @@ def write_davis_future_report(report: dict[str, Any], output: str | Path) -> Non
                 f"- Mean J: {report['mean_J']:.6f}",
                 f"- Mean F: {report['mean_F']:.6f}",
                 f"- Mean J&F: {report['mean_J_and_F']:.6f}",
+                "- GT-visible J&F: "
+                + ("n/a" if visible_jf is None else f"{visible_jf:.6f}")
+                + f" ({visible['frames']} frames)",
+                "- GT-absent J&F: "
+                + ("n/a" if absent_jf is None else f"{absent_jf:.6f}")
+                + f" ({absent['frames']} frames)",
                 f"- Metric source: `{report['metric_source']}`",
                 "",
             ]

@@ -62,13 +62,20 @@ def _html(records: list[dict[str, object]], summary: dict[str, object]) -> str:
     )
     rows = []
     for row in summary["methods"]:
+        visible_jf = row.get("mean_visible_J_and_F")
+        visible_jf_text = "n/a" if visible_jf is None else f"{visible_jf:.6f}"
         rows.append(
             "<tr><td>{label}</td><td>{prompt_source}</td><td>{history_frames_reprocessed}</td>"
-            "<td>{mean_J_and_F:.6f}</td><td>{mean_binary_iou_to_target_native:.6f}</td>"
+            "<td>{mean_J_and_F:.6f}</td><td>{visible_jf_text}</td><td>{mean_binary_iou_to_target_native:.6f}</td>"
             "<td>{wall_time_seconds:.3f}</td><td>{backbone_calls_before_or_at_switch}</td></tr>".format(
-                **row
+                visible_jf_text=visible_jf_text, **row
             )
         )
+    sequence = str(summary["sequence"])
+    object_id = int(summary["object_id"])
+    switch_frame = int(summary["switch_frame"])
+    start_frame = int(summary["start_frame"])
+    end_frame = int(summary["end_frame"])
     template = """<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CMMT cached baseline suite</title>
@@ -76,11 +83,11 @@ def _html(records: list[dict[str, object]], summary: dict[str, object]) -> str:
 body{margin:0;background:#0d1117;color:#e6edf3;font:15px/1.55 system-ui,sans-serif}main{max-width:1420px;margin:36px auto;padding:0 20px}a{color:#58a6ff}.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:18px;margin:18px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid img{width:100%;border-radius:8px;background:#fff}.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}.controls label{display:flex;flex-direction:column;gap:5px}select,input{width:100%}table{border-collapse:collapse;width:100%;overflow:auto;display:block}th,td{padding:8px 10px;border-bottom:1px solid #30363d;text-align:right;white-space:nowrap}th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}.note{color:#9da7b3}.score{font-family:ui-monospace,monospace}canvas{width:100%;height:360px;background:white;border-radius:8px}video{width:100%;border-radius:8px}@media(max-width:850px){.grid,.controls{grid-template-columns:1fr}}
 </style></head><body><main>
 <p class="note">Cross-Model Memory Translator · Phase 1 engineering result</p>
-<h1>DAVIS bike-packing baseline 비교</h1>
-<p>Object 1, switch frame 14 이후 frames 15–67의 단일 사례 결과입니다. 전체 DAVIS benchmark가 아닙니다.</p>
-<div class="card"><h2>핵심 결과</h2><div style="overflow:auto"><table><thead><tr><th>방법</th><th>입력</th><th>과거 처리 frame</th><th>J&amp;F</th><th>Native IoU</th><th>시간(s)</th><th>과거 backbone</th></tr></thead><tbody>__TABLE_ROWS__</tbody></table></div>
-<p class="note">Target Reset은 SAM 2 객체 슬롯 등록을 위해 switch frame에 빈 mask만 넣은 proxy입니다. Last-Mask와 Replay-1은 정의상 같은 결과여야 하며 실제로 일치했습니다.</p></div>
-<div class="card"><h2>전체 결과 영상</h2><video controls loop muted src="baseline_suite.mp4"></video><p class="note">영상 패널: GT / Large-native / Direct / Last-Mask / Replay-2.</p></div>
+<h1>DAVIS __SEQUENCE__ baseline 비교</h1>
+<p>Object __OBJECT_ID__, switch frame __SWITCH_FRAME__ 이후 frames __START_FRAME__–__END_FRAME__의 단일 사례 결과입니다. 전체 DAVIS benchmark가 아닙니다.</p>
+<div class="card"><h2>핵심 결과</h2><div style="overflow:auto"><table><thead><tr><th>방법</th><th>입력</th><th>과거 처리 frame</th><th>전체 J&amp;F</th><th>GT-visible J&amp;F</th><th>Native IoU</th><th>시간(s)</th><th>과거 backbone</th></tr></thead><tbody>__TABLE_ROWS__</tbody></table></div>
+<p class="note">Visible J&amp;F는 GT에 대상이 존재하는 프레임만 평균냅니다. Target Reset은 SAM 2 객체 슬롯 등록을 위해 switch frame에 빈 mask만 넣은 proxy입니다. Last-Mask와 Replay-1은 정의상 같은 결과여야 하며 실제로 일치했습니다.</p></div>
+<div class="card"><h2>전체 결과 영상</h2><video controls loop muted src="baseline_suite.mp4"></video><p class="note">영상 패널: GT / Large-native / Direct / Last-Mask / Replay-2 / Replay-4.</p></div>
 <div class="card"><h2>Frame별 J&amp;F</h2><canvas id="chart" width="1320" height="360"></canvas></div>
 <div class="card"><h2 id="frame-title"></h2><input id="slider" type="range" min="0" value="0"><div class="controls"><label>비교 방법 A<select id="method-a">__METHOD_OPTIONS__</select></label><label>비교 방법 B<select id="method-b">__METHOD_OPTIONS__</select></label></div><p id="scores" class="score"></p><div class="grid"><img id="gt"><img id="native"><img id="a"><img id="b"></div></div>
 <p class="note">Dataset: <a href="https://davischallenge.org/">DAVIS 2017</a>, <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. 비상업적 연구 평가 목적으로 사용했으며 DAVIS benchmark 논문을 인용합니다.</p>
@@ -99,6 +106,11 @@ const canvas=document.querySelector('#chart'),ctx=canvas.getContext('2d'),W=canv
     }
     return (
         template.replace("__TABLE_ROWS__", "".join(rows))
+        .replace("__SEQUENCE__", sequence)
+        .replace("__OBJECT_ID__", str(object_id))
+        .replace("__SWITCH_FRAME__", str(switch_frame))
+        .replace("__START_FRAME__", str(start_frame))
+        .replace("__END_FRAME__", str(end_frame))
         .replace("__METHOD_OPTIONS__", method_options)
         .replace("__RECORDS__", json.dumps(records, separators=(",", ":")))
         .replace("__METHODS__", json.dumps(labels, separators=(",", ":")))
@@ -194,6 +206,7 @@ def main() -> None:
                 Image.open(frames_dir / f"direct_copy_{stem}.jpg"),
                 Image.open(frames_dir / f"last_mask_{stem}.jpg"),
                 Image.open(frames_dir / f"replay_2_{stem}.jpg"),
+                Image.open(frames_dir / f"replay_4_{stem}.jpg"),
             ]
             canvas = Image.new(
                 "RGB", (sum(panel.width for panel in video_panels), video_panels[0].height)
