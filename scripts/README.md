@@ -79,3 +79,20 @@ cmmt-sam2-cached-baseline \
 `last_mask`, `replay_k`는 GT를 모델 입력으로 사용하지 않습니다. 시각화가 필요하면
 `--annotation-dir`과 `--artifact-dir`을 함께 지정하며, annotation은 평가/표시에만
 사용됩니다.
+
+한 case의 전체 고정 ladder(Direct, Reset, Last-Mask, Replay-1/2/4, Full Replay),
+공식 partial DAVIS J&F, 전체 frame 비교 이미지는 다음 suite로 생성합니다.
+
+```bash
+python scripts/run_cached_baseline_suite.py \
+  --case-cache outputs/case_cache/bike-packing_obj1_switch14.pt \
+  --sam2-repo .external/sam2 \
+  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --target-checkpoint checkpoints/sam2.1_hiera_large.pt \
+  --target-model-id sam2.1-hiera-large \
+  --video-dir data/DAVIS/JPEGImages/480p/bike-packing \
+  --prompt-mask data/DAVIS/Annotations/480p/bike-packing/00000.png \
+  --annotation-dir data/DAVIS/Annotations/480p/bike-packing \
+  --evaluation-repo .external/davis2017-evaluation \
+  --output-dir outputs/baseline_suites/bike-packing_obj1_switch14
+```
