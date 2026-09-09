@@ -11,6 +11,10 @@ from .davis_evaluation import (
     load_official_davis_metrics,
     write_davis_future_report,
 )
+from .evaluation_manifest import (
+    build_davis_evaluation_manifest,
+    write_evaluation_manifest,
+)
 from .paired_experiment import (
     load_canonical_state,
     run_paired_experiment,
@@ -150,6 +154,54 @@ def davis_download_main(argv: list[str] | None = None) -> None:
         keep_archive=args.keep_archive,
     )
     print(json.dumps({"davis_root": str(root)}, indent=2))
+
+
+def davis_manifest_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description="Build a deterministic DAVIS video/object/switch manifest."
+    )
+    parser.add_argument("--root", required=True, type=Path)
+    parser.add_argument("--split", choices=("train", "val"), default="val")
+    parser.add_argument("--resolution", default="480p")
+    parser.add_argument(
+        "--regular-quantile",
+        action="append",
+        type=float,
+        default=[],
+        help="Repeatable regular switch quantile. Default: 0.25, 0.5, 0.75.",
+    )
+    parser.add_argument("--min-prefix-frames", type=int, default=5)
+    parser.add_argument("--min-future-frames", type=int, default=20)
+    parser.add_argument("--area-drop-ratio", type=float, default=0.35)
+    parser.add_argument("--area-growth-ratio", type=float, default=3.0)
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--output", required=True, type=Path)
+    args = parser.parse_args(argv)
+    manifest = build_davis_evaluation_manifest(
+        args.root,
+        split=args.split,
+        resolution=args.resolution,
+        regular_quantiles=tuple(args.regular_quantile) or (0.25, 0.5, 0.75),
+        min_prefix_frames=args.min_prefix_frames,
+        min_future_frames=args.min_future_frames,
+        area_drop_ratio=args.area_drop_ratio,
+        area_growth_ratio=args.area_growth_ratio,
+        seed=args.seed,
+    )
+    write_evaluation_manifest(manifest, args.output)
+    print(
+        json.dumps(
+            {
+                "output": str(args.output.resolve()),
+                "split": manifest["split"],
+                "sequences": manifest["sequence_count"],
+                "cases": manifest["case_count"],
+                "excluded": len(manifest["excluded"]),
+                "content_sha256": manifest["content_sha256"],
+            },
+            indent=2,
+        )
+    )
 
 
 def davis_future_evaluation_main(argv: list[str] | None = None) -> None:

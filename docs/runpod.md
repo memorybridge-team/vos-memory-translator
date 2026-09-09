@@ -55,6 +55,11 @@ CPU에서 수행:
 GPU가 0%여도 Pod가 켜져 있으면 요금이 발생할 수 있으므로 실행 상태는 기록합니다.
 그러나 비용을 줄이려고 필요한 실험 case를 제거하지는 않습니다.
 
+학습 중 외부 object storage의 JPEG/PNG를 직접 읽지 않습니다. 현재 case의 dataset과
+checkpoint를 `/workspace/CMMT`에 먼저 준비하고 GPU 작업이 끝난 뒤 결과를
+외부 저장소로 올리는 hot/cold 구조를 사용합니다. 자세한 기준은
+[`storage_pipeline.md`](storage_pipeline.md)를 따릅니다.
+
 ## 실행 순서
 
 1. 1개 case smoke로 경로·checkpoint·state contract·artifact 생성을 확인합니다.

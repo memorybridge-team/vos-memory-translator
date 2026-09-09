@@ -86,6 +86,7 @@ Tensor MSE가 낮은 것만으로 성공이라 부르지 않습니다. 다음을
 | `configs/` | 저장소가 관리하는 실험 설정 |
 | `docs/design/` | state contract와 Translator 설계 근거 |
 | `docs/experimental_plan.md` | 현재 유효한 정식 실험 계획 |
+| `docs/storage_pipeline.md` | GPU를 기다리게 하지 않는 hot/cold 저장 정책 |
 | `reports/experiments/` | 재현 가능한 pilot metric과 대표 시각 자료 |
 | `reports/run_logs/` | 실제 실행 시간·명령·성공/실패 기록 |
 | `references/` | 논문 링크와 출처 인덱스; 원문 PDF는 Git에서 제외 |
