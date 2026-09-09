@@ -684,6 +684,25 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   translator의 다음 가치는 평균 easy case가 아니라 고정 manifest의 occlusion,
   reappearance, fast-motion hard cases에서 검증해야 한다. 전체 raw suite 378MB는
   RunPod에, 53-frame×7-method 선택형 Pages gallery 22MB는 Git에 보존한다.
+- **[Pilot — 2026-09-10 reappearance hard case]** 고정 manifest의 DAVIS val
+  `india`, object 3, switch 35, 평가 frames 36–79에서 전체 J&F는 Direct/Reset/
+  Last-Mask/Replay-1/Replay-2/Replay-4/Full-Replay 순으로 0.204545/0.204545/
+  0.204545/0.204545/0.552702/0.868743/0.895240이었다. 하지만 GT-visible 35 frames
+  J&F는 0/0/0/0/0.437682/0.834992/0.868302였다. 실패 방법의 전체 0.204545는
+  GT와 prediction이 모두 빈 9 frames에서 얻은 점수다. 이후 partial VOS 결과에는
+  전체 J&F와 GT-visible J&F를 함께 보고한다.
+- **[관찰 — 2026-09-10]** object 3는 switch frame 35에서 GT와 Tiny source mask가
+  모두 0픽셀이며 frame 36에 11,393 GT pixels로 재등장한다. Tiny mask는 frame 34에
+  2,298 pixels, frame 32에 25,515 pixels였다. 따라서 Last-Mask/Replay-1은 재등장
+  단서를 잃어 visible J&F 0이지만 Replay-4는 과거 4 frames만 처리해 0.834992로
+  Full Replay 0.868302에 접근했다. 이는 translator가 replay 없이 temporal identity를
+  복원해야 하는 명확한 hard case이며, translated memory+short replay도 정식
+  ablation으로 유지한다. 단, one-case pilot이므로 일반화된 성능 주장은 하지 않는다.
+- **[구현 — 2026-09-10]** 공식 DAVIS frame 점수에 `ground_truth_present`를 기록하고
+  visible/absent subset 평균을 추가했다. Cached suite 표와 GitHub Pages gallery도
+  visible J&F를 표시하고 sequence/object/switch metadata를 동적으로 렌더링한다.
+  Local test는 `30 passed`였다. `india` raw suite와 273MB case cache는 RunPod Network
+  Volume에, 검증된 44-frame×7-method gallery 약 11.8MB는 Git에 보존한다.
 
 ## 18. 노션 원자료 인덱스
 
