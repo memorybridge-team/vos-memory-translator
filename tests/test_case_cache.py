@@ -6,6 +6,10 @@ import pytest
 import torch
 
 from vos_memory_inspector.case_cache import load_case_cache, write_case_cache
+from vos_memory_inspector.roundtrip import (
+    binary_prompt_from_mask_logits,
+    plan_cached_baseline,
+)
 from vos_memory_inspector.state_schema import CanonicalState
 
 
@@ -90,3 +94,46 @@ def test_case_cache_rejects_incomplete_future_against_metadata(tmp_path: Path) -
             target_oracle_future_masks={2: torch.zeros(1)},
             metadata={"switch_frame": 1, "num_frames": 4},
         )
+
+
+def test_cached_baseline_plans_keep_prompt_boundaries_explicit() -> None:
+    reset = plan_cached_baseline("target_reset", switch_frame=6)
+    last = plan_cached_baseline("last_mask", switch_frame=6)
+    replay_one = plan_cached_baseline(
+        "replay_k", switch_frame=6, replay_frames=1
+    )
+    replay_four = plan_cached_baseline(
+        "replay_k", switch_frame=6, replay_frames=4
+    )
+    full = plan_cached_baseline("full_replay", switch_frame=6)
+
+    assert reset["prompt_source"] == "blank_mask"
+    assert last["prompt_frame"] == replay_one["prompt_frame"] == 6
+    assert last["history_frames_reprocessed"] == replay_one[
+        "history_frames_reprocessed"
+    ] == 1
+    assert replay_four["prompt_frame"] == 3
+    assert full["prompt_frame"] == 0
+    assert full["uses_ground_truth_prompt"]
+    assert not last["uses_ground_truth_prompt"]
+
+
+def test_cached_baseline_plan_rejects_invalid_replay_lengths() -> None:
+    with pytest.raises(ValueError, match="required"):
+        plan_cached_baseline("replay_k", switch_frame=4)
+    with pytest.raises(ValueError, match="at least 1"):
+        plan_cached_baseline("replay_k", switch_frame=4, replay_frames=0)
+    with pytest.raises(ValueError, match="available prefix"):
+        plan_cached_baseline("replay_k", switch_frame=4, replay_frames=6)
+
+
+def test_binary_prompt_from_mask_logits_thresholds_and_resizes() -> None:
+    logits = torch.tensor([[[[-1.0, 2.0], [3.0, -4.0]]]])
+    prompt = binary_prompt_from_mask_logits(logits, height=4, width=6)
+
+    assert prompt.shape == (4, 6)
+    assert prompt.dtype == bool
+    assert not prompt[0, 0]
+    assert prompt[0, -1]
+    assert prompt[-1, 0]
+    assert not prompt[-1, -1]

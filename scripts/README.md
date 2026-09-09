@@ -48,3 +48,34 @@ cmmt-sam2-cached-handoff \
   --video-dir /workspace/CMMT/data/DAVIS/JPEGImages/480p/bmx-bumps \
   --translator direct
 ```
+
+필수 non-translator baseline도 같은 cache를 사용합니다. `replay-1`은 정의상
+`last_mask`와 같아야 하며 구현 sanity check로 사용합니다. SAM 2는 prompt 없이
+객체를 등록할 수 없으므로 `target_reset`은 switch frame에 빈 mask로 객체 슬롯만
+등록하고 source의 mask·appearance·pointer·temporal memory는 전달하지 않는
+명시적 proxy입니다.
+
+```bash
+cmmt-sam2-cached-baseline \
+  --baseline last_mask \
+  --case-cache /workspace/CMMT/outputs/case_cache/bmx-bumps_obj1_switch6.pt \
+  --sam2-repo /workspace/CMMT/.external/sam2 \
+  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --target-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_large.pt \
+  --target-model-id sam2.1-hiera-large \
+  --video-dir /workspace/CMMT/data/DAVIS/JPEGImages/480p/bmx-bumps
+
+cmmt-sam2-cached-baseline \
+  --baseline replay_k --replay-frames 4 \
+  --case-cache /workspace/CMMT/outputs/case_cache/bmx-bumps_obj1_switch6.pt \
+  --sam2-repo /workspace/CMMT/.external/sam2 \
+  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --target-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_large.pt \
+  --target-model-id sam2.1-hiera-large \
+  --video-dir /workspace/CMMT/data/DAVIS/JPEGImages/480p/bmx-bumps
+```
+
+`full_replay`만 DAVIS 첫-frame GT인 `--prompt-mask`가 필요합니다. `target_reset`,
+`last_mask`, `replay_k`는 GT를 모델 입력으로 사용하지 않습니다. 시각화가 필요하면
+`--annotation-dir`과 `--artifact-dir`을 함께 지정하며, annotation은 평가/표시에만
+사용됩니다.

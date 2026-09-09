@@ -11,6 +11,7 @@ from typing import Any
 
 import numpy as np
 import torch
+from PIL import Image
 
 from .runner import load_binary_prompt
 from .artifacts import write_handoff_artifacts
@@ -23,6 +24,9 @@ from .sam2_state import (
 )
 from .upstream import verify_sam2_checkout
 from .translators import DirectCopyTranslator
+
+
+CACHED_BASELINES = ("target_reset", "last_mask", "replay_k", "full_replay")
 
 
 def _seed_everything(seed: int) -> None:
@@ -136,6 +140,86 @@ def _collect_prefix_reference(
     if canonical is None:
         raise RuntimeError("source run did not reach switch_frame")
     return canonical, prefix_masks
+
+
+def plan_cached_baseline(
+    baseline: str,
+    *,
+    switch_frame: int,
+    replay_frames: int | None = None,
+) -> dict[str, Any]:
+    """Resolve a baseline into its prompt source and target history window.
+
+    ``replay_frames`` counts frames through and including the switch frame.  Under
+    this definition Replay-1 intentionally equals Last-Mask and serves as an
+    implementation sanity check.
+    """
+
+    if baseline not in CACHED_BASELINES:
+        raise ValueError(f"unsupported cached baseline: {baseline!r}")
+    if switch_frame < 0:
+        raise ValueError("switch_frame must be non-negative")
+    if baseline == "target_reset":
+        return {
+            "baseline": baseline,
+            "prompt_frame": switch_frame,
+            "prompt_source": "blank_mask",
+            "history_frames_reprocessed": 1,
+            "uses_ground_truth_prompt": False,
+            "uses_source_prediction_prompt": False,
+        }
+    if baseline == "last_mask":
+        return {
+            "baseline": baseline,
+            "prompt_frame": switch_frame,
+            "prompt_source": "source_prediction_at_switch",
+            "history_frames_reprocessed": 1,
+            "uses_ground_truth_prompt": False,
+            "uses_source_prediction_prompt": True,
+        }
+    if baseline == "replay_k":
+        if replay_frames is None:
+            raise ValueError("replay_frames is required for replay_k")
+        if replay_frames < 1:
+            raise ValueError("replay_frames must be at least 1")
+        if replay_frames > switch_frame + 1:
+            raise ValueError(
+                f"replay_frames={replay_frames} exceeds available prefix "
+                f"length {switch_frame + 1}"
+            )
+        return {
+            "baseline": baseline,
+            "prompt_frame": switch_frame - replay_frames + 1,
+            "prompt_source": "source_prediction_at_replay_start",
+            "history_frames_reprocessed": replay_frames,
+            "uses_ground_truth_prompt": False,
+            "uses_source_prediction_prompt": True,
+        }
+    return {
+        "baseline": baseline,
+        "prompt_frame": 0,
+        "prompt_source": "first_frame_ground_truth",
+        "history_frames_reprocessed": switch_frame + 1,
+        "uses_ground_truth_prompt": True,
+        "uses_source_prediction_prompt": False,
+    }
+
+
+def binary_prompt_from_mask_logits(
+    logits: torch.Tensor,
+    *,
+    height: int,
+    width: int,
+) -> np.ndarray:
+    """Convert cached one-object logits to an original-resolution binary prompt."""
+
+    array = logits.detach().cpu().float().numpy().squeeze()
+    if array.ndim != 2:
+        raise ValueError(f"expected one-object 2D mask logits, got {array.shape}")
+    image = Image.fromarray((array > 0).astype(np.uint8) * 255)
+    if image.size != (width, height):
+        image = image.resize((width, height), resample=Image.Resampling.NEAREST)
+    return np.asarray(image) > 0
 
 
 def prepare_cross_model_case_reference(
@@ -391,6 +475,205 @@ def run_cached_translator_handoff(
             output_dir=artifact_dir,
             report=report,
             candidate_label=candidate_label,
+        )
+    del inference_state, predictor
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    return report
+
+
+def run_cached_baseline(
+    *,
+    baseline: str,
+    case_cache: str | Path,
+    sam2_repo: str | Path,
+    target_config_file: str,
+    target_checkpoint: str | Path,
+    target_model_id: str,
+    video_dir: str | Path,
+    prompt_mask: str | Path | None = None,
+    annotation_dir: str | Path | None = None,
+    replay_frames: int | None = None,
+    device: str = "cuda",
+    offload_video_to_cpu: bool = True,
+    offload_state_to_cpu: bool = True,
+    seed: int = 7,
+    artifact_dir: str | Path | None = None,
+) -> dict[str, Any]:
+    """Run a non-translator target baseline from a prepared case cache.
+
+    The cache supplies the source predictions used as prompts and the target-native
+    future masks used for comparison.  Candidate target inference is always rerun,
+    so latency and backbone-call counts remain method-specific.
+    """
+
+    cache_path = Path(case_cache).resolve()
+    payload = load_case_cache(cache_path)
+    metadata = payload["metadata"]
+    if metadata.get("target_model_id") != target_model_id:
+        raise ValueError(
+            f"case cache target {metadata.get('target_model_id')!r} differs from "
+            f"requested {target_model_id!r}"
+        )
+    video_dir = Path(video_dir).resolve()
+    if metadata.get("video_id") != video_dir.name:
+        raise ValueError(
+            f"case cache video {metadata.get('video_id')!r} differs from "
+            f"{video_dir.name!r}"
+        )
+    sam2_repo = Path(sam2_repo).resolve()
+    target_checkpoint = Path(target_checkpoint).resolve()
+    commit = verify_sam2_checkout(sam2_repo)
+    if metadata.get("upstream_commit") != commit:
+        raise ValueError("case cache and runtime SAM 2 commits differ")
+    if not target_checkpoint.is_file():
+        raise FileNotFoundError(f"target checkpoint not found: {target_checkpoint}")
+    if str(sam2_repo) not in sys.path:
+        sys.path.insert(0, str(sam2_repo))
+    from sam2.build_sam import build_sam2_video_predictor
+
+    switch_frame = int(metadata["switch_frame"])
+    num_frames = int(metadata["num_frames"])
+    object_id = int(metadata["object_id"])
+    plan = plan_cached_baseline(
+        baseline,
+        switch_frame=switch_frame,
+        replay_frames=replay_frames,
+    )
+    if baseline == "full_replay" and prompt_mask is None:
+        raise ValueError("prompt_mask is required for full_replay")
+
+    started_at = _start_resource_measurement(device)
+    _seed_everything(seed)
+    predictor = build_sam2_video_predictor(
+        config_file=target_config_file,
+        ckpt_path=str(target_checkpoint),
+        device=device,
+    )
+    backbone_calls: list[tuple[int, ...]] = []
+    original_forward_image = predictor.forward_image
+
+    def counted_forward_image(image: torch.Tensor):
+        backbone_calls.append(tuple(image.shape))
+        return original_forward_image(image)
+
+    predictor.forward_image = counted_forward_image
+    inference_state = init_sam2_inference_state_without_warmup(
+        predictor,
+        video_path=str(video_dir),
+        offload_video_to_cpu=offload_video_to_cpu,
+        offload_state_to_cpu=offload_state_to_cpu,
+    )
+    if int(inference_state["num_frames"]) != num_frames:
+        raise ValueError(
+            f"runtime video has {inference_state['num_frames']} frames but cache "
+            f"expects {num_frames}"
+        )
+    prompt_frame = int(plan["prompt_frame"])
+    if baseline == "target_reset":
+        prompt = np.zeros(
+            (int(inference_state["video_height"]), int(inference_state["video_width"])),
+            dtype=bool,
+        )
+    elif baseline == "full_replay":
+        prompt = load_binary_prompt(Path(prompt_mask), object_id)
+    else:
+        source_mask = payload["source_prefix_masks"].get(prompt_frame)
+        if not isinstance(source_mask, torch.Tensor):
+            raise ValueError(f"source prediction is missing for frame {prompt_frame}")
+        prompt = binary_prompt_from_mask_logits(
+            source_mask,
+            height=int(inference_state["video_height"]),
+            width=int(inference_state["video_width"]),
+        )
+
+    calls_before_prompt = len(backbone_calls)
+    predictor.add_new_mask(
+        inference_state,
+        frame_idx=prompt_frame,
+        obj_id=object_id,
+        mask=prompt,
+    )
+    calls_after_prompt = len(backbone_calls)
+    candidate_future: dict[int, torch.Tensor] = {}
+    calls_after_switch: int | None = None
+    for frame_idx, _object_ids, masks in predictor.propagate_in_video(
+        inference_state,
+        start_frame_idx=prompt_frame,
+        max_frame_num_to_track=num_frames - prompt_frame,
+        reverse=False,
+    ):
+        frame = int(frame_idx)
+        if frame == switch_frame:
+            calls_after_switch = len(backbone_calls)
+        if frame > switch_frame:
+            candidate_future[frame] = masks.detach().cpu().float()
+    if calls_after_switch is None:
+        raise RuntimeError("baseline propagation did not reach switch_frame")
+
+    oracle_future = payload["target_oracle_future_masks"]
+    downstream = _compare_future_masks(oracle_future, candidate_future)
+    resources = _resource_measurement(started_at, device)
+    labels = {
+        "target_reset": "Target Reset (blank object slot)",
+        "last_mask": "Last-Mask",
+        "replay_k": f"Replay-{plan['history_frames_reprocessed']}",
+        "full_replay": "Full Replay / Large-native",
+    }
+    report = {
+        "schema_version": "cmmt.cached_sam2_baseline.v1",
+        "source_model_id": metadata["source_model_id"],
+        "target_model_id": target_model_id,
+        "translator": baseline,
+        "baseline": baseline,
+        "baseline_label": labels[baseline],
+        "baseline_plan": plan,
+        "target_reset_definition": (
+            "SAM 2 cannot propagate an unregistered object. This proxy registers "
+            "the object with an all-zero mask on the switch frame and transfers no "
+            "source appearance, mask, pointer, or temporal memory."
+            if baseline == "target_reset"
+            else None
+        ),
+        "upstream_commit": commit,
+        "video_id": video_dir.name,
+        "object_id": object_id,
+        "switch_frame": switch_frame,
+        "case_cache_sha256": cache_path.with_suffix(
+            cache_path.suffix + ".sha256"
+        ).read_text(encoding="ascii").split()[0],
+        "future_frames": sorted(candidate_future),
+        "backbone_calls_before_prompt": calls_before_prompt,
+        "backbone_calls_during_prompt": calls_after_prompt - calls_before_prompt,
+        "backbone_calls_during_history_through_switch": (
+            calls_after_switch - calls_after_prompt
+        ),
+        "backbone_calls_before_or_at_switch_total": calls_after_switch,
+        "backbone_calls_during_future_continuation": (
+            len(backbone_calls) - calls_after_switch
+        ),
+        "mask_comparison_to_target_native": downstream,
+        "seed": seed,
+        "device": device,
+        "resources": resources,
+        "resources_candidate_only": resources,
+        "resources_shared_reference_preparation": metadata.get(
+            "preparation_resources"
+        ),
+    }
+    if artifact_dir is not None:
+        if annotation_dir is None:
+            raise ValueError("annotation_dir is required when artifact_dir is set")
+        report["artifacts"] = write_handoff_artifacts(
+            video_dir=video_dir,
+            annotation_dir=annotation_dir,
+            object_id=object_id,
+            oracle_masks=oracle_future,
+            candidate_masks=candidate_future,
+            output_dir=artifact_dir,
+            report=report,
+            candidate_label=labels[baseline],
         )
     del inference_state, predictor
     gc.collect()

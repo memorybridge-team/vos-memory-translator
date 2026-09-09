@@ -23,6 +23,7 @@ from .paired_experiment import (
 from .runner import run_video_probe
 from .roundtrip import (
     prepare_cross_model_case_reference,
+    run_cached_baseline,
     run_cached_translator_handoff,
     run_cross_model_direct_handoff,
     run_cross_model_translator_handoff,
@@ -479,6 +480,72 @@ def cached_handoff_main(argv: list[str] | None = None) -> None:
         translator=translator,
         translator_name=translator_name,
         candidate_label=candidate_label,
+    )
+    if args.json is not None:
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        args.json.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    print(json.dumps(report, indent=2))
+
+
+def cached_baseline_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Run Target Reset, Last-Mask, Replay-k, or Full Replay against a "
+            "prepared SAM 2 case cache."
+        )
+    )
+    parser.add_argument(
+        "--baseline",
+        required=True,
+        choices=("target_reset", "last_mask", "replay_k", "full_replay"),
+    )
+    parser.add_argument("--case-cache", required=True, type=Path)
+    parser.add_argument("--sam2-repo", required=True, type=Path)
+    parser.add_argument("--target-config", required=True)
+    parser.add_argument("--target-checkpoint", required=True, type=Path)
+    parser.add_argument("--target-model-id", required=True)
+    parser.add_argument("--video-dir", required=True, type=Path)
+    parser.add_argument(
+        "--prompt-mask",
+        type=Path,
+        help="First-frame ground-truth mask; required only for full_replay.",
+    )
+    parser.add_argument("--annotation-dir", type=Path)
+    parser.add_argument(
+        "--replay-frames",
+        type=int,
+        help=(
+            "Number of target-processed prefix frames including the switch frame. "
+            "Required for replay_k; replay-1 intentionally equals Last-Mask."
+        ),
+    )
+    parser.add_argument("--device", default="cuda")
+    parser.add_argument("--keep-video-on-device", action="store_true")
+    parser.add_argument("--keep-state-on-device", action="store_true")
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--json", type=Path)
+    parser.add_argument("--artifact-dir", type=Path)
+    args = parser.parse_args(argv)
+    if args.baseline == "replay_k" and args.replay_frames is None:
+        parser.error("--replay-frames is required for replay_k")
+    if args.baseline == "full_replay" and args.prompt_mask is None:
+        parser.error("--prompt-mask is required for full_replay")
+    report = run_cached_baseline(
+        baseline=args.baseline,
+        case_cache=args.case_cache,
+        sam2_repo=args.sam2_repo,
+        target_config_file=args.target_config,
+        target_checkpoint=args.target_checkpoint,
+        target_model_id=args.target_model_id,
+        video_dir=args.video_dir,
+        prompt_mask=args.prompt_mask,
+        annotation_dir=args.annotation_dir,
+        replay_frames=args.replay_frames,
+        device=args.device,
+        offload_video_to_cpu=not args.keep_video_on_device,
+        offload_state_to_cpu=not args.keep_state_on_device,
+        seed=args.seed,
+        artifact_dir=args.artifact_dir,
     )
     if args.json is not None:
         args.json.parent.mkdir(parents=True, exist_ok=True)
