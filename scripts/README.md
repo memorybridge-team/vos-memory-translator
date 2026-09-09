@@ -96,3 +96,15 @@ python scripts/run_cached_baseline_suite.py \
   --evaluation-repo .external/davis2017-evaluation \
   --output-dir outputs/baseline_suites/bike-packing_obj1_switch14
 ```
+
+완료된 suite를 GitHub Pages용 선택형 frame gallery와 MP4로 압축합니다. Raw PNG는
+Network Volume에 유지하고, Pages에는 폭 640 JPEG와 요약 JSON만 넣습니다.
+
+```bash
+python scripts/build_baseline_suite_gallery.py \
+  --suite-dir outputs/baseline_suites/bike-packing_obj1_switch14 \
+  --video-dir data/DAVIS/JPEGImages/480p/bike-packing \
+  --annotation-dir data/DAVIS/Annotations/480p/bike-packing \
+  --object-id 1 \
+  --output-dir outputs/pages/2026-09-10-bike-packing-baselines
+```
