@@ -629,6 +629,14 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   종료된 대형 state/checkpoint/result는 추후 선택할 object storage cold tier에
   비동기 업로드한다. 외부 저장소를 아직 선택하지 않았으므로 현 시점에는 cold
   upload를 실행하지 않았다.
+- **[RunPod 자원 결정 — 2026-09-09]** 새 이동형 Pod 기본값은 Secure Cloud
+  `L40S 48GB + 50GB container disk + 500GB Network Volume`으로 정한다.
+  Network Volume은 `/workspace`를 대체하므로 별도 Volume disk는 사용하지 않는다.
+  Network storage의 작은-file latency를 피하기 위해 현재 case는 container local
+  cache에 stage한 뒤 GPU가 읽고 완료 bundle만 persistent storage로 원자적으로
+  옮긴다. Community Cloud의 비용 우선 대안은 RTX A6000/A40 48GB와 500GB local
+  Volume disk이며 Pod 삭제 전 cold backup이 필수다. 이 용량은 연구 case를 줄이는
+  cap이 아니라 시작값이며 80% 사용 시 확장·archive한다.
 - **[구현 — 2026-09-09]** 여러 baseline이 동일 case의 Tiny prefix와 Large-native
   oracle을 반복 실행하지 않도록 reusable prepared-case cache를 추가했다. Cache는
   source/target canonical state, source prefix masks, target future oracle masks를
