@@ -16,3 +16,35 @@ cmmt-davis-build-manifest \
   --split val \
   --output /workspace/CMMT/outputs/manifests/davis2017_val_phase1.json
 ```
+
+여러 baseline이 같은 source/oracle을 다시 계산하지 않도록 case reference를 한 번만
+준비할 수 있습니다. `.pt`와 `.pt.sha256`은 `outputs/`에 두며 Git에 올리지 않습니다.
+
+```bash
+cmmt-sam2-prepare-case \
+  --sam2-repo /workspace/CMMT/.external/sam2 \
+  --source-config configs/sam2.1/sam2.1_hiera_t.yaml \
+  --source-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_tiny.pt \
+  --source-model-id sam2.1-hiera-tiny \
+  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --target-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_large.pt \
+  --target-model-id sam2.1-hiera-large \
+  --video-dir /workspace/CMMT/data/DAVIS/JPEGImages/480p/bmx-bumps \
+  --prompt-mask /workspace/CMMT/data/DAVIS/Annotations/480p/bmx-bumps/00000.png \
+  --object-id 1 --switch-frame 6 \
+  --output /workspace/CMMT/outputs/case_cache/bmx-bumps_obj1_switch6.pt
+```
+
+준비된 cache에서는 source와 oracle을 다시 실행하지 않고 candidate continuation만
+실행합니다.
+
+```bash
+cmmt-sam2-cached-handoff \
+  --case-cache /workspace/CMMT/outputs/case_cache/bmx-bumps_obj1_switch6.pt \
+  --sam2-repo /workspace/CMMT/.external/sam2 \
+  --target-config configs/sam2.1/sam2.1_hiera_l.yaml \
+  --target-checkpoint /workspace/CMMT/checkpoints/sam2.1_hiera_large.pt \
+  --target-model-id sam2.1-hiera-large \
+  --video-dir /workspace/CMMT/data/DAVIS/JPEGImages/480p/bmx-bumps \
+  --translator direct
+```

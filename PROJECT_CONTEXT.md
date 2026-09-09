@@ -617,6 +617,26 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   소비하는 Target Reset/First-Frame-only, Last-Mask, Replay-k, Full Replay
   baseline runner를 구현한다. 5시간 사용률이 89%여서 합의된 80% 보호선에 따라
   새 장기 구현 직전에 안전 checkpoint하고 다음 reset 뒤 이 지점부터 재개한다.
+- **[구현 — 2026-09-09]** 위 재개 지점의 deterministic manifest 생성기와
+  policy를 commit `97a7e39`로 구현했다. Manifest는 dataset 절대 경로나 픽셀을
+  포함하지 않고 sequence/object/switch와 선택 이유만 기록하며 content SHA-256을
+  검증한다. 실제 DAVIS val manifest 생성은 RunPod SSH endpoint timeout으로 아직
+  수행하지 못했으므로 구현 검증과 dataset 실행 결과를 구분한다.
+- **[파이프라인 결정 — 2026-09-09]** 연구 처리량을 위해 저장소를 hot/warm/cold로
+  분리한다. 현재 case의 DAVIS frame, checkpoint, state cache는 RunPod
+  `/workspace/CMMT`의 hot tier에 두어 GPU가 네트워크 object storage의 작은 파일을
+  직접 읽지 않게 한다. 코드·config·고정 manifest·작은 metric은 GitHub warm tier,
+  종료된 대형 state/checkpoint/result는 추후 선택할 object storage cold tier에
+  비동기 업로드한다. 외부 저장소를 아직 선택하지 않았으므로 현 시점에는 cold
+  upload를 실행하지 않았다.
+- **[구현 — 2026-09-09]** 여러 baseline이 동일 case의 Tiny prefix와 Large-native
+  oracle을 반복 실행하지 않도록 reusable prepared-case cache를 추가했다. Cache는
+  source/target canonical state, source prefix masks, target future oracle masks를
+  CPU tensor로 보존하며 runtime 절대 경로는 넣지 않는다. `.pt.partial`에서 원자적
+  승격하고 `.pt.sha256` 검증에 실패하면 사용을 거부한다. Direct/Ridge consumer는
+  cache 이후 target continuation만 실행하고 공통 준비 비용과 candidate 비용을
+  따로 보고한다. 로컬 test는 `26 passed`; 실제 SAM 2 checkpoint smoke는 RunPod
+  접속 복구 후 수행할 미검증 항목이다.
 - **[판단]** cross-model tensor는 단순 shape copy보다 learned component mapping이
   필요하다는 첫 end-to-end 근거를 얻었다. 하지만 다음 gate는 고정 val subset,
   여러 switch/object의 ground-truth J&F와 reset/Last-Mask/replay-k/oracle 비교다.

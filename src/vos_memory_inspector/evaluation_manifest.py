@@ -18,6 +18,11 @@ _BACKGROUND_LABEL = 0
 _VOID_LABEL = 255
 
 
+def _read_label_image(path: Path) -> np.ndarray:
+    with Image.open(path) as image:
+        return np.asarray(image).copy()
+
+
 def _read_split(root: Path, split: str) -> list[str]:
     if split not in {"train", "val"}:
         raise ValueError("split must be 'train' or 'val'")
@@ -173,7 +178,7 @@ def build_davis_evaluation_manifest(
         if [path.stem for path in annotation_paths] != expected_stems:
             raise ValueError(f"non-contiguous annotation numbering in {sequence!r}")
 
-        first_mask = np.asarray(Image.open(annotation_paths[0]))
+        first_mask = _read_label_image(annotation_paths[0])
         object_ids = sorted(
             int(value)
             for value in np.unique(first_mask)
@@ -181,7 +186,7 @@ def build_davis_evaluation_manifest(
         )
         if not object_ids:
             raise ValueError(f"first annotation has no objects: {annotation_paths[0]}")
-        masks = [np.asarray(Image.open(path)) for path in annotation_paths]
+        masks = [_read_label_image(path) for path in annotation_paths]
         if any(mask.shape != first_mask.shape for mask in masks):
             raise ValueError(f"annotation shape changes within {sequence!r}")
         height, width = first_mask.shape
