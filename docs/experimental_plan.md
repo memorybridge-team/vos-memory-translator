@@ -1,7 +1,42 @@
 # CMMT 정식 실험 계획
 
-> 갱신: 2026-09-09 KST  
+> 갱신: 2026-09-10 KST  
 > 원칙: RunPod 비용 때문에 연구에 필요한 실험 수·모델·데이터를 축소하지 않는다.
+
+## 전체 연구 흐름과 현재 위치
+
+```text
+[0. 환경·데이터·고정 manifest]                         완료
+                │
+                ▼
+[1. state contract·주입·평가 파이프라인]               진행 중
+                │  └─ 전체/GT-visible J&F 완료
+                │     switch shock·recovery/identity 집계는 남음
+                ▼
+[2. 강한 baseline과 rare-event 분포]                   ◀ 현재 단계
+                │  └─ Direct/Reset/Last/Replay/Oracle 구현 완료
+                │     rare-event 1/10 완료, 9개 실행 대기
+                ▼
+[3. paired Tiny↔Large state 수집·Ridge/MLP 학습]        다음 단계
+                │
+                ▼
+[4. held-out 일반화·통계·양방향·반복 switch]
+                │
+                ▼
+[5. MOSE/LVOS/YouTube-VOS hard·long-term 검증]
+                │
+                ▼
+[6. SAM 2↔XMem/Cutie cross-architecture 검증]
+                │
+                ▼
+[7. 논문용 ablation·시스템 비용·failure boundary 정리]
+```
+
+2026-09-10 현재 DAVIS `india` reappearance 사례에서 Last-Mask의 GT-visible J&F가
+0이고 Replay-4가 0.834992, Full Replay가 0.868302인 것을 확인했다. 다음 실행은
+고정 rare-event 10-case subset의 나머지 9개를 완료해 이 관찰이 한 사례에만 해당하는지
+검증한다. Sweep은 checksummed cache와 완성된 7-method summary를 자동 인식하므로
+중단 후에도 완료 case를 다시 계산하지 않는다.
 
 ## 최종 연구 질문
 

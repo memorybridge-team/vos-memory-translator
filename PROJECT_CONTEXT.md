@@ -703,6 +703,15 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   visible J&F를 표시하고 sequence/object/switch metadata를 동적으로 렌더링한다.
   Local test는 `30 passed`였다. `india` raw suite와 273MB case cache는 RunPod Network
   Volume에, 검증된 44-frame×7-method gallery 약 11.8MB는 Git에 보존한다.
+- **[현재 단계·구현 — 2026-09-10]** 전체 연구 흐름에서 Phase 0 환경·데이터·고정
+  manifest는 완료했고, Phase 1 평가 기반과 Phase 2 baseline을 함께 완성하는 중이다.
+  현재 gate는 rare-event baseline 10 cases 중 완료된 `india` object 3/switch 35를
+  제외한 9 cases다. Full manifest checksum을 검증하고 4개 rare tag로 subset을
+  결정적으로 선택하며, dataset을 sequence별 `/tmp` hot cache에 stage하고, 유효한
+  case-cache와 완성된 7-method suite를 자동 건너뛰는 resumable sweep runner를
+  추가했다. Subset hash는 `e6492a58a953790d5a5adcae89ad40cf54f2f3c83c1e07fc32c8c347ce737e93`,
+  local test는 `33 passed`다. 다음 단계는 이 분포를 고정한 후 paired-state 수집과
+  Ridge/MLP learned translator 학습으로 넘어가는 것이다.
 
 ## 18. 노션 원자료 인덱스
 
