@@ -712,6 +712,26 @@ source LLM의 KV semantics를 projection한 뒤 target LLM의 자체 cache와 ga
   추가했다. Subset hash는 `e6492a58a953790d5a5adcae89ad40cf54f2f3c83c1e07fc32c8c347ce737e93`,
   local test는 `33 passed`다. 다음 단계는 이 분포를 고정한 후 paired-state 수집과
   Ridge/MLP learned translator 학습으로 넘어가는 것이다.
+- **[Rare-event sweep 완료 — 2026-09-10]** L4 23,034MiB에서 고정 subset 10/10을
+  완료했다. Source는 SAM 2.1 Tiny, target은 Large, seed 7이며 Direct/Reset/
+  Last-Mask/Replay-1/2/4/Full Replay 7개 방법을 같은 partial future에서 평가했다.
+  JSON/Markdown NaN·Infinity는 없고 11개 prepared cache(기존 bike-packing 포함)의
+  SHA-256이 모두 일치했다. Sweep 원자료는 RunPod Network Volume에, 작은 aggregate와
+  case summary는 `reports/experiments/2026-09-10_rare_event_baseline_sweep/`에 둔다.
+- **[결과 — 2026-09-10]** 10사례 unweighted mean GT-visible J&F는 Direct 0,
+  Reset 0, Last-Mask/Replay-1 0.319945, Replay-2 0.425541, Replay-4 0.623753,
+  Full Replay 0.483535였다. 평균 past target backbone call은 각각 0/1/1/1/2/4/30.5회다.
+  이 결과는 3개 video에 군집된 rare-event slice이지 전체 DAVIS benchmark가 아니다.
+- **[판단 변경 — 2026-09-10]** Full Replay/Large-native를 고정된 성능 상한으로
+  부르지 않는다. Autoregressive memory drift 때문에 `lab-coat` switch13에서 Full
+  Replay visible J&F 0.025686, Replay-4 0.804905였으나 `kite-surf` switch20에서는
+  Replay-4 0, Full Replay 0.406723으로 반대였다. 따라서 Translator 목표는 Full
+  state의 tensor 모사만이 아니라 downstream Pareto frontier이며, recent/long-term
+  memory 선택과 translated-state+short-replay를 정식 ablation으로 유지한다.
+- **[현재 단계 — 2026-09-10]** Phase 2의 rare-event baseline 분포는 완료했다.
+  다음은 동일 산출물에서 switch+1/5 shock, identity break, recovery length 정의와
+  집계를 고정하는 Phase 1/2 마무리이며, 그 직후 video-level split을 적용한 paired
+  Tiny/Large state 수집과 Ridge/MLP Translator 학습(Phase 3)으로 진행한다.
 
 ## 18. 노션 원자료 인덱스
 

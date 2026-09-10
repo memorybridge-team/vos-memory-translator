@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CMMT rare-event baseline sweep</title>
+<style>
+body{margin:0;background:#0d1117;color:#e6edf3;font:15px/1.55 system-ui,sans-serif}main{max-width:1180px;margin:38px auto;padding:0 20px}a{color:#58a6ff}.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;margin:18px 0}.note{color:#9da7b3}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{padding:8px 10px;border-bottom:1px solid #30363d;text-align:right;white-space:nowrap}th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}.bar{height:12px;border-radius:8px;background:#30363d;overflow:hidden;min-width:180px}.bar span{height:100%;display:block;background:#58a6ff}.best{color:#7ee787;font-weight:700}.warn{color:#f2cc60}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style></head><body><main>
+<p class="note">Cross-Model Memory Translator · 2026-09-10</p>
+<h1>DAVIS rare-event baseline sweep</h1>
+<p>DAVIS 2017 val의 3개 영상, 10개 object/switch 사례에서 SAM 2.1 Tiny→Large handoff baseline을 비교했습니다. 이 결과는 전체 DAVIS benchmark가 아니라 고정된 rare-event slice입니다.</p>
+<div class="card"><h2>핵심 결과: GT-visible J&amp;F</h2>
+<table><thead><tr><th>방법</th><th>점수</th><th>그래프</th><th>과거 Large backbone</th></tr></thead><tbody>
+<tr><td>Direct Copy</td><td>0.000</td><td><div class="bar"><span style="width:0%"></span></div></td><td>0.0</td></tr>
+<tr><td>Target Reset</td><td>0.000</td><td><div class="bar"><span style="width:0%"></span></div></td><td>1.0</td></tr>
+<tr><td>Last-Mask</td><td>0.320</td><td><div class="bar"><span style="width:32%"></span></div></td><td>1.0</td></tr>
+<tr><td>Replay-2</td><td>0.426</td><td><div class="bar"><span style="width:42.6%"></span></div></td><td>2.0</td></tr>
+<tr class="best"><td>Replay-4</td><td>0.624</td><td><div class="bar"><span style="width:62.4%;background:#3fb950"></span></div></td><td>4.0</td></tr>
+<tr><td>Full Replay / Large-native</td><td>0.484</td><td><div class="bar"><span style="width:48.4%"></span></div></td><td>30.5</td></tr>
+</tbody></table><p class="note">GT에 대상이 실제로 존재하는 후속 frame만 사례별로 평균한 뒤 10사례를 동일 가중 평균했습니다.</p></div>
+<div class="card"><h2>사례별 결과</h2><table><thead><tr><th>사례</th><th>이벤트</th><th>Last</th><th>Replay-2</th><th>Replay-4</th><th>Full</th></tr></thead><tbody>
+<tr><td>india o1 s38</td><td>area drop</td><td>0.897</td><td>0.894</td><td>0.892</td><td>0.892</td></tr>
+<tr><td>india o1 s40</td><td>area growth</td><td>0.907</td><td>0.907</td><td>0.909</td><td>0.907</td></tr>
+<tr><td>india o2 s38</td><td>area growth</td><td>0.516</td><td>0.416</td><td class="best">0.794</td><td>0.436</td></tr>
+<tr><td>india o2 s51</td><td>occlusion entry</td><td>0.000</td><td>0.000</td><td>0.002</td><td>0.000</td></tr>
+<tr><td>india o3 s34</td><td>occlusion entry</td><td>0.438</td><td>0.833</td><td>0.836</td><td class="best">0.868</td></tr>
+<tr><td><a href="../2026-09-10-india-reappearance-baselines/index.html">india o3 s35</a></td><td>reappearance</td><td>0.000</td><td>0.438</td><td>0.835</td><td class="best">0.868</td></tr>
+<tr><td>kite-surf o2 s15</td><td>occlusion entry</td><td>0.000</td><td>0.000</td><td>0.406</td><td class="best">0.407</td></tr>
+<tr><td>kite-surf o2 s20</td><td>reappearance</td><td>0.000</td><td>0.000</td><td>0.000</td><td class="best">0.407</td></tr>
+<tr><td>lab-coat o1 s11</td><td>area drop</td><td>0.416</td><td>0.758</td><td class="best">0.758</td><td>0.024</td></tr>
+<tr><td><a href="../2026-09-10-lab-coat-switch13-baselines/index.html">lab-coat o1 s13</a></td><td>area growth</td><td>0.026</td><td>0.010</td><td class="best">0.805</td><td>0.026</td></tr>
+</tbody></table></div>
+<div class="grid"><div class="card"><h2>무엇을 알았나</h2><p>Replay-4가 평균상 가장 강했지만 모든 사례에서 이기지는 않았습니다. 오래된 memory가 drift를 만들기도 하고, 반대로 재등장 identity를 위해 긴 history가 필요하기도 합니다.</p></div><div class="card"><h2>전체 영상으로 확인</h2><p><a href="../2026-09-10-india-reappearance-baselines/index.html">India 재등장 gallery →</a></p><p><a href="../2026-09-10-lab-coat-switch13-baselines/index.html">Lab-coat 급성장 gallery →</a></p><p class="note">두 gallery 모두 GT가 가장 왼쪽이며 전체 평가 frame, 방법 선택 slider와 MP4를 제공합니다.</p></div></div>
+<p class="note">Dataset: <a href="https://davischallenge.org/">DAVIS 2017</a>, <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. 비상업적 연구 평가 목적으로 사용했습니다.</p>
+</main></body></html>

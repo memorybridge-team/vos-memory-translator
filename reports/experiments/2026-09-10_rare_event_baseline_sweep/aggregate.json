@@ -1,0 +1,82 @@
+{
+  "schema_version": "cmmt.cached_baseline_sweep_aggregate.v1",
+  "planned_cases": 10,
+  "completed_cases": 10,
+  "completed_case_ids": [
+    "val:india:obj1:switch38",
+    "val:india:obj1:switch40",
+    "val:india:obj2:switch38",
+    "val:india:obj2:switch51",
+    "val:india:obj3:switch34",
+    "val:india:obj3:switch35",
+    "val:kite-surf:obj2:switch15",
+    "val:kite-surf:obj2:switch20",
+    "val:lab-coat:obj1:switch11",
+    "val:lab-coat:obj1:switch13"
+  ],
+  "methods": [
+    {
+      "method": "direct_copy",
+      "label": "Direct Copy",
+      "cases": 10,
+      "mean_J_and_F": 0.2782430306820551,
+      "mean_visible_J_and_F": 0.0,
+      "mean_past_backbone_calls": 0.0,
+      "mean_wall_time_seconds": 24.892890552431346
+    },
+    {
+      "method": "target_reset",
+      "label": "Target Reset (blank object slot)",
+      "cases": 10,
+      "mean_J_and_F": 0.2746716021106265,
+      "mean_visible_J_and_F": 0.0,
+      "mean_past_backbone_calls": 1.0,
+      "mean_wall_time_seconds": 24.079403494857253
+    },
+    {
+      "method": "last_mask",
+      "label": "Last-Mask",
+      "cases": 10,
+      "mean_J_and_F": 0.46818803321542,
+      "mean_visible_J_and_F": 0.3199445586600519,
+      "mean_past_backbone_calls": 1.0,
+      "mean_wall_time_seconds": 21.481613114848734
+    },
+    {
+      "method": "replay_1",
+      "label": "Replay-1",
+      "cases": 10,
+      "mean_J_and_F": 0.46818803321542,
+      "mean_visible_J_and_F": 0.3199445586600519,
+      "mean_past_backbone_calls": 1.0,
+      "mean_wall_time_seconds": 21.729169359244406
+    },
+    {
+      "method": "replay_2",
+      "label": "Replay-2",
+      "cases": 10,
+      "mean_J_and_F": 0.5383498524309714,
+      "mean_visible_J_and_F": 0.42554100213512286,
+      "mean_past_backbone_calls": 2.0,
+      "mean_wall_time_seconds": 22.743573609553277
+    },
+    {
+      "method": "replay_4",
+      "label": "Replay-4",
+      "cases": 10,
+      "mean_J_and_F": 0.7003642997954191,
+      "mean_visible_J_and_F": 0.62375265198656,
+      "mean_past_backbone_calls": 4.0,
+      "mean_wall_time_seconds": 23.43174525592476
+    },
+    {
+      "method": "full_replay",
+      "label": "Full Replay / Large-native",
+      "cases": 10,
+      "mean_J_and_F": 0.6038380968747901,
+      "mean_visible_J_and_F": 0.4835350102529208,
+      "mean_past_backbone_calls": 30.5,
+      "mean_wall_time_seconds": 33.54504074305296
+    }
+  ]
+}

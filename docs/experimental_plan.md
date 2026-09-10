@@ -15,7 +15,7 @@
                 ▼
 [2. 강한 baseline과 rare-event 분포]                   ◀ 현재 단계
                 │  └─ Direct/Reset/Last/Replay/Oracle 구현 완료
-                │     rare-event 1/10 완료, 9개 실행 대기
+                │     rare-event 10/10 완료, temporal metric 정리 중
                 ▼
 [3. paired Tiny↔Large state 수집·Ridge/MLP 학습]        다음 단계
                 │
@@ -32,11 +32,12 @@
 [7. 논문용 ablation·시스템 비용·failure boundary 정리]
 ```
 
-2026-09-10 현재 DAVIS `india` reappearance 사례에서 Last-Mask의 GT-visible J&F가
-0이고 Replay-4가 0.834992, Full Replay가 0.868302인 것을 확인했다. 다음 실행은
-고정 rare-event 10-case subset의 나머지 9개를 완료해 이 관찰이 한 사례에만 해당하는지
-검증한다. Sweep은 checksummed cache와 완성된 7-method summary를 자동 인식하므로
-중단 후에도 완료 case를 다시 계산하지 않는다.
+2026-09-10 현재 고정 rare-event 10-case subset을 완료했다. GT-visible J&F 평균은
+Last-Mask 0.319945, Replay-2 0.425541, Replay-4 0.623753, Full Replay 0.483535였다.
+Replay-4가 평균상 가장 강했지만 `kite-surf` 재등장에서는 Full Replay만 성공했고,
+`lab-coat`에서는 반대로 Full Replay가 실패하고 Replay-4가 성공했다. 다음 실행은
+동일 결과에서 switch shock·identity break·recovery length를 집계한 뒤, video-level
+split을 고정하고 paired state 수집과 Ridge/MLP Translator 학습으로 넘어간다.
 
 ## 최종 연구 질문
 

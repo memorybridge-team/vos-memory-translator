@@ -1,0 +1,59 @@
+{
+  "schema_version": "cmmt.cached_baseline_sweep_status.v1",
+  "started_at": "2026-09-10T04:36:23.112871+00:00",
+  "updated_at": "2026-09-10T05:26:10.372460+00:00",
+  "state": "complete",
+  "planned_cases": 10,
+  "cases": {
+    "india_obj1_switch38": {
+      "state": "complete",
+      "updated_at": "2026-09-10T04:41:54.970019+00:00",
+      "elapsed_seconds": 331.8498682398349
+    },
+    "india_obj1_switch40": {
+      "state": "complete",
+      "updated_at": "2026-09-10T04:47:22.799021+00:00",
+      "elapsed_seconds": 327.77998420223594
+    },
+    "india_obj2_switch38": {
+      "state": "complete",
+      "updated_at": "2026-09-10T04:52:57.187029+00:00",
+      "elapsed_seconds": 334.3126259762794
+    },
+    "india_obj2_switch51": {
+      "state": "complete",
+      "updated_at": "2026-09-10T04:57:32.878800+00:00",
+      "elapsed_seconds": 275.6369575280696
+    },
+    "india_obj3_switch34": {
+      "state": "complete",
+      "updated_at": "2026-09-10T05:06:34.135884+00:00",
+      "elapsed_seconds": 541.1764553301036
+    },
+    "india_obj3_switch35": {
+      "state": "skipped_complete",
+      "updated_at": "2026-09-10T05:06:34.214976+00:00"
+    },
+    "kite-surf_obj2_switch15": {
+      "state": "complete",
+      "updated_at": "2026-09-10T05:11:11.530498+00:00",
+      "elapsed_seconds": 277.2630977705121
+    },
+    "kite-surf_obj2_switch20": {
+      "state": "complete",
+      "updated_at": "2026-09-10T05:17:08.790501+00:00",
+      "elapsed_seconds": 357.2016534656286
+    },
+    "lab-coat_obj1_switch11": {
+      "state": "complete",
+      "updated_at": "2026-09-10T05:22:11.321969+00:00",
+      "elapsed_seconds": 302.4596165828407
+    },
+    "lab-coat_obj1_switch13": {
+      "state": "complete",
+      "updated_at": "2026-09-10T05:26:10.271995+00:00",
+      "elapsed_seconds": 238.85011736303568
+    }
+  },
+  "completed_at": "2026-09-10T05:26:10.372444+00:00"
+}

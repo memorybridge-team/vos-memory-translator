@@ -1,0 +1,208 @@
+{
+  "schema_version": "cmmt.baseline_sweep_selection.v1",
+  "source_manifest_content_sha256": "7b8fdab3abf312eaf8972a2fd579f54b35b388b23e741c0af07480e6e375b6d1",
+  "selection_policy": {
+    "match": "any_tag",
+    "tags": [
+      "full_occlusion_entry",
+      "reappearance",
+      "strong_area_drop",
+      "strong_area_growth"
+    ]
+  },
+  "case_count": 10,
+  "cases": [
+    {
+      "case_id": "val:india:obj1:switch38",
+      "split": "val",
+      "sequence": "india",
+      "object_id": 1,
+      "switch_frame": 38,
+      "future_end_frame": 79,
+      "frame_count": 81,
+      "tags": [
+        "strong_area_drop"
+      ],
+      "transition": {
+        "area": 18176,
+        "next_area": 3480,
+        "next_over_current_area": 0.1914612676056338,
+        "current_over_next_area": 5.222988505747127,
+        "centroid_displacement_over_diagonal": 0.014466784184232435
+      }
+    },
+    {
+      "case_id": "val:india:obj1:switch40",
+      "split": "val",
+      "sequence": "india",
+      "object_id": 1,
+      "switch_frame": 40,
+      "future_end_frame": 79,
+      "frame_count": 81,
+      "tags": [
+        "strong_area_growth"
+      ],
+      "transition": {
+        "area": 3702,
+        "next_area": 18885,
+        "next_over_current_area": 5.10129659643436,
+        "current_over_next_area": 0.1960285941223193,
+        "centroid_displacement_over_diagonal": 0.10993300391875876
+      }
+    },
+    {
+      "case_id": "val:india:obj2:switch38",
+      "split": "val",
+      "sequence": "india",
+      "object_id": 2,
+      "switch_frame": 38,
+      "future_end_frame": 79,
+      "frame_count": 81,
+      "tags": [
+        "strong_area_growth"
+      ],
+      "transition": {
+        "area": 2983,
+        "next_area": 14999,
+        "next_over_current_area": 5.028159570901777,
+        "current_over_next_area": 0.19887992532835522,
+        "centroid_displacement_over_diagonal": 0.14046099134952045
+      }
+    },
+    {
+      "case_id": "val:india:obj2:switch51",
+      "split": "val",
+      "sequence": "india",
+      "object_id": 2,
+      "switch_frame": 51,
+      "future_end_frame": 79,
+      "frame_count": 81,
+      "tags": [
+        "full_occlusion_entry"
+      ],
+      "transition": {
+        "area": 1233,
+        "next_area": 0,
+        "next_over_current_area": 0.0,
+        "current_over_next_area": null,
+        "centroid_displacement_over_diagonal": null
+      }
+    },
+    {
+      "case_id": "val:india:obj3:switch34",
+      "split": "val",
+      "sequence": "india",
+      "object_id": 3,
+      "switch_frame": 34,
+      "future_end_frame": 79,
+      "frame_count": 81,
+      "tags": [
+        "full_occlusion_entry"
+      ],
+      "transition": {
+        "area": 5241,
+        "next_area": 0,
+        "next_over_current_area": 0.0,
+        "current_over_next_area": null,
+        "centroid_displacement_over_diagonal": null
+      }
+    },
+    {
+      "case_id": "val:india:obj3:switch35",
+      "split": "val",
+      "sequence": "india",
+      "object_id": 3,
+      "switch_frame": 35,
+      "future_end_frame": 79,
+      "frame_count": 81,
+      "tags": [
+        "reappearance"
+      ],
+      "transition": {
+        "area": 0,
+        "next_area": 11393,
+        "next_over_current_area": null,
+        "current_over_next_area": 0.0,
+        "centroid_displacement_over_diagonal": null
+      }
+    },
+    {
+      "case_id": "val:kite-surf:obj2:switch15",
+      "split": "val",
+      "sequence": "kite-surf",
+      "object_id": 2,
+      "switch_frame": 15,
+      "future_end_frame": 48,
+      "frame_count": 50,
+      "tags": [
+        "full_occlusion_entry"
+      ],
+      "transition": {
+        "area": 55,
+        "next_area": 0,
+        "next_over_current_area": 0.0,
+        "current_over_next_area": null,
+        "centroid_displacement_over_diagonal": null
+      }
+    },
+    {
+      "case_id": "val:kite-surf:obj2:switch20",
+      "split": "val",
+      "sequence": "kite-surf",
+      "object_id": 2,
+      "switch_frame": 20,
+      "future_end_frame": 48,
+      "frame_count": 50,
+      "tags": [
+        "reappearance"
+      ],
+      "transition": {
+        "area": 0,
+        "next_area": 155,
+        "next_over_current_area": null,
+        "current_over_next_area": 0.0,
+        "centroid_displacement_over_diagonal": null
+      }
+    },
+    {
+      "case_id": "val:lab-coat:obj1:switch11",
+      "split": "val",
+      "sequence": "lab-coat",
+      "object_id": 1,
+      "switch_frame": 11,
+      "future_end_frame": 45,
+      "frame_count": 47,
+      "tags": [
+        "max_centroid_motion",
+        "strong_area_drop"
+      ],
+      "transition": {
+        "area": 22,
+        "next_area": 6,
+        "next_over_current_area": 0.2727272727272727,
+        "current_over_next_area": 3.6666666666666665,
+        "centroid_displacement_over_diagonal": 0.016348889293477737
+      }
+    },
+    {
+      "case_id": "val:lab-coat:obj1:switch13",
+      "split": "val",
+      "sequence": "lab-coat",
+      "object_id": 1,
+      "switch_frame": 13,
+      "future_end_frame": 45,
+      "frame_count": 47,
+      "tags": [
+        "strong_area_growth"
+      ],
+      "transition": {
+        "area": 13,
+        "next_area": 78,
+        "next_over_current_area": 6.0,
+        "current_over_next_area": 0.16666666666666666,
+        "centroid_displacement_over_diagonal": 0.008082611431610506
+      }
+    }
+  ],
+  "content_sha256": "e6492a58a953790d5a5adcae89ad40cf54f2f3c83c1e07fc32c8c347ce737e93"
+}
